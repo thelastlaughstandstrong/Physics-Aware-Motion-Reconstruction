@@ -1,0 +1,4 @@
+[submodule "phc"]
+	path = phc
+	url = https://github.com/thelastlaughstandstrong/PHC-AvatarPoser.git
+	branch = direct-pd-action
