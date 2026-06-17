@@ -229,7 +229,7 @@ class ModelAvatarPoser(ModelBase):
             input_singleframe = False
             with torch.no_grad():
 
-                if self.L.shape[0] < window_size:
+                if self.L.shape[0] <= window_size:
 
 
                     if input_singleframe:
@@ -283,16 +283,21 @@ class ModelAvatarPoser(ModelBase):
             self.E_global_orientation = E_global_orientation_tensor
             self.E_joint_rotation = E_joint_rotation_tensor
             self.E = torch.cat([E_global_orientation_tensor, E_joint_rotation_tensor],dim=-1).to(self.device)
-
             predicted_angle = utils_transform.sixd2aa(self.E[:,:132].reshape(-1,6).detach()).reshape(self.E[:,:132].shape[0],-1).float()
+            # E (6D rotation) is decoded into axis-angle predicted_angle for all 22 joints.
+
 
             # Calculate global translation
 
             T_head2world = self.Head_trans_global.clone()
             T_head2root_pred = torch.eye(4).repeat(T_head2world.shape[0],1,1).cuda()
+            # joint angles (joints 1–21, i.e. predicted_angle[...,3:66]) are converted to rotation matrices. Joint 0 (root) is zeroed out for it to be derived.
             rotation_local_matrot = aa2matrot(torch.cat([torch.zeros([predicted_angle.shape[0],3]).cuda(),predicted_angle[...,3:66]],dim=1).reshape(-1,3)).reshape(predicted_angle.shape[0],-1,9)
             rotation_global_matrot = local2global_pose(rotation_local_matrot, self.bm.kintree_table[0][:22].long())
-            head2root_rotation = rotation_global_matrot[:,15,:]
+            # local2global_pose walks the SMPL skeleton tree (kintree_table) and accumulates local rotations into global rotations. 
+            # Rotation_global_matrot[:,15,:] is the rotation of the head joint expressed relative to the root, in matrix form.
+            head2root_rotation = rotation_global_matrot[:,15,:] #Rotation, R component of the rigid transform T_head2root from head to pelvis, in matrix form.
+
 
             body_pose_local_pred=self.bm(**{'pose_body':predicted_angle[...,3:66]})
             head2root_translation = body_pose_local_pred.Jtr[:,15,:]
@@ -310,6 +315,7 @@ class ModelAvatarPoser(ModelBase):
             t_root2world = -t_head2root+t_head2world.cuda()
 
             self.predicted_body=self.bm(**{'pose_body':predicted_angle[...,3:66], 'root_orient':predicted_angle[...,:3], 'trans': t_root2world}) 
+            # bm = BodyModel, ie. SMPL Body
             # No stabilizer: 'root_orient':rotation_root2world_pred.cuda()
 
             self.predicted_position = self.predicted_body.Jtr[:,:22,:]

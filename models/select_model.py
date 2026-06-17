@@ -22,6 +22,9 @@ def define_Model(opt):
     if model == 'avatarposer':  # two inputs: L, C
         from models.model_avatarposer import ModelAvatarPoser as M
 
+    elif model == 'avatarposer_finetune':
+        from models.model_avatarposer_finetune import ModelAvatarPoserFinetune as M
+
     else:
         raise NotImplementedError('Model [{:s}] is not defined.'.format(model))
 
@@ -59,6 +62,16 @@ def define_G(opt):
 
     if net_type == 'AvatarPoser':
         from models.network import AvatarPoser as net
+        netG = net(input_dim=opt_net['input_dim'],
+                   output_dim=opt_net['output_dim'],
+                   num_layer=opt_net['num_layer'],
+                   embed_dim=opt_net['embed_dim'],
+                   nhead = opt_net['nhead'],
+                   body_model = body_model,
+                   device = device)
+
+    elif net_type == 'AvatarPoserFinetune':
+        from models.network_finetune import AvatarPoserFinetune as net
         netG = net(input_dim=opt_net['input_dim'],
                    output_dim=opt_net['output_dim'],
                    num_layer=opt_net['num_layer'],

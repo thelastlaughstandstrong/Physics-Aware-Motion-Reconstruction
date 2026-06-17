@@ -96,7 +96,8 @@ class AMASS_Dataset(Dataset):
                     'P': body_parms_list,
                     'Head_trans_global':head_global_trans_list[1:],
                     'pos_pelvis_gt':body_parms_list['trans'][2:],
-                    'vel_pelvis_gt':body_parms_list['trans'][2:]-body_parms_list['trans'][1:-1]
+                    'vel_pelvis_gt':body_parms_list['trans'][2:]-body_parms_list['trans'][1:-1],
+                    'filepath': data['filepath']
                     }
 
 

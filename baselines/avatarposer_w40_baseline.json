@@ -1,0 +1,41 @@
+{
+  "model": "AvatarPoser (original checkpoint, window_size=40)",
+  "date": "2026-06-17",
+  "test_set": "AMASS (CMU + BMLrub + MPI_HDM05), 536 sequences, 60fps",
+  "num_sequences": 536,
+  "metrics": {
+    "rot_error_deg": 4.03608,
+    "pos_error_cm": 2.51398,
+    "vel_error_cm_s": 24.11242,
+    "jitter_m_s3": 1357.2765,
+    "foot_skate_cm_s": 33.6667,
+    "gpen_mean_mm": 23.79059,
+    "gpen_max_mm": 72.14095,
+    "gpen_rate": 0.65441,
+    "hand_error_cm": 1.73044,
+    "lower_body_error_cm": 4.76345,
+    "upper_body_error_cm": 1.25238,
+    "pelvis_error_cm": 1.70963
+  },
+  "metric_units": {
+    "rot_error_deg": "degrees (geodesic distance, mean per joint)",
+    "pos_error_cm": "cm (MPJPE, all 22 joints)",
+    "vel_error_cm_s": "cm/s (MPJVE, finite-difference velocity)",
+    "jitter_m_s3": "m/s\u00b3 (mean jerk of predicted motion, no GT reference)",
+    "foot_skate_cm_s": "cm/s (weighted horizontal foot sliding while in contact)",
+    "gpen_mean_mm": "mm (mean ground penetration depth of penetrating vertices)",
+    "gpen_max_mm": "mm (worst-case ground penetration depth in sequence)",
+    "gpen_rate": "fraction of frames with any vertex below Z=0",
+    "hand_error_cm": "cm (MPJPE at wrist joints 20,21)",
+    "lower_body_error_cm": "cm (MPJPE at joints 1,2,4,5,7,8,10,11)",
+    "upper_body_error_cm": "cm (MPJPE at joints 13,14,16,17,18,19)",
+    "pelvis_error_cm": "cm (MPJPE at joint 0)"
+  },
+  "notes": [
+    "Ground penetration uses SMPL-H mesh vertices (6890) vs flat floor at Z=0 (AMASS Z-up).",
+    "Foot skate uses SMPL joints 10/11 (left/right foot), H_thresh=0.033m, fps=60.",
+    "Jitter = mean ||3rd-order finite difference of predicted joint positions|| * 60^3.",
+    "MPJRE uses geodesic distance between rotation matrices (not axis-angle MAE).",
+    "IK module present in network but NOT called during test() \u2014 known AvatarPoser quirk."
+  ]
+}

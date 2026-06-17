@@ -23,7 +23,7 @@ for dataroot_subset in ["MPI_HDM05", "BioMotionLab_NTroje", "CMU"]:
     print(dataroot_subset)
     for phase in ["train","test"]:
         print(phase)
-        savedir = os.path.join("./data_fps60", dataroot_subset, phase)
+        savedir = os.path.join("./data_cameraready_fps60", dataroot_subset, phase)
         if not os.path.exists(savedir):
             os.makedirs(savedir)
 
@@ -57,7 +57,7 @@ for dataroot_subset in ["MPI_HDM05", "BioMotionLab_NTroje", "CMU"]:
         idx = 0
         for filepath in filepaths:
             data = dict()
-            bdata = np.load(filepath,allow_pickle=True)
+            bdata = np.load(os.path.join(dataroot_amass, filepath),allow_pickle=True)
             # print(list(bdata.keys())) ### check keys of body data: ['trans', 'gender', 'mocap_framerate', 'betas', 'dmpls', 'poses']
             try:
                 framerate = bdata["mocap_framerate"]
@@ -80,7 +80,16 @@ for dataroot_subset in ["MPI_HDM05", "BioMotionLab_NTroje", "CMU"]:
             bdata_trans = bdata["trans"][::stride,...]
             subject_gender = bdata["gender"]
 
-            bm = bm_male# if subject_gender == 'male' else bm_female
+            # bm = bm_male# if subject_gender == 'male' else bm_female
+            if isinstance(subject_gender, (bytes, bytearray)):
+                try:
+                    subject_gender = subject_gender.decode('utf-8')
+                except:
+                    subject_gender = str(subject_gender)
+            if isinstance(subject_gender, str) and subject_gender.lower().startswith('f'):
+                bm = bm_female
+            else:
+                bm = bm_male
 
             body_parms = {
                 'root_orient': torch.Tensor(bdata_poses[:, :3]),#.to(comp_device), # controls the global root orientation

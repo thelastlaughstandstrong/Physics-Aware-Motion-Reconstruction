@@ -9,9 +9,11 @@
 # Department of Computer Science, ETH Zurich
 '''
 
+import os
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
+
 import torch
 import cv2
-import os
 import numpy as np
 import trimesh
 from human_body_prior.body_model.body_model import BodyModel
@@ -21,9 +23,6 @@ from body_visualizer.mesh.mesh_viewer import MeshViewer
 from body_visualizer.mesh.sphere import points_to_spheres
 import trimesh.util as util
 from psbody.mesh import Mesh
-
-
-os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 """
 # --------------------------------

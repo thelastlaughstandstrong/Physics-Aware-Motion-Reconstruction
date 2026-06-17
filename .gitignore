@@ -3,3 +3,5 @@ results
 *.pkl
 *fps60
 **/__pycache__
+amass/
+support_data/
