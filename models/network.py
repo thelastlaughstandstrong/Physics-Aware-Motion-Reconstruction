@@ -73,16 +73,17 @@ class AvatarPoser(nn.Module):
         return body_pose
 
 
-    def forward(self, input_tensor, do_fk = True):
+    def forward(self, input_tensor, do_fk=True, return_feature=False):
 
-#        embed()
         x = self.linear_embedding(input_tensor)
         x = x.permute(1,0,2)
         x = self.transformer_encoder(x)
-        x = x.permute(1,0,2)[:, -1]
+        x = x.permute(1,0,2)[:, -1]  # (batch, embed_dim) — motion feature z_t
 
         global_orientation = self.stabilizer(x)
         joint_rotation = self.joint_rotation_decoder(x)
+        if return_feature:
+            return global_orientation, joint_rotation, x
         if do_fk:
             joint_position = self.fk_module(global_orientation, joint_rotation, self.body_model)
             return global_orientation, joint_rotation, joint_position

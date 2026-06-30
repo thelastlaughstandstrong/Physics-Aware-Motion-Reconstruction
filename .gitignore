@@ -5,3 +5,10 @@ results
 **/__pycache__
 amass/
 support_data/
+
+# experiment outputs
+output/HumanoidIm/ap_phc_*/
+output/HumanoidIm/phc_kp_mcp_iccv/eval_*.log
+results_*/
+model_zoo/*.pth
+output/HumanoidIm/phc_*/

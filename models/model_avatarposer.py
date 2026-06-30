@@ -58,6 +58,12 @@ class ModelAvatarPoser(ModelBase):
     def init_train(self):
         self.load()                           # load model
         self.netG.train()                     # set training mode,for BN
+        if self.opt_train.get('freeze_encoder', False):
+            encoder_prefixes = ('module.linear_embedding', 'module.transformer_encoder')
+            for name, param in self.netG.named_parameters():
+                if name.startswith(encoder_prefixes):
+                    param.requires_grad_(False)
+            print('[decoder finetune] encoder frozen — only stabilizer + joint_rotation_decoder will be trained')
         self.define_loss()                    # define loss
         self.define_optimizer()               # define optimizer
         self.load_optimizers()                # load optimizer

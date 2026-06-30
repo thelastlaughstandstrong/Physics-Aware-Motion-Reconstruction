@@ -143,10 +143,17 @@ def main(json_path='options/train_avatarposer.json'):
     # Step--4 (main training)
     # ----------------------------------------
     '''
+    max_steps = opt['train'].get('max_steps', None)
     for epoch in range(1000000):  # keep running
         for i, train_data in enumerate(train_loader):
 
             current_step += 1
+            if max_steps and current_step > max_steps:
+                logger.info('Reached max_steps={}, stopping.'.format(max_steps))
+                model.save(current_step)
+                logger.info('Saving the final model.')
+                model.save('latest')
+                return
             # -------------------------------
             # 1) feed patch pairs
             # -------------------------------
