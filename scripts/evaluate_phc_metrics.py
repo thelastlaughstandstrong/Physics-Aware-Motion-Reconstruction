@@ -384,6 +384,16 @@ def main():
         if (i + 1) % 20 == 0:
             print(f"  {i+1}/{len(motion_keys)} sequences processed …", end="\r")
 
+    # Load pre-sim q_ref stats if available
+    qref_stats = {}
+    qref_log = os.path.join(os.path.dirname(args.pos_dump), "qref_gpen.log")
+    if os.path.exists(qref_log):
+        with open(qref_log) as f:
+            for line in f:
+                for key in ("qref_mpjpe (cm)", "gpen_mean  (mm)", "gpen_max   (mm)", "gpen_rate"):
+                    if key in line:
+                        qref_stats[key.strip()] = float(line.split(":")[-1].strip())
+
     lines = []
     lines.append(f"\nProcessed {len(pos_errors)} sequences  ({skipped} skipped)")
     lines.append("")
@@ -393,14 +403,21 @@ def main():
     lines.append(f"  success_rate    : {success_rate:.4f}")
     if pos_errors:
         lines.append(f"  MPJPE (cm)      : {np.mean(pos_errors) * 100:.5f}")
+        if "qref_mpjpe (cm)" in qref_stats:
+            lines.append(f"  qref_MPJPE (cm) : {qref_stats['qref_mpjpe (cm)']:.5f}  [pre-sim kinematic]")
         lines.append(f"  MPJVE (cm/s)    : {np.mean(vel_errors) * 100:.5f}")
         if rot_errors:
             lines.append(f"  MPJRE (deg)     : {np.mean(rot_errors):.5f}")
         lines.append(f"  jitter (m/s³)   : {np.mean(jitters):.5f}")
         lines.append(f"  foot_skate(cm/s): {np.mean(foot_skates) * 100:.5f}")
-        lines.append(f"  gpen_mean (mm)  : {np.mean(gpen_means):.5f}")
-        lines.append(f"  gpen_max (mm)   : {np.mean(gpen_maxes):.5f}")
-        lines.append(f"  gpen_rate       : {np.mean(gpen_rates):.5f}")
+        if qref_stats:
+            lines.append(f"  gpen_mean (mm)  : {qref_stats.get('gpen_mean  (mm)', 0.0):.5f}  [pre-sim q_ref]")
+            lines.append(f"  gpen_max  (mm)  : {qref_stats.get('gpen_max   (mm)', 0.0):.5f}  [pre-sim q_ref]")
+            lines.append(f"  gpen_rate       : {qref_stats.get('gpen_rate', 0.0):.5f}  [pre-sim q_ref]")
+        else:
+            lines.append(f"  gpen_mean (mm)  : {np.mean(gpen_means):.5f}")
+            lines.append(f"  gpen_max (mm)   : {np.mean(gpen_maxes):.5f}")
+            lines.append(f"  gpen_rate       : {np.mean(gpen_rates):.5f}")
     lines.append("")
     lines.append("Baseline (AvatarPoser kinematic, for reference):")
     lines.append("  MPJPE (cm)      : 2.51398")
