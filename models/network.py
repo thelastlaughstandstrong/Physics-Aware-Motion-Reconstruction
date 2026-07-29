@@ -36,7 +36,7 @@ class AvatarPoser(nn.Module):
         self.joint_rotation_decoder = nn.Sequential(
                             nn.Linear(embed_dim, 256),
                             nn.ReLU(),
-                            nn.Linear(256, 126)
+                            nn.Linear(256, output_dim - 6)
             )
 
         self.body_model = body_model

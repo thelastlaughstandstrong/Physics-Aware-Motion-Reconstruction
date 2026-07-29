@@ -51,13 +51,21 @@ def define_G(opt):
     opt_net = opt['netG']
     net_type = opt_net['net_type']
     device = torch.device('cuda' if opt['gpu_ids'] else 'cpu')
-    support_dir = opt['support_dir']
-    subject_gender = "male"
-    bm_fname = os.path.join(support_dir, 'body_models/smplh/{}/model.npz'.format(subject_gender))
-    dmpl_fname = os.path.join(support_dir, 'body_models/dmpls/{}/model.npz'.format(subject_gender))
-    num_betas = 16 # number of body parameters
-    num_dmpls = 8 # number of DMPL parameters
-    body_model = BodyModel(bm_fname=bm_fname, num_betas=num_betas, num_dmpls=num_dmpls, dmpl_fname=dmpl_fname).to(device)
+    skeleton = opt_net.get('skeleton', 'smpl')
+
+    if skeleton == 'quest_humanoid':
+        # Quest2 synthetic data uses SimXR's own quest_humanoid rig (25 joints), not SMPL --
+        # see models/quest_body_model.py for why this can't reuse the SMPL-H BodyModel.
+        from models.quest_body_model import QuestHumanoidBodyModel
+        body_model = QuestHumanoidBodyModel(device=device)
+    else:
+        support_dir = opt['support_dir']
+        subject_gender = "male"
+        bm_fname = os.path.join(support_dir, 'body_models/smplh/{}/model.npz'.format(subject_gender))
+        dmpl_fname = os.path.join(support_dir, 'body_models/dmpls/{}/model.npz'.format(subject_gender))
+        num_betas = 16 # number of body parameters
+        num_dmpls = 8 # number of DMPL parameters
+        body_model = BodyModel(bm_fname=bm_fname, num_betas=num_betas, num_dmpls=num_dmpls, dmpl_fname=dmpl_fname).to(device)
 
 
     if net_type == 'AvatarPoser':

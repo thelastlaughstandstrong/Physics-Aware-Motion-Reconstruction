@@ -1,0 +1,13 @@
+- learning=distill_quest
+- exp_name=quest_distill_option2_scratch
+- env=env_quest_im_basic
+- robot=quest_humanoid
+- env.motion_file=/home/sia-irl/AvatarPoser/data/quest2_synthetic/test_seg_motion
+- env.num_envs=128
+- env.cycle_motion=False
+- env.min_length=5
+- learning.params.config.student_checkpoint=output/HumanoidIm/quest_distill_option2_scratch/student/student_0500000.pth
+- test=True
+- im_eval=True
+- headless=True
+- disable_multiprocessing=False

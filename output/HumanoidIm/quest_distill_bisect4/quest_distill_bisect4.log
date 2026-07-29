@@ -1,0 +1,158 @@
+[distill] stage 1 | step    100 | gpu_alloc 0.230GB (env_step-only)
+[distill] stage 1 | step    100 | action 0.000000
+[distill] stage 1 | step    200 | gpu_alloc 0.240GB (env_step-only)
+[distill] stage 1 | step    200 | action 0.000000
+[distill] stage 1 | step    300 | gpu_alloc 0.251GB (env_step-only)
+[distill] stage 1 | step    300 | action 0.000000
+[distill] stage 1 | step    400 | gpu_alloc 0.262GB (env_step-only)
+[distill] stage 1 | step    400 | action 0.000000
+[distill] stage 1 | step    500 | gpu_alloc 0.272GB (env_step-only)
+[distill] stage 1 | step    500 | action 0.000000
+[distill] stage 1 | step    600 | gpu_alloc 0.282GB (env_step-only)
+[distill] stage 1 | step    600 | action 0.000000
+[distill] stage 1 | step    700 | gpu_alloc 0.293GB (env_step-only)
+[distill] stage 1 | step    700 | action 0.000000
+[distill] stage 1 | step    800 | gpu_alloc 0.304GB (env_step-only)
+[distill] stage 1 | step    800 | action 0.000000
+[distill] stage 1 | step    900 | gpu_alloc 0.314GB (env_step-only)
+[distill] stage 1 | step    900 | action 0.000000
+[distill] stage 1 | step   1000 | gpu_alloc 0.325GB (env_step-only)
+[distill] stage 1 | step   1000 | action 0.000000
+[distill] stage 1 | step   1100 | gpu_alloc 0.336GB (env_step-only)
+[distill] stage 1 | step   1100 | action 0.000000
+[distill] stage 1 | step   1200 | gpu_alloc 0.347GB (env_step-only)
+[distill] stage 1 | step   1200 | action 0.000000
+[distill] stage 1 | step   1300 | gpu_alloc 0.357GB (env_step-only)
+[distill] stage 1 | step   1300 | action 0.000000
+[distill] stage 1 | step   1400 | gpu_alloc 0.368GB (env_step-only)
+[distill] stage 1 | step   1400 | action 0.000000
+[distill] stage 1 | step   1500 | gpu_alloc 0.378GB (env_step-only)
+[distill] stage 1 | step   1500 | action 0.000000
+[distill] stage 1 | step   1600 | gpu_alloc 0.389GB (env_step-only)
+[distill] stage 1 | step   1600 | action 0.000000
+[distill] stage 1 | step   1700 | gpu_alloc 0.400GB (env_step-only)
+[distill] stage 1 | step   1700 | action 0.000000
+[distill] stage 1 | step   1800 | gpu_alloc 0.411GB (env_step-only)
+[distill] stage 1 | step   1800 | action 0.000000
+[distill] stage 1 | step   1900 | gpu_alloc 0.421GB (env_step-only)
+[distill] stage 1 | step   1900 | action 0.000000
+[distill] stage 1 | step   2000 | gpu_alloc 0.432GB (env_step-only)
+[distill] stage 1 | step   2000 | action 0.000000
+[distill] stage 1 | step   2100 | gpu_alloc 0.442GB (env_step-only)
+[distill] stage 1 | step   2100 | action 0.000000
+[distill] stage 1 | step   2200 | gpu_alloc 0.453GB (env_step-only)
+[distill] stage 1 | step   2200 | action 0.000000
+[distill] stage 1 | step   2300 | gpu_alloc 0.464GB (env_step-only)
+[distill] stage 1 | step   2300 | action 0.000000
+[distill] stage 1 | step   2400 | gpu_alloc 0.475GB (env_step-only)
+[distill] stage 1 | step   2400 | action 0.000000
+[distill] stage 1 | step   2500 | gpu_alloc 0.485GB (env_step-only)
+[distill] stage 1 | step   2500 | action 0.000000
+[distill] stage 1 | step   2600 | gpu_alloc 0.496GB (env_step-only)
+[distill] stage 1 | step   2600 | action 0.000000
+[distill] stage 1 | step   2700 | gpu_alloc 0.506GB (env_step-only)
+[distill] stage 1 | step   2700 | action 0.000000
+[distill] stage 1 | step   2800 | gpu_alloc 0.517GB (env_step-only)
+[distill] stage 1 | step   2800 | action 0.000000
+[distill] stage 1 | step   2900 | gpu_alloc 0.528GB (env_step-only)
+[distill] stage 1 | step   2900 | action 0.000000
+[distill] stage 1 | step   3000 | gpu_alloc 0.539GB (env_step-only)
+[distill] stage 1 | step   3000 | action 0.000000
+[distill] stage 1 | step   3100 | gpu_alloc 0.549GB (env_step-only)
+[distill] stage 1 | step   3100 | action 0.000000
+[distill] stage 1 | step   3200 | gpu_alloc 0.560GB (env_step-only)
+[distill] stage 1 | step   3200 | action 0.000000
+[distill] stage 1 | step   3300 | gpu_alloc 0.570GB (env_step-only)
+[distill] stage 1 | step   3300 | action 0.000000
+[distill] stage 1 | step   3400 | gpu_alloc 0.581GB (env_step-only)
+[distill] stage 1 | step   3400 | action 0.000000
+[distill] stage 1 | step   3500 | gpu_alloc 0.591GB (env_step-only)
+[distill] stage 1 | step   3500 | action 0.000000
+[distill] stage 1 | step   3600 | gpu_alloc 0.602GB (env_step-only)
+[distill] stage 1 | step   3600 | action 0.000000
+[distill] stage 1 | step   3700 | gpu_alloc 0.613GB (env_step-only)
+[distill] stage 1 | step   3700 | action 0.000000
+[distill] stage 1 | step   3800 | gpu_alloc 0.624GB (env_step-only)
+[distill] stage 1 | step   3800 | action 0.000000
+[distill] stage 1 | step   3900 | gpu_alloc 0.634GB (env_step-only)
+[distill] stage 1 | step   3900 | action 0.000000
+[distill] stage 1 | step   4000 | gpu_alloc 0.645GB (env_step-only)
+[distill] stage 1 | step   4000 | action 0.000000
+[distill] stage 1 | step   4100 | gpu_alloc 0.656GB (env_step-only)
+[distill] stage 1 | step   4100 | action 0.000000
+[distill] stage 1 | step   4200 | gpu_alloc 0.666GB (env_step-only)
+[distill] stage 1 | step   4200 | action 0.000000
+[distill] stage 1 | step   4300 | gpu_alloc 0.677GB (env_step-only)
+[distill] stage 1 | step   4300 | action 0.000000
+[distill] stage 1 | step   4400 | gpu_alloc 0.688GB (env_step-only)
+[distill] stage 1 | step   4400 | action 0.000000
+[distill] stage 1 | step   4500 | gpu_alloc 0.698GB (env_step-only)
+[distill] stage 1 | step   4500 | action 0.000000
+[distill] stage 1 | step   4600 | gpu_alloc 0.708GB (env_step-only)
+[distill] stage 1 | step   4600 | action 0.000000
+[distill] stage 1 | step   4700 | gpu_alloc 0.719GB (env_step-only)
+[distill] stage 1 | step   4700 | action 0.000000
+[distill] stage 1 | step   4800 | gpu_alloc 0.730GB (env_step-only)
+[distill] stage 1 | step   4800 | action 0.000000
+[distill] stage 1 | step   4900 | gpu_alloc 0.741GB (env_step-only)
+[distill] stage 1 | step   4900 | action 0.000000
+[distill] stage 1 | step   5000 | gpu_alloc 0.751GB (env_step-only)
+[distill] stage 1 | step   5000 | action 0.000000
+[distill] stage 1 | step   5100 | gpu_alloc 0.762GB (env_step-only)
+[distill] stage 1 | step   5100 | action 0.000000
+[distill] stage 1 | step   5200 | gpu_alloc 0.773GB (env_step-only)
+[distill] stage 1 | step   5200 | action 0.000000
+[distill] stage 1 | step   5300 | gpu_alloc 0.783GB (env_step-only)
+[distill] stage 1 | step   5300 | action 0.000000
+[distill] stage 1 | step   5400 | gpu_alloc 0.794GB (env_step-only)
+[distill] stage 1 | step   5400 | action 0.000000
+[distill] stage 1 | step   5500 | gpu_alloc 0.804GB (env_step-only)
+[distill] stage 1 | step   5500 | action 0.000000
+[distill] stage 1 | step   5600 | gpu_alloc 0.815GB (env_step-only)
+[distill] stage 1 | step   5600 | action 0.000000
+[distill] stage 1 | step   5700 | gpu_alloc 0.825GB (env_step-only)
+[distill] stage 1 | step   5700 | action 0.000000
+[distill] stage 1 | step   5800 | gpu_alloc 0.835GB (env_step-only)
+[distill] stage 1 | step   5800 | action 0.000000
+[distill] stage 1 | step   5900 | gpu_alloc 0.846GB (env_step-only)
+[distill] stage 1 | step   5900 | action 0.000000
+[distill] stage 1 | step   6000 | gpu_alloc 0.857GB (env_step-only)
+[distill] stage 1 | step   6000 | action 0.000000
+[distill] stage 1 | step   6100 | gpu_alloc 0.868GB (env_step-only)
+[distill] stage 1 | step   6100 | action 0.000000
+[distill] stage 1 | step   6200 | gpu_alloc 0.878GB (env_step-only)
+[distill] stage 1 | step   6200 | action 0.000000
+[distill] stage 1 | step   6300 | gpu_alloc 0.888GB (env_step-only)
+[distill] stage 1 | step   6300 | action 0.000000
+[distill] stage 1 | step   6400 | gpu_alloc 0.898GB (env_step-only)
+[distill] stage 1 | step   6400 | action 0.000000
+[distill] stage 1 | step   6500 | gpu_alloc 0.909GB (env_step-only)
+[distill] stage 1 | step   6500 | action 0.000000
+[distill] stage 1 | step   6600 | gpu_alloc 0.920GB (env_step-only)
+[distill] stage 1 | step   6600 | action 0.000000
+[distill] stage 1 | step   6700 | gpu_alloc 0.931GB (env_step-only)
+[distill] stage 1 | step   6700 | action 0.000000
+[distill] stage 1 | step   6800 | gpu_alloc 0.941GB (env_step-only)
+[distill] stage 1 | step   6800 | action 0.000000
+[distill] stage 1 | step   6900 | gpu_alloc 0.952GB (env_step-only)
+[distill] stage 1 | step   6900 | action 0.000000
+[distill] stage 1 | step   7000 | gpu_alloc 0.962GB (env_step-only)
+[distill] stage 1 | step   7000 | action 0.000000
+[distill] stage 1 | step   7100 | gpu_alloc 0.973GB (env_step-only)
+[distill] stage 1 | step   7100 | action 0.000000
+[distill] stage 1 | step   7200 | gpu_alloc 0.983GB (env_step-only)
+[distill] stage 1 | step   7200 | action 0.000000
+[distill] stage 1 | step   7300 | gpu_alloc 0.994GB (env_step-only)
+[distill] stage 1 | step   7300 | action 0.000000
+[distill] stage 1 | step   7400 | gpu_alloc 1.004GB (env_step-only)
+[distill] stage 1 | step   7400 | action 0.000000
+[distill] stage 1 | step   7500 | gpu_alloc 1.015GB (env_step-only)
+[distill] stage 1 | step   7500 | action 0.000000
+[distill] stage 1 | step   7600 | gpu_alloc 1.025GB (env_step-only)
+[distill] stage 1 | step   7600 | action 0.000000
+[distill] stage 1 | step   7700 | gpu_alloc 1.036GB (env_step-only)
+[distill] stage 1 | step   7700 | action 0.000000
+[distill] stage 1 | step   7800 | gpu_alloc 1.047GB (env_step-only)
+[distill] stage 1 | step   7800 | action 0.000000
+[distill] stage 1 | step   7900 | gpu_alloc 1.058GB (env_step-only)
+[distill] stage 1 | step   7900 | action 0.000000

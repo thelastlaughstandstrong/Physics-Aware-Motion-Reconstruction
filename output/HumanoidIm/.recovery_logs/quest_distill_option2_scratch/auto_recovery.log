@@ -1,0 +1,7 @@
+[auto-recovery] starting supervised run for quest_distill_option2_scratch (max 10 crash retries, cap=500000 steps, num_envs=128)
+[auto-recovery] attempt 1: resuming from /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_distill_option2_scratch/student/student_0301920.pth
+[auto-recovery] GPU has 16069MiB free (>= 10000MiB threshold) — proceeding
+[auto-recovery] run completed normally (attempt 1)
+[DistillAgent] Backbone loaded: 46 keys matched, 0 missing, 0 unexpected
+[DistillAgentQuest] Backbone UNFROZEN -- trained jointly via kinematic + action loss
+[DistillAgent] Training log -> output/HumanoidIm/quest_distill_option2_scratch/quest_distill_option2_scratch.log

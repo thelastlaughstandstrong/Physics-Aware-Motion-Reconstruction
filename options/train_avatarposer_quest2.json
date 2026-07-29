@@ -1,0 +1,73 @@
+{
+  "task": "AvatarPoseEstimationQuest2"  //  root/task/videos-models-options
+  , "model": "avatarposer" // "plain"
+  , "gpu_ids": [0]
+
+  , "merge_bn": true               // merge BN
+  , "merge_bn_startpoint": 400000  // merge BN after N iterations
+
+  , "path": {
+    "root": "results"            // "results"
+    , "pretrained_netG": null      // path of pretrained model
+  }
+  , "support_dir": "support_data/"
+  , "datasets": {
+    "train": {
+      "name": "train_dataset"           // just name
+      , "dataset_type": "quest2"        // "quest2"
+      , "dataroot": "./data/quest2_synthetic"// path of training dataset
+
+      , "dataloader_shuffle": true
+      , "dataloader_num_workers": 16
+      , "dataloader_batch_size": 256     // batch size 1 | 16 | 32 | 48 | 64 | 128 | 256
+      , "num_input": 3
+      , "window_size": 40
+
+    }
+    , "test": {
+      "name": "test_dataset"            // just name
+      , "dataset_type": "quest2"        // "quest2"
+      , "dataroot": "./data/quest2_synthetic"  // path of testing dataset
+      , "dataloader_batch_size": 1     // batch size 1 | 16 | 32 | 48 | 64 | 128
+      , "num_input": 3                  // number of tracking devices  3 | 4
+      , "window_size": 40
+
+    }
+  }
+
+  , "netG": {
+    "net_type": "AvatarPoser"
+    , "skeleton": "quest_humanoid"  // SimXR's 25-joint rig, NOT SMPL -- see models/quest_body_model.py
+    , "num_layer": 3
+    , "input_dim": 54        // input channel number # unchanged: still 3 tracked points' HMD features
+    , "output_dim": 150       // 6 (root) + 144 (24 non-root joints x 6D) -- quest_humanoid has 25 joints total
+    , "embed_dim": 256          // channel number of linear embedding for transformer
+    , "nhead": 8          //
+    , "init_type": "kaiming_normal"         // "orthogonal" | "normal" | "uniform" | "xavier_normal" | "xavier_uniform" | "kaiming_normal" | "kaiming_uniform"
+    , "init_bn_type": "uniform"         // "uniform" | "constant"
+    , "init_gain": 0.2
+  }
+
+  , "train": {
+    "G_lossfn_type": "l1"               // "l1" preferred | "l2sum" | "l2" | "ssim"
+    , "G_lossfn_weight": 1.0            // default
+
+    , "G_optimizer_type": "adam"        // fixed, adam is enough
+    , "G_optimizer_lr": 1e-4           // learning rate
+    , "G_optimizer_clipgrad": null      // unused
+
+    , "G_scheduler_type": "MultiStepLR" // "MultiStepLR" is enough
+    , "G_scheduler_milestones": [60000, 120000, 180000, 240000, 300000, 360000]
+    , "G_scheduler_gamma": 0.5
+
+    , "G_regularizer_orthstep": null    // unused
+    , "G_regularizer_clipstep": null    // unused
+
+    , "checkpoint_test": 999999          // disabled: model.test() does SMPL-specific global-root
+                                          // reconstruction + hardcodes wrist indices [20,21], not
+                                          // valid for quest_humanoid -- evaluated separately after
+    , "checkpoint_save": 5000           // for saving model
+    , "checkpoint_print": 500          // for print
+    , "max_steps": 15000                // Phase A first-pass fit; can resume/extend later
+  }
+}

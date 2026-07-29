@@ -164,13 +164,23 @@ class ModelBase():
                 state_dict = state_dict[param_key]
             network.load_state_dict(state_dict, strict=strict)
         else:
+            # Match by (key name, shape), not iteration order -- needed for warm-starting from a
+            # checkpoint with a different output head (e.g. AMASS/SMPL AvatarPoser -> quest_humanoid
+            # AvatarPoser: same encoder/stabilizer, but joint_rotation_decoder's final layer differs
+            # in output dim). Skipped tensors keep the current model's (random) init.
             state_dict_old = torch.load(load_path)
             if param_key in state_dict_old.keys():
                 state_dict_old = state_dict_old[param_key]
             state_dict = network.state_dict()
-            for ((key_old, param_old),(key, param)) in zip(state_dict_old.items(), state_dict.items()):
-                state_dict[key] = param_old
+            skipped = []
+            for key, param in state_dict.items():
+                if key in state_dict_old and state_dict_old[key].shape == param.shape:
+                    state_dict[key] = state_dict_old[key]
+                else:
+                    skipped.append(key)
             network.load_state_dict(state_dict, strict=True)
+            print(f'[load_network] partial load: {len(state_dict) - len(skipped)}/{len(state_dict)} '
+                  f'tensors matched by name+shape' + (f'; kept random init for: {skipped}' if skipped else ''))
             del state_dict_old, state_dict
 
     # ----------------------------------------

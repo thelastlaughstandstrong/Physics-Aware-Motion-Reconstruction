@@ -56,7 +56,11 @@ def main(json_path='options/train_avatarposer.json'):
     # ----------------------------------------
     # -->-->-->-->-->-->-->-->-->-->-->-->-->-
     init_iter, init_path_G = option.find_last_checkpoint(opt['path']['models'], net_type='G')
-    opt['path']['pretrained_netG'] = init_path_G
+    # Only overwrite an explicit path['pretrained_netG'] (e.g. a warm-start checkpoint from a
+    # different experiment) when this experiment's own directory actually has a checkpoint to
+    # resume from -- otherwise a fresh experiment's warm-start config gets silently discarded.
+    if init_path_G is not None:
+        opt['path']['pretrained_netG'] = init_path_G
     current_step = init_iter
 
     # --<--<--<--<--<--<--<--<--<--<--<--<--<-

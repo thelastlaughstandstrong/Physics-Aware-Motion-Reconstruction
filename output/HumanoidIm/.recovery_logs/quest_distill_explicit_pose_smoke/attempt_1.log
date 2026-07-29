@@ -1,0 +1,172 @@
+Importing module 'gym_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/gym_38.so)
+Setting GYM_USD_PLUG_INFO_PATH to /home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/usd/plugInfo.json
+PyTorch version 2.4.1+cu121
+Device count 1
+/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/src/gymtorch
+Using /home/sia-irl/.cache/torch_extensions/py38_cu121 as PyTorch extensions root...
+Emitting ninja build file /home/sia-irl/.cache/torch_extensions/py38_cu121/gymtorch/build.ninja...
+Building extension module gymtorch...
+Allowing ninja to set a default number of workers... (overridable by setting the environment variable MAX_JOBS=N)
+ninja: no work to do.
+Loading extension module gymtorch...
+2026-07-27 17:43:37,706 - INFO - logger - logger initialized
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+MOVING MOTION DATA TO GPU, USING CACHE: False
+MOVING MOTION DATA TO GPU, USING CACHE: False
+MOVING MOTION DATA TO GPU, USING CACHE: False
+Importing module 'rlgpu_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/rlgpu_38.so)
+2026-07-27 17:43:39,722 - DEBUG - Setting JobRuntime:name=UNKNOWN_NAME
+2026-07-27 17:43:39,722 - DEBUG - Setting JobRuntime:name=run_hydra
+Not connected to PVD
++++ Using GPU PhysX
+Physics Engine: PhysX
+Physics Device: cuda:0
+GPU Pipeline: enabled
+torch_deterministic: False
+torch_deterministic: False
+torch_deterministic: False
+Setting seed: 0
+Started to train
+Humanoid Weights [65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499]
+SIM FPS: 29.999998435378156
+SIM FPS: 29.999998435378156
+
+****************************** Current motion keys ******************************
+Sampling motion: tensor([2730, 3686, 1982, 4011, 1645, 3613, 2122, 3527, 1082,  656, 3544, 1022,
+        1356, 1648, 1241, 3779, 4052, 3562, 2641,  874, 2536,   17, 2168, 3634,
+         755,  149, 3818, 2747, 2305,  775], device='cuda:0')
+['/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT023.yoga.pkl_3768_4185.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT026.stretching.pkl_3529_3969.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT025.interactions.pkl_449_897.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT007.ROM.pkl_442_883.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT044.gestures.pkl_4498_4946.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT009.gestures.pkl_0_384.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT016.ROM.pkl_416_831.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT030.whiteboard.pkl_4446_4889.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT015.walking.pkl_3043_3476.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT066.ROM.pkl_1684_2104.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT056.jogging.pkl_2670_3114.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT066.jogging.pkl_2126_2550.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT045.jogging.pkl_2570_2997.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT005.walking.pkl_0_439.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT053.whiteboard.pkl_889_1332.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT069.presentation.pkl_4320_4751.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT042.standing.pkl_423_845.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT024.ROM.pkl_4655_5077.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT047.cooking.pkl_3040_3473.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT037.whiteboard.pkl_2175_2609.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT004.walking.pkl_880_1319.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT063.walking.pkl_1347_1795.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT027.dancing.pkl_3440_3869.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT042.standing.pkl_5069_5490.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT022.standing.pkl_422_843.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT060.ROM.pkl_1604_2003.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT023.whiteboard.pkl_1754_2191.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT057.interactions.pkl_866_1298.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT023.standing.pkl_445_889.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT061.whiteboard.pkl_4791_5225.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT021.ROM.pkl_1656_2069.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT016.walking.pkl_4280_4707.pkl']
+*********************************************************************************
+
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+  0%|          | 0/31 [00:00<?, ?it/s]  3%|▎         | 1/31 [00:00<00:06,  4.72it/s]100%|██████████| 31/31 [00:00<00:00, 102.88it/s]
+  0%|          | 0/32 [00:00<?, ?it/s]100%|██████████| 32/32 [00:00<00:00, 19881.16it/s]
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/gym/spaces/box.py:127: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/rl_games/common/a2c_common.py:175: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  self.scaler = torch.cuda.amp.GradScaler(enabled=self.mixed_precision)
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+  warnings.warn(f"enable_nested_tensor is True, but self.use_nested_tensor is False because {why_not_sparsity_fast_path}")
+/home/sia-irl/AvatarPoser/utils/utils_transform.py:55: UserWarning: Using torch.cross without specifying the dim arg is deprecated.
+Please either pass the dim explicitly or simply use torch.linalg.cross.
+The default value of dim will change to agree with that of linalg.cross in a future release. (Triggered internally at ../aten/src/ATen/native/Cross.cpp:62.)
+  rot_vec_3 = torch.cross(rot_vec_1, rot_vec_2)
+[distill] step      32 | batch     1 | kinematic 0.060566 (root 0.058834 jrot 0.041562 jpos 0.017827) | action 0.014637 | total 0.062030 | gpu_alloc 0.269GB gpu_reserved 2.366GB
+[distill] step      64 | batch     2 | kinematic 0.047734 (root 0.043128 jrot 0.033556 jpos 0.013316) | action 0.024782 | total 0.050213 | gpu_alloc 0.270GB gpu_reserved 2.370GB
+[distill] step      96 | batch     3 | kinematic 0.048332 (root 0.047700 jrot 0.033869 jpos 0.013508) | action 0.028568 | total 0.051188 | gpu_alloc 0.272GB gpu_reserved 2.416GB
+[distill] step     128 | batch     4 | kinematic 0.044290 (root 0.044880 jrot 0.031037 jpos 0.012356) | action 0.026729 | total 0.046963 | gpu_alloc 0.274GB gpu_reserved 2.418GB
+[distill] step     160 | batch     5 | kinematic 0.046446 (root 0.045778 jrot 0.032625 jpos 0.012905) | action 0.021686 | total 0.048615 | gpu_alloc 0.276GB gpu_reserved 2.422GB
+[distill] step     192 | batch     6 | kinematic 0.043766 (root 0.045156 jrot 0.030559 jpos 0.012304) | action 0.017055 | total 0.045471 | gpu_alloc 0.277GB gpu_reserved 2.426GB
+[distill] step     224 | batch     7 | kinematic 0.041968 (root 0.040796 jrot 0.029441 jpos 0.011711) | action 0.024482 | total 0.044416 | gpu_alloc 0.278GB gpu_reserved 2.426GB
+[distill] step     256 | batch     8 | kinematic 0.040824 (root 0.041663 jrot 0.028525 jpos 0.011466) | action 0.019254 | total 0.042750 | gpu_alloc 0.279GB gpu_reserved 2.426GB
+[distill] step     288 | batch     9 | kinematic 0.042749 (root 0.043759 jrot 0.029899 jpos 0.011974) | action 0.017671 | total 0.044516 | gpu_alloc 0.280GB gpu_reserved 2.429GB
+[distill] step     320 | batch    10 | kinematic 0.039451 (root 0.038001 jrot 0.027794 jpos 0.010897) | action 0.029327 | total 0.042383 | gpu_alloc 0.282GB gpu_reserved 2.431GB
+[distill] step     352 | batch    11 | kinematic 0.040212 (root 0.040034 jrot 0.027980 jpos 0.011431) | action 0.020629 | total 0.042275 | gpu_alloc 0.283GB gpu_reserved 2.433GB
+[distill] step     384 | batch    12 | kinematic 0.038962 (root 0.039766 jrot 0.027063 jpos 0.011104) | action 0.015987 | total 0.040561 | gpu_alloc 0.284GB gpu_reserved 2.433GB
+[distill] step     416 | batch    13 | kinematic 0.036782 (root 0.037888 jrot 0.025703 jpos 0.010321) | action 0.017150 | total 0.038497 | gpu_alloc 0.285GB gpu_reserved 2.435GB
+[distill] step     448 | batch    14 | kinematic 0.036584 (root 0.037269 jrot 0.025613 jpos 0.010226) | action 0.016118 | total 0.038196 | gpu_alloc 0.287GB gpu_reserved 2.435GB
+[distill] step     480 | batch    15 | kinematic 0.037676 (root 0.037245 jrot 0.026270 jpos 0.010661) | action 0.035714 | total 0.041247 | gpu_alloc 0.288GB gpu_reserved 2.437GB
+[distill] saved -> output/HumanoidIm/quest_distill_explicit_pose_smoke/student/student_0000480.pth
+[distill] step     512 | batch    16 | kinematic 0.037802 (root 0.036544 jrot 0.026576 jpos 0.010495) | action 0.030668 | total 0.040869 | gpu_alloc 0.289GB gpu_reserved 2.439GB
+[distill] step     544 | batch    17 | kinematic 0.038191 (root 0.037695 jrot 0.026605 jpos 0.010832) | action 0.035695 | total 0.041761 | gpu_alloc 0.290GB gpu_reserved 2.439GB
+[distill] step     576 | batch    18 | kinematic 0.037301 (root 0.035991 jrot 0.026136 jpos 0.010445) | action 0.020314 | total 0.039333 | gpu_alloc 0.292GB gpu_reserved 2.441GB
+[distill] step     608 | batch    19 | kinematic 0.038112 (root 0.036159 jrot 0.026834 jpos 0.010555) | action 0.023865 | total 0.040499 | gpu_alloc 0.293GB gpu_reserved 2.443GB
+[distill] step     640 | batch    20 | kinematic 0.037176 (root 0.036557 jrot 0.025869 jpos 0.010576) | action 0.021265 | total 0.039302 | gpu_alloc 0.294GB gpu_reserved 2.445GB
+[distill] step     672 | batch    21 | kinematic 0.035988 (root 0.035074 jrot 0.025244 jpos 0.010042) | action 0.018764 | total 0.037864 | gpu_alloc 0.295GB gpu_reserved 2.445GB
+[distill] step     704 | batch    22 | kinematic 0.035293 (root 0.034517 jrot 0.024583 jpos 0.010020) | action 0.019990 | total 0.037292 | gpu_alloc 0.297GB gpu_reserved 2.445GB
+[distill] step     736 | batch    23 | kinematic 0.032309 (root 0.030331 jrot 0.022694 jpos 0.009009) | action 0.017438 | total 0.034053 | gpu_alloc 0.298GB gpu_reserved 2.445GB
+[distill] step     768 | batch    24 | kinematic 0.033406 (root 0.031494 jrot 0.023506 jpos 0.009269) | action 0.029802 | total 0.036386 | gpu_alloc 0.299GB gpu_reserved 2.449GB
+[distill] step     800 | batch    25 | kinematic 0.033154 (root 0.030665 jrot 0.023507 jpos 0.009033) | action 0.024798 | total 0.035633 | gpu_alloc 0.300GB gpu_reserved 2.449GB
+[distill] step     832 | batch    26 | kinematic 0.033273 (root 0.033242 jrot 0.023380 jpos 0.009228) | action 0.024324 | total 0.035706 | gpu_alloc 0.301GB gpu_reserved 2.452GB
+[distill] step     864 | batch    27 | kinematic 0.033300 (root 0.030492 jrot 0.023414 jpos 0.009276) | action 0.032218 | total 0.036522 | gpu_alloc 0.302GB gpu_reserved 2.452GB
+[distill] step     896 | batch    28 | kinematic 0.032521 (root 0.032728 jrot 0.022792 jpos 0.009075) | action 0.046896 | total 0.037211 | gpu_alloc 0.303GB gpu_reserved 2.454GB
+[distill] step     928 | batch    29 | kinematic 0.033541 (root 0.031615 jrot 0.023807 jpos 0.009101) | action 0.019312 | total 0.035472 | gpu_alloc 0.304GB gpu_reserved 2.456GB
+[distill] step     960 | batch    30 | kinematic 0.033716 (root 0.031006 jrot 0.023620 jpos 0.009475) | action 0.032446 | total 0.036960 | gpu_alloc 0.305GB gpu_reserved 2.456GB
+[distill] saved -> output/HumanoidIm/quest_distill_explicit_pose_smoke/student/student_0000960.pth
+[distill] step     992 | batch    31 | kinematic 0.031673 (root 0.030333 jrot 0.022468 jpos 0.008598) | action 0.017231 | total 0.033396 | gpu_alloc 0.306GB gpu_reserved 2.456GB
+[distill] step    1024 | batch    32 | kinematic 0.031066 (root 0.028964 jrot 0.021947 jpos 0.008540) | action 0.023438 | total 0.033410 | gpu_alloc 0.307GB gpu_reserved 2.456GB
+[distill] step    1056 | batch    33 | kinematic 0.032816 (root 0.030693 jrot 0.023072 jpos 0.009130) | action 0.019582 | total 0.034775 | gpu_alloc 0.308GB gpu_reserved 2.458GB
+[distill] step    1088 | batch    34 | kinematic 0.033093 (root 0.032417 jrot 0.023056 jpos 0.009389) | action 0.019411 | total 0.035035 | gpu_alloc 0.310GB gpu_reserved 2.458GB
+[distill] step    1120 | batch    35 | kinematic 0.032233 (root 0.030387 jrot 0.022618 jpos 0.009008) | action 0.019858 | total 0.034219 | gpu_alloc 0.310GB gpu_reserved 2.460GB
+[distill] step    1152 | batch    36 | kinematic 0.034812 (root 0.034002 jrot 0.024356 jpos 0.009776) | action 0.024277 | total 0.037240 | gpu_alloc 0.312GB gpu_reserved 2.462GB
+[distill] step    1184 | batch    37 | kinematic 0.031929 (root 0.031169 jrot 0.022390 jpos 0.008915) | action 0.017669 | total 0.033696 | gpu_alloc 0.313GB gpu_reserved 2.464GB
+[distill] step    1216 | batch    38 | kinematic 0.031778 (root 0.028585 jrot 0.022482 jpos 0.008724) | action 0.018091 | total 0.033587 | gpu_alloc 0.314GB gpu_reserved 2.464GB
+[distill] step    1248 | batch    39 | kinematic 0.030223 (root 0.028437 jrot 0.021392 jpos 0.008262) | action 0.052084 | total 0.035432 | gpu_alloc 0.315GB gpu_reserved 2.466GB
+[distill] step    1280 | batch    40 | kinematic 0.028763 (root 0.028992 jrot 0.020157 jpos 0.008026) | action 0.017343 | total 0.030497 | gpu_alloc 0.316GB gpu_reserved 2.466GB
+[distill] step    1312 | batch    41 | kinematic 0.029810 (root 0.029901 jrot 0.020534 jpos 0.008678) | action 0.023220 | total 0.032132 | gpu_alloc 0.317GB gpu_reserved 2.468GB
+[distill] step    1344 | batch    42 | kinematic 0.029226 (root 0.027163 jrot 0.020550 jpos 0.008133) | action 0.022277 | total 0.031454 | gpu_alloc 0.318GB gpu_reserved 2.468GB
+[distill] step    1376 | batch    43 | kinematic 0.030447 (root 0.026766 jrot 0.021400 jpos 0.008512) | action 0.018780 | total 0.032325 | gpu_alloc 0.319GB gpu_reserved 2.468GB
+[distill] step    1408 | batch    44 | kinematic 0.028985 (root 0.027464 jrot 0.020490 jpos 0.007946) | action 0.024304 | total 0.031415 | gpu_alloc 0.321GB gpu_reserved 2.470GB
+[distill] step    1440 | batch    45 | kinematic 0.029811 (root 0.029738 jrot 0.021131 jpos 0.008086) | action 0.037879 | total 0.033599 | gpu_alloc 0.321GB gpu_reserved 2.470GB
+[distill] saved -> output/HumanoidIm/quest_distill_explicit_pose_smoke/student/student_0001440.pth
+[distill] step    1472 | batch    46 | kinematic 0.030959 (root 0.028553 jrot 0.021673 jpos 0.008715) | action 0.068859 | total 0.037845 | gpu_alloc 0.323GB gpu_reserved 2.473GB
+[distill] step    1504 | batch    47 | kinematic 0.029540 (root 0.027787 jrot 0.021008 jpos 0.007976) | action 0.025422 | total 0.032082 | gpu_alloc 0.323GB gpu_reserved 2.473GB
+[distill] step    1536 | batch    48 | kinematic 0.028641 (root 0.028589 jrot 0.019855 jpos 0.008214) | action 0.016446 | total 0.030286 | gpu_alloc 0.325GB gpu_reserved 2.475GB
+[distill] step    1568 | batch    49 | kinematic 0.029431 (root 0.028224 jrot 0.020416 jpos 0.008450) | action 0.021180 | total 0.031549 | gpu_alloc 0.326GB gpu_reserved 2.477GB
+[distill] step    1600 | batch    50 | kinematic 0.030403 (root 0.030374 jrot 0.021022 jpos 0.008774) | action 0.014292 | total 0.031832 | gpu_alloc 0.327GB gpu_reserved 2.479GB
+[distill] step    1632 | batch    51 | kinematic 0.030579 (root 0.030257 jrot 0.021143 jpos 0.008830) | action 0.026094 | total 0.033188 | gpu_alloc 0.328GB gpu_reserved 2.479GB
+[distill] step    1664 | batch    52 | kinematic 0.028249 (root 0.025718 jrot 0.019860 jpos 0.007875) | action 0.076389 | total 0.035888 | gpu_alloc 0.329GB gpu_reserved 2.479GB
+[distill] step    1696 | batch    53 | kinematic 0.027878 (root 0.026253 jrot 0.019746 jpos 0.007607) | action 0.030171 | total 0.030895 | gpu_alloc 0.330GB gpu_reserved 2.479GB
+[distill] step    1728 | batch    54 | kinematic 0.029877 (root 0.028730 jrot 0.020840 jpos 0.008463) | action 0.025037 | total 0.032381 | gpu_alloc 0.331GB gpu_reserved 2.481GB
+[distill] step    1760 | batch    55 | kinematic 0.029204 (root 0.027865 jrot 0.020542 jpos 0.008105) | action 0.023340 | total 0.031538 | gpu_alloc 0.332GB gpu_reserved 2.481GB
+[distill] step    1792 | batch    56 | kinematic 0.028502 (root 0.026657 jrot 0.019907 jpos 0.008062) | action 0.018601 | total 0.030362 | gpu_alloc 0.333GB gpu_reserved 2.483GB
+[distill] step    1824 | batch    57 | kinematic 0.028077 (root 0.026717 jrot 0.019577 jpos 0.007965) | action 0.027781 | total 0.030855 | gpu_alloc 0.334GB gpu_reserved 2.485GB
+[distill] step    1856 | batch    58 | kinematic 0.027019 (root 0.026542 jrot 0.019190 jpos 0.007299) | action 0.026803 | total 0.029700 | gpu_alloc 0.335GB gpu_reserved 2.485GB
+[distill] step    1888 | batch    59 | kinematic 0.027009 (root 0.025539 jrot 0.019241 jpos 0.007257) | action 0.034301 | total 0.030439 | gpu_alloc 0.336GB gpu_reserved 2.485GB
+[distill] step    1920 | batch    60 | kinematic 0.028873 (root 0.026585 jrot 0.020336 jpos 0.008005) | action 0.036277 | total 0.032500 | gpu_alloc 0.337GB gpu_reserved 2.487GB
+[distill] saved -> output/HumanoidIm/quest_distill_explicit_pose_smoke/student/student_0001920.pth
+[distill] step    1952 | batch    61 | kinematic 0.030410 (root 0.028947 jrot 0.021257 jpos 0.008574) | action 0.019643 | total 0.032375 | gpu_alloc 0.338GB gpu_reserved 2.487GB
+[distill] step    1984 | batch    62 | kinematic 0.028041 (root 0.025922 jrot 0.019631 jpos 0.007891) | action 0.025281 | total 0.030569 | gpu_alloc 0.339GB gpu_reserved 2.489GB
+[distill] step    2016 | batch    63 | kinematic 0.027531 (root 0.025500 jrot 0.019411 jpos 0.007609) | action 0.024034 | total 0.029934 | gpu_alloc 0.340GB gpu_reserved 2.491GB
+[distill] saved -> output/HumanoidIm/quest_distill_explicit_pose_smoke/student/student_0002016.pth
+[distill] hit max_distill_step cap (2000) at step 2016 -- stopping
+Loaded 32 motions with a total length of 458.400s and 13784 frames.
+RL device:  cuda:0
+32
+72
+972
+0
+Box(-1.0, 1.0, (72,), float32) Box(-inf, inf, (972,), float32)
+Env info:
+{'action_space': Box(-1.0, 1.0, (72,), float32), 'observation_space': Box(-inf, inf, (972,), float32), 'amp_observation_space': Box(-inf, inf, (2220,), float32), 'enc_amp_observation_space': Box(-inf, inf, (2220,), float32), 'task_obs_size': 0}
+RunningMeanStd:  (1,)
+RunningMeanStd:  (972,)
+build mlp: 972
+build mlp: 972
+build mlp: 2220
+sigma
+actor_mlp.0.weight
+actor_mlp.0.bias
+actor_mlp.2.weight
+actor_mlp.2.bias
+actor_mlp.4.weight
+actor_mlp.4.bias
+critic_mlp.0.weight
+critic_mlp.0.bias
+critic_mlp.2.weight
+critic_mlp.2.bias
+critic_mlp.4.weight
+critic_mlp.4.bias
+value.weight
+value.bias
+mu.weight
+mu.bias
+_disc_mlp.0.weight
+_disc_mlp.0.bias
+_disc_mlp.2.weight
+_disc_mlp.2.bias
+_disc_logits.weight
+_disc_logits.bias
+RunningMeanStd:  (1,)
+RunningMeanStd:  (2220,)
+[DistillAgentQuest] Loading PHC teacher from ../output/HumanoidIm/phc_prim_quest/Humanoid.pth
+[DistillAgentQuest] PHC self_obs_dim = 372
+[DistillAgentQuest] PHC action_dim   = 72
+[DistillAgentQuest] action_head/value_head conditioned on EXPLICIT decoded pose (q_base), not the opaque backbone latent z
+[DistillAgent] Backbone loaded: 46 keys matched, 0 missing, 0 unexpected
+[DistillAgentQuest] Backbone UNFROZEN -- trained jointly via kinematic + action loss
+[DistillAgent] Training log -> output/HumanoidIm/quest_distill_explicit_pose_smoke/quest_distill_explicit_pose_smoke.log

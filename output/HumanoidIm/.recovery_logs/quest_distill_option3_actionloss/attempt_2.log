@@ -1,0 +1,30 @@
+/usr/bin/bash: /home/sia-irl/anaconda3/envs/avatarposer/lib/libtinfo.so.6: no version information available (required by /usr/bin/bash)
+Importing module 'gym_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/gym_38.so)
+Setting GYM_USD_PLUG_INFO_PATH to /home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/usd/plugInfo.json
+PyTorch version 2.4.1+cu121
+Device count 1
+/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/src/gymtorch
+Using /home/sia-irl/.cache/torch_extensions/py38_cu121 as PyTorch extensions root...
+Emitting ninja build file /home/sia-irl/.cache/torch_extensions/py38_cu121/gymtorch/build.ninja...
+Building extension module gymtorch...
+Allowing ninja to set a default number of workers... (overridable by setting the environment variable MAX_JOBS=N)
+ninja: no work to do.
+Loading extension module gymtorch...
+2026-07-22 17:17:07,251 - INFO - logger - logger initialized
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+MOVING MOTION DATA TO GPU, USING CACHE: False
+MOVING MOTION DATA TO GPU, USING CACHE: False
+MOVING MOTION DATA TO GPU, USING CACHE: False
+Importing module 'rlgpu_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/rlgpu_38.so)
+Traceback (most recent call last):
+  File "phc/run_hydra.py", line 64, in <module>
+    from learning import distill_agent_quest
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/distill_agent_quest.py", line 93, in <module>
+    _spec.loader.exec_module(_utils_transform)
+  File "/home/sia-irl/AvatarPoser/utils/utils_transform.py", line 14, in <module>
+    from human_body_prior.tools import tgm_conversion as tgm
+ImportError: cannot import name 'tgm_conversion' from 'human_body_prior.tools' (/home/sia-irl/anaconda3/envs/rlgpu/lib/python3.8/site-packages/human_body_prior/tools/__init__.py)
+ERROR conda.cli.main_run:execute(127): `conda run python phc/run_hydra.py learning=distill_quest exp_name=quest_distill_option3_actionloss env=env_quest_im_basic robot=quest_humanoid env.motion_file=/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion env.num_envs=128 env.cycle_motion=True env.min_length=5 learning.params.config.max_distill_step=200000 headless=True no_virtual_display=True no_log=True disable_multiprocessing=False test=False im_eval=False learning.params.config.lambda_kinematic=0.0 learning.params.config.lambda_action=1.0` failed. (See above for error)

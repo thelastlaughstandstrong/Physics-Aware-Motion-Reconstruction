@@ -32,12 +32,15 @@ Notes
 - For metrics that need GT comparison (pos_error, vel_error), GT body params are loaded from
   the AvatarPoser test dataset and converted to PHC frame using FK — matching the reference
   motion coordinate system exactly.
-- rot_error requires local joint rotations which are not directly available from rigid body
-  positions alone; it is computed from PHC's reference motion (the AvatarPoser prediction it
-  was tracking) vs the true GT, as an upper-bound indicator.
+- rot_error ("PHC-corrected metrics" MPJRE) is computed from PHC's simulated global joint
+  rotations vs the true GT. The separate "Baseline (AvatarPoser kinematic)" MPJRE is computed
+  from an independent AvatarPoser prediction pkl (--avatarposer_pred_pkl) vs the same GT,
+  matched by dataset_seqname suffix since the two pkls use different key-naming schemes.
 """
 
 import argparse
+import datetime
+import json
 import os
 import re
 import sys
@@ -55,9 +58,11 @@ sys.path.insert(0, PHC_ROOT)
 
 from data.select_dataset import define_Dataset
 from utils import utils_option as option
+from utils.physical_metrics import compute_ground_penetration
 from poselib.poselib.skeleton.skeleton3d import SkeletonState, SkeletonTree
 from smpl_sim.smpllib.smpl_joint_names import SMPL_BONE_ORDER_NAMES, SMPL_MUJOCO_NAMES
 from smpl_sim.smpllib.smpl_local_robot import SMPL_Robot as LocalRobot
+from human_body_prior.body_model.body_model import BodyModel
 from scripts.convert_avatarposer_to_phc import (
     ROBOT_CFG, SMPL_2_MUJOCO, build_skeleton_tree
 )
@@ -211,6 +216,70 @@ def compute_gpen(pred_full: np.ndarray, ground_z: float = 0.0) -> tuple:
     return mean_mm, max_mm, pen_rate
 
 
+_UPRIGHT_ROT = sRot.from_quat([0.5, 0.5, 0.5, 0.5])  # inverse of _UPRIGHT_ROT_INV
+
+
+def pqg_upright_to_body_params(pqg_upright: np.ndarray, root_pos: np.ndarray,
+                                skeleton_tree: SkeletonTree):
+    """
+    Convert PHC-frame (upright_start-rotated) global joint quaternions + root position
+    back into AvatarPoser/SMPL-compatible (root_orient, pose_body, trans) axis-angle body
+    params, for driving AvatarPoser's own SMPL-H body model to get true mesh vertices.
+
+    Undoes the upright rotation (right-multiply by the inverse of the rotation applied in
+    convert_avatarposer_to_phc.py), rebuilds a SkeletonState on the *non-upright* skeleton
+    tree, and reads its local_rotation. Verified via a synthetic round-trip test
+    (local -> global -> upright -> undo upright -> local): max recovered-angle error
+    < 0.06 degrees (floating-point noise), confirming this is not simply a no-op — a
+    shared rotation applied to every joint's *global* quaternion does NOT cancel out of
+    the parent-relative *local* rotations, so the undo step is required, not optional.
+
+    pqg_upright: [T, 24, 4] Mujoco-order global quaternions, PHC upright frame.
+    root_pos:    [T, 3] root/pelvis world position (== root_trans_offset elsewhere in
+                 this script; joint 0 is Pelvis in both Mujoco and SMPL joint order).
+    Returns: root_orient [T,3], pose_body [T,63], trans [T,3] (torch, axis-angle/metres).
+    """
+    T = pqg_upright.shape[0]
+    g_smpl_frame = (sRot.from_quat(pqg_upright.reshape(-1, 4)) * _UPRIGHT_ROT).as_quat().reshape(T, 24, 4)
+    root_pos_t = torch.from_numpy(root_pos.astype(np.float32)) if isinstance(root_pos, np.ndarray) else root_pos
+    sk_state = SkeletonState.from_rotation_and_root_translation(
+        skeleton_tree, torch.from_numpy(g_smpl_frame.astype(np.float32)), root_pos_t, is_local=False
+    )
+    local_rot_mj   = sk_state.local_rotation.numpy()               # [T, 24, 4] Mujoco order
+    local_rot_smpl = local_rot_mj[:, MUJOCO_2_SMPL_REORDER, :]     # [T, 24, 4] SMPL order
+    aa = sRot.from_quat(local_rot_smpl.reshape(-1, 4)).as_rotvec().reshape(T, 24, 3)
+    root_orient = torch.from_numpy(aa[:, 0, :].astype(np.float32))
+    pose_body   = torch.from_numpy(aa[:, 1:22, :].reshape(T, 63).astype(np.float32))
+    trans = root_pos_t - skeleton_tree.local_translation[0]
+    return root_orient, pose_body, trans
+
+
+def compute_mesh_gpen(body_model: BodyModel, root_orient: torch.Tensor, pose_body: torch.Tensor,
+                       trans: torch.Tensor, device: torch.device, batch_size: int = 512) -> tuple:
+    """
+    True mesh-vertex ground penetration, matching utils.physical_metrics.compute_ground_penetration
+    exactly (same function the AvatarPoser baseline uses) — betas default to zero (neutral shape)
+    since neither AvatarPoser's own baseline (models/select_model.py never passes betas) nor PHC's
+    simulated humanoid (has_shape_variation=False in smpl_humanoid.yaml forces a fixed neutral
+    body regardless of the motion pkl's beta) use per-subject shape, so this is consistent with
+    both sides, not a new mismatch. Batched to bound GPU memory on long sequences.
+    """
+    T = root_orient.shape[0]
+    verts_chunks = []
+    with torch.no_grad():
+        for s in range(0, T, batch_size):
+            e = min(s + batch_size, T)
+            out = body_model(
+                pose_body=pose_body[s:e].to(device),
+                root_orient=root_orient[s:e].to(device),
+                trans=trans[s:e].to(device),
+            )
+            verts_chunks.append(out.v.cpu())
+    verts = torch.cat(verts_chunks, dim=0)
+    mean_mm, max_mm, rate = compute_ground_penetration(verts)
+    return mean_mm.item(), max_mm.item(), rate.item()
+
+
 def compute_mpjre(pred_rot: np.ndarray, gt_rot: np.ndarray) -> float:
     """
     Mean per-joint rotation error (geodesic distance) in degrees.
@@ -223,27 +292,53 @@ def compute_mpjre(pred_rot: np.ndarray, gt_rot: np.ndarray) -> float:
     return float(np.degrees(rel.mean()))
 
 
+_SEQ_PREFIX_RE = re.compile(r"^(?:pred_\d+_|gt_test_\d+_)")
+
+
+def seq_suffix(key: str) -> str:
+    """Strip the pred_NNNN_/gt_test_N_ prefix, leaving the dataset_seqname id used to
+    match avatarposer_all.pkl's prediction keys against this eval's GT/motion keys
+    (the two files use different numeric-index prefixes for the same sequences)."""
+    return _SEQ_PREFIX_RE.sub("", key)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--pos_dump", required=True,
                         help="Path to phc_positions_for_eval.pkl (written by PHC im_eval).")
     parser.add_argument("--motion_file", default=None,
-                        help="PHC motion pkl used during eval (for AvatarPoser MPJRE baseline).")
+                        help="PHC motion pkl used during eval (also used as GT source when "
+                             "--gt_pkl is not given).")
     parser.add_argument("--gt_pkl", default=None,
                         help="phc_bio_test.pkl — use instead of AvatarPoser test dataset for GT. "
                              "Keys must match motion_keys in pos_dump.")
+    parser.add_argument("--avatarposer_pred_pkl",
+                        default=os.path.join(REPO_ROOT, "sample_data", "avatarposer_all.pkl"),
+                        help="Genuine AvatarPoser kinematic predictions (PHC format, pose_quat_global) "
+                             "used for the 'Baseline (AvatarPoser kinematic)' MPJRE. Matched against "
+                             "GT by dataset_seqname suffix, not by raw key (prefixes differ between "
+                             "files). Skipped gracefully if missing (this file is gitignored).")
     parser.add_argument("--opt", default="options/test_avatarposer.json",
                         help="AvatarPoser options JSON (only needed when --gt_pkl is not set).")
     parser.add_argument("--fps", type=int, default=30,
                         help="Frame rate of PHC output (default 30).")
+    parser.add_argument("--baseline_cache",
+                        default=os.path.join(REPO_ROOT, "results/baselines/avatarposer_baseline_phc_frame.json"),
+                        help="Cache file for the 'Baseline (AvatarPoser kinematic)' metrics. These "
+                             "numbers are constant across all experiments/checkpoints (they only "
+                             "depend on --avatarposer_pred_pkl vs GT, neither of which vary per "
+                             "checkpoint), so by default they're computed once (mesh reconstruction "
+                             "+ body model forward pass) and reused from this file rather than "
+                             "recomputed on every eval run. Pass --recompute_baseline to refresh it.")
+    parser.add_argument("--recompute_baseline", action="store_true",
+                        help="Force recomputing the Baseline metrics even if --baseline_cache exists.")
     args = parser.parse_args()
 
     os.chdir(REPO_ROOT)
 
     print("Loading PHC simulation positions …")
     phc_dump    = joblib.load(args.pos_dump)
-    motion_data = joblib.load(args.motion_file) if args.motion_file else {}
     pred_pos_all   = phc_dump["pred_pos_all"]
     ref_pos_all    = phc_dump.get("ref_pos_all", None)
     pred_rot_all   = phc_dump.get("pred_rot_all", None)
@@ -261,6 +356,16 @@ def main():
     upright_mjcf  = os.path.join(PHC_ROOT, "phc/data/assets/mjcf/smpl_0_humanoid.xml")
     skeleton_tree_upright = SkeletonTree.from_mjcf(upright_mjcf)
     print(f"  upright skeleton loaded from {upright_mjcf}")
+
+    print("Loading SMPL-H body model (for true mesh-vertex ground penetration) …")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    support_dir = os.path.join(REPO_ROOT, "support_data")
+    body_model = BodyModel(
+        bm_fname=os.path.join(support_dir, "body_models/smplh/male/model.npz"),
+        num_betas=16, num_dmpls=8,
+        dmpl_fname=os.path.join(support_dir, "body_models/dmpls/male/model.npz"),
+    ).to(device)
+    print(f"  body model loaded on {device}")
 
     # ── GT source: phc_test.pkl (preferred) OR AvatarPoser test dataset ─────
     # If --gt_pkl not given but --motion_file is, use motion_file as GT source
@@ -296,9 +401,38 @@ def main():
         print(f"  indexed {len(idx_to_data)} sequences           ")
         key_to_gt = None
 
+    # ── AvatarPoser kinematic predictions (for the "Baseline" section) ───────
+    # Independent of the GT source above: these are AvatarPoser's own predicted
+    # rotations, matched to GT/motion keys by dataset_seqname suffix since the two
+    # pkls use different numeric-index prefixes (pred_NNNN_... vs gt_test_N_...).
+    #
+    # These Baseline metrics are constant across every experiment/checkpoint (they
+    # only depend on --avatarposer_pred_pkl vs GT, neither of which vary per eval
+    # run), so by default they're computed once and cached to --baseline_cache
+    # rather than re-running mesh reconstruction + the body model on every call.
+    baseline_cached = None
+    if args.baseline_cache and os.path.exists(args.baseline_cache) and not args.recompute_baseline:
+        with open(args.baseline_cache) as f:
+            baseline_cached = json.load(f)["metrics"]
+        print(f"Loaded cached Baseline metrics from {args.baseline_cache} "
+              f"(pass --recompute_baseline to refresh)")
+
+    ap_pred_by_suffix = {}
+    if baseline_cached is None:
+        if os.path.exists(args.avatarposer_pred_pkl):
+            print(f"Loading AvatarPoser predictions from {args.avatarposer_pred_pkl} …")
+            ap_pred_data = joblib.load(args.avatarposer_pred_pkl)
+            ap_pred_by_suffix = {seq_suffix(k): v for k, v in ap_pred_data.items()}
+            print(f"  {len(ap_pred_by_suffix)} AvatarPoser prediction sequences loaded")
+        else:
+            print(f"  [note] {args.avatarposer_pred_pkl} not found — skipping "
+                  f"'Baseline (AvatarPoser kinematic)' section")
+
     # ── Compute metrics per sequence ──────────────────────────────────────────
-    pos_errors, vel_errors, rot_errors, ap_rot_errors, jitters, foot_skates = [], [], [], [], [], []
+    pos_errors, vel_errors, rot_errors, jitters, foot_skates = [], [], [], [], []
     gpen_means, gpen_maxes, gpen_rates = [], [], []
+    ap_pos_errors, ap_vel_errors, ap_rot_errors, ap_jitters, ap_foot_skates = [], [], [], [], []
+    ap_gpen_means, ap_gpen_maxes, ap_gpen_rates = [], [], []
 
     # Tracking quality: mean |PHC_sim - AvatarPoser_ref| across all sequences.
     # Should match PHC's reported mpjpe_g (~42mm for seq 0).
@@ -369,14 +503,64 @@ def main():
             T_r = min(pred_rot_all[i].shape[0], gt_rot_mj.shape[0])
             rot_errors.append(compute_mpjre(pred_rot_all[i][:T_r], gt_rot_mj[:T_r]))
 
-        # AvatarPoser MPJRE: predicted global rotations (from motion pkl) vs GT
-        if key in motion_data:
-            ap_rot = motion_data[key]["pose_quat_global"]  # [N, 24, 4]
-            T_ap   = min(ap_rot.shape[0], gt_rot_mj.shape[0])
-            ap_rot_errors.append(compute_mpjre(ap_rot[:T_ap], gt_rot_mj[:T_ap]))
+        # AvatarPoser baseline: genuine AvatarPoser kinematic prediction vs GT, matched by
+        # dataset_seqname suffix (see ap_pred_by_suffix construction above). Computed with
+        # the exact same functions/frame as the PHC-corrected metrics above, at
+        # avatarposer_all.pkl's own fps (30, matching PHC's rate) rather than AvatarPoser's
+        # native 60fps, so this is a fair comparison against the PHC-corrected numbers.
+        suf = seq_suffix(key)
+        if suf in ap_pred_by_suffix:
+            ap_entry = ap_pred_by_suffix[suf]
+            ap_pqg = ap_entry["pose_quat_global"]  # [N, 24, 4]
+            ap_rto = ap_entry["root_trans_offset"]  # [N, 3]
+            if isinstance(ap_pqg, torch.Tensor):
+                ap_pqg = ap_pqg.numpy()
+            ap_rto_t = ap_rto if isinstance(ap_rto, torch.Tensor) else torch.from_numpy(ap_rto.astype(np.float32))
+            ap_pqg_t = torch.from_numpy(ap_pqg.astype(np.float32))
+            ap_sk_state = SkeletonState.from_rotation_and_root_translation(
+                skeleton_tree_upright, ap_pqg_t, ap_rto_t, is_local=False
+            )
+            ap_pos_mj = ap_sk_state.global_translation.numpy()  # [N, 24, 3]
+
+            T_ap = min(ap_pos_mj.shape[0], gt_pos_mj.shape[0])
+            ap_fps = ap_entry.get("fps", 30.0) or 30.0
+            if T_ap >= 4:
+                ap_pos_smpl = ap_pos_mj[:T_ap, MUJOCO_2_SMPL_REORDER, :][:, :NUM_SMPL_JOINTS, :]
+                gt_smpl_ap  = gt_pos_mj[:T_ap, MUJOCO_2_SMPL_REORDER, :][:, :NUM_SMPL_JOINTS, :]
+                ap_m = compute_metrics(ap_pos_smpl, gt_smpl_ap, fps=ap_fps)
+                ap_pos_errors.append(ap_m["pos_error_m"])
+                ap_vel_errors.append(ap_m["vel_error_m_s"])
+                ap_jitters.append(ap_m["jitter_m_s3"])
+                ap_foot_skates.append(compute_foot_skate(ap_pos_mj[:T_ap], fps=ap_fps))
+
+                # True mesh-vertex gpen for the AvatarPoser prediction (matches how the
+                # original baseline number was computed, unlike the joint-center approximation).
+                ap_root_orient, ap_pose_body, ap_trans = pqg_upright_to_body_params(
+                    ap_pqg[:T_ap], ap_pos_mj[:T_ap, 0, :], skeleton_tree
+                )
+                ap_gp_mean, ap_gp_max, ap_gp_rate = compute_mesh_gpen(
+                    body_model, ap_root_orient, ap_pose_body, ap_trans, device
+                )
+                ap_gpen_means.append(ap_gp_mean)
+                ap_gpen_maxes.append(ap_gp_max)
+                ap_gpen_rates.append(ap_gp_rate)
+
+            T_ap_r = min(ap_pqg.shape[0], gt_rot_mj.shape[0])
+            ap_rot_errors.append(compute_mpjre(ap_pqg[:T_ap_r], gt_rot_mj[:T_ap_r]))
 
         foot_skates.append(compute_foot_skate(pred_full[:T], fps=args.fps))
-        gp_mean, gp_max, gp_rate = compute_gpen(pred_full[:T])
+        if pred_rot_all is not None:
+            # True mesh-vertex gpen for PHC's simulated humanoid (replaces the joint-center
+            # approximation with the same method the AvatarPoser baseline uses).
+            T_g = min(pred_rot_all[i].shape[0], T)
+            phc_root_orient, phc_pose_body, phc_trans = pqg_upright_to_body_params(
+                pred_rot_all[i][:T_g], pred_full[:T_g, 0, :], skeleton_tree
+            )
+            gp_mean, gp_max, gp_rate = compute_mesh_gpen(
+                body_model, phc_root_orient, phc_pose_body, phc_trans, device
+            )
+        else:
+            gp_mean, gp_max, gp_rate = compute_gpen(pred_full[:T])
         gpen_means.append(gp_mean)
         gpen_maxes.append(gp_max)
         gpen_rates.append(gp_rate)
@@ -420,14 +604,69 @@ def main():
             lines.append(f"  gpen_rate       : {np.mean(gpen_rates):.5f}")
     lines.append("")
     lines.append("Baseline (AvatarPoser kinematic, for reference):")
-    lines.append("  MPJPE (cm)      : 2.51398")
-    lines.append("  MPJVE (cm/s)    : 24.11242")
-    if ap_rot_errors:
-        lines.append(f"  MPJRE (deg)     : {np.mean(ap_rot_errors):.5f}")
-    lines.append("  jitter (m/s³)   : 1357.28")
-    lines.append("  foot_skate(cm/s): 33.67")
-    lines.append("  gpen_mean (mm)  : 23.79")
-    lines.append("  gpen_rate       : 0.654")
+    if baseline_cached is not None:
+        lines.append(f"  MPJPE (cm)      : {baseline_cached['pos_error_cm']:.5f}")
+        lines.append(f"  MPJVE (cm/s)    : {baseline_cached['vel_error_cm_s']:.5f}")
+        lines.append(f"  MPJRE (deg)     : {baseline_cached['rot_error_deg']:.5f}")
+        lines.append(f"  jitter (m/s³)   : {baseline_cached['jitter_m_s3']:.5f}")
+        lines.append(f"  foot_skate(cm/s): {baseline_cached['foot_skate_cm_s']:.5f}")
+        lines.append(f"  gpen_mean (mm)  : {baseline_cached['gpen_mean_mm']:.5f}")
+        lines.append(f"  gpen_max  (mm)  : {baseline_cached['gpen_max_mm']:.5f}")
+        lines.append(f"  gpen_rate       : {baseline_cached['gpen_rate']:.5f}")
+        lines.append(f"  [from cache: {args.baseline_cache}]")
+    else:
+        if ap_pos_errors:
+            lines.append(f"  MPJPE (cm)      : {np.mean(ap_pos_errors) * 100:.5f}")
+            lines.append(f"  MPJVE (cm/s)    : {np.mean(ap_vel_errors) * 100:.5f}")
+        if ap_rot_errors:
+            lines.append(f"  MPJRE (deg)     : {np.mean(ap_rot_errors):.5f}")
+        if ap_pos_errors:
+            lines.append(f"  jitter (m/s³)   : {np.mean(ap_jitters):.5f}")
+            lines.append(f"  foot_skate(cm/s): {np.mean(ap_foot_skates) * 100:.5f}")
+        if ap_gpen_means:
+            lines.append(f"  gpen_mean (mm)  : {np.mean(ap_gpen_means):.5f}")
+            lines.append(f"  gpen_max  (mm)  : {np.mean(ap_gpen_maxes):.5f}")
+            lines.append(f"  gpen_rate       : {np.mean(ap_gpen_rates):.5f}")
+
+        if args.baseline_cache and ap_pos_errors and ap_rot_errors and ap_gpen_means:
+            cache_data = {
+                "model": "AvatarPoser (converted to PHC frame: 30fps, PHC generic skeleton)",
+                "date": datetime.date.today().isoformat(),
+                "source_pred_pkl": args.avatarposer_pred_pkl,
+                "source_gt": gt_pkl_path,
+                "num_sequences": len(ap_pos_errors),
+                "metrics": {
+                    "rot_error_deg": np.mean(ap_rot_errors),
+                    "pos_error_cm": np.mean(ap_pos_errors) * 100,
+                    "vel_error_cm_s": np.mean(ap_vel_errors) * 100,
+                    "jitter_m_s3": np.mean(ap_jitters),
+                    "foot_skate_cm_s": np.mean(ap_foot_skates) * 100,
+                    "gpen_mean_mm": np.mean(ap_gpen_means),
+                    "gpen_max_mm": np.mean(ap_gpen_maxes),
+                    "gpen_rate": np.mean(ap_gpen_rates),
+                },
+                "metric_units": {
+                    "rot_error_deg": "degrees (geodesic distance, global post-FK rotation, mean per joint)",
+                    "pos_error_cm": "cm (MPJPE, 22 joints)",
+                    "vel_error_cm_s": "cm/s (MPJVE, finite-difference velocity)",
+                    "jitter_m_s3": "m/s³ (mean jerk of predicted motion, no GT reference)",
+                    "foot_skate_cm_s": "cm/s (weighted horizontal foot sliding while in contact)",
+                    "gpen_mean_mm": "mm (mean SMPL-H mesh-vertex ground penetration depth)",
+                    "gpen_max_mm": "mm (worst-case mesh-vertex penetration depth)",
+                    "gpen_rate": "fraction of frames with any mesh vertex below Z=0",
+                },
+                "notes": [
+                    "Computed at PHC's 30fps / generic skeleton / neutral (zero) SMPL-H betas, "
+                    "for apples-to-apples comparison with the 'PHC-corrected metrics' section — "
+                    "NOT the same basis as results/baselines/avatarposer_w40_baseline.json (that "
+                    "one uses AvatarPoser's native 60fps, per-subject skeleton, and local-rotation "
+                    "MPJRE; see scripts/evaluate_phc_metrics.py module docstring).",
+                ],
+            }
+            os.makedirs(os.path.dirname(args.baseline_cache), exist_ok=True)
+            with open(args.baseline_cache, "w") as f:
+                json.dump(cache_data, f, indent=2)
+            lines.append(f"  [cached to: {args.baseline_cache}]")
 
     output = "\n".join(lines)
     print(output)

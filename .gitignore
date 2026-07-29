@@ -12,3 +12,5 @@ output/HumanoidIm/phc_kp_mcp_iccv/eval_*.log
 results_*/
 model_zoo/*.pth
 output/HumanoidIm/phc_*/
+output/HumanoidIm/quest_distill_*/student/
+output/blender_renders/

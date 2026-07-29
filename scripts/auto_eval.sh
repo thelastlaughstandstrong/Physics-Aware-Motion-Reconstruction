@@ -2,15 +2,17 @@
 # auto_eval.sh — waits for a distill checkpoint then runs physics eval + metrics
 #
 # Usage:
-#   bash scripts/auto_eval.sh <exp_name> <target_step>
+#   bash scripts/auto_eval.sh <exp_name> <target_step> [extra_hydra_overrides]
 #
 # Example:
 #   bash scripts/auto_eval.sh ap_phc_distill_v2 500000
+#   bash scripts/auto_eval.sh ap_phc_distill_direct_pd 260000 "env.raw_action_passthrough=True"
 
 set -e
 
-EXP_NAME=${1:?Usage: auto_eval.sh <exp_name> <target_step>}
-TARGET_STEP=${2:?Usage: auto_eval.sh <exp_name> <target_step>}
+EXP_NAME=${1:?Usage: auto_eval.sh <exp_name> <target_step> [extra_hydra_overrides]}
+TARGET_STEP=${2:?Usage: auto_eval.sh <exp_name> <target_step> [extra_hydra_overrides]}
+EXTRA_OVERRIDES=${3:-}
 
 REPO=/home/sia-irl/AvatarPoser
 CKPT_DIR=$REPO/phc/output/HumanoidIm/$EXP_NAME/student
@@ -33,7 +35,7 @@ cd $REPO/phc && python phc/run_hydra.py \
   env.motion_file=sample_data/phc_test.pkl \
   'env.models=[output/HumanoidIm/phc_kp_pnn_iccv/Humanoid.pth]' \
   env.num_envs=16 env.obs_v=7 headless=True \
-  learning.params.config.student_checkpoint=$CKPT"
+  learning.params.config.student_checkpoint=$CKPT $EXTRA_OVERRIDES"
 
 echo "[auto_eval] Physics eval done. Computing metrics..."
 

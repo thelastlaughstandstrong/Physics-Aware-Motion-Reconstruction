@@ -14,6 +14,8 @@ def define_Dataset(dataset_opt):
     if dataset_type in ['amass']:
         from data.dataset_amass import AMASS_Dataset as D
 
+    elif dataset_type in ['quest2']:
+        from data.dataset_quest2 import Quest2_Dataset as D
 
     else:
         raise NotImplementedError('Dataset [{:s}] is not found.'.format(dataset_type))

@@ -1,4 +1,7 @@
 {
+    "files.associations": {
+        "options/*.json": "jsonc"
+    },
     "python.testing.pytestArgs": [
         "."
     ],

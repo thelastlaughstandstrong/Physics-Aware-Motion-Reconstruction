@@ -1,0 +1,135 @@
+[distill] stage 1 | step    100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000256 | total 0.000026 | gpu_alloc 0.332GB gpu_reserved 0.677GB
+[distill] stage 1 | step    100 | action 0.000026
+[distill] stage 1 | step    200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000193 | total 0.000019 | gpu_alloc 0.374GB gpu_reserved 0.721GB
+[distill] stage 1 | step    200 | action 0.000019
+[distill] stage 1 | step    300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.002017 | total 0.000202 | gpu_alloc 0.418GB gpu_reserved 0.747GB
+[distill] stage 1 | step    300 | action 0.000202
+[distill] stage 1 | step    400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000121 | total 0.000012 | gpu_alloc 0.458GB gpu_reserved 0.789GB
+[distill] stage 1 | step    400 | action 0.000012
+[distill] stage 1 | step    500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000087 | total 0.000009 | gpu_alloc 0.500GB gpu_reserved 0.833GB
+[distill] stage 1 | step    500 | action 0.000009
+[distill] stage 1 | step    600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000857 | total 0.000086 | gpu_alloc 0.543GB gpu_reserved 0.898GB
+[distill] stage 1 | step    600 | action 0.000086
+[distill] stage 1 | step    700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000090 | total 0.000009 | gpu_alloc 0.584GB gpu_reserved 0.940GB
+[distill] stage 1 | step    700 | action 0.000009
+[diag] step 800: live-allocation call sites: [('??:0', 33755)]
+[distill] stage 1 | step    800 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000074 | total 0.000007 | gpu_alloc 0.626GB gpu_reserved 0.984GB
+[distill] stage 1 | step    800 | action 0.000007
+[distill] stage 1 | step    900 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000717 | total 0.000072 | gpu_alloc 0.669GB gpu_reserved 1.009GB
+[distill] stage 1 | step    900 | action 0.000072
+[distill] stage 1 | step   1000 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000069 | total 0.000007 | gpu_alloc 0.711GB gpu_reserved 1.051GB
+[distill] stage 1 | step   1000 | action 0.000007
+[distill] stage 1 | step   1100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000064 | total 0.000006 | gpu_alloc 0.753GB gpu_reserved 1.095GB
+[distill] stage 1 | step   1100 | action 0.000006
+[distill] stage 1 | step   1200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000541 | total 0.000054 | gpu_alloc 0.795GB gpu_reserved 1.160GB
+[distill] stage 1 | step   1200 | action 0.000054
+[distill] stage 1 | step   1300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000130 | total 0.000013 | gpu_alloc 0.837GB gpu_reserved 1.204GB
+[distill] stage 1 | step   1300 | action 0.000013
+[distill] stage 1 | step   1400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000077 | total 0.000008 | gpu_alloc 0.879GB gpu_reserved 1.248GB
+[distill] stage 1 | step   1400 | action 0.000008
+[distill] stage 1 | step   1500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000313 | total 0.000031 | gpu_alloc 0.922GB gpu_reserved 1.271GB
+[distill] stage 1 | step   1500 | action 0.000031
+[distill] stage 1 | step   1600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000067 | total 0.000007 | gpu_alloc 0.964GB gpu_reserved 1.315GB
+[distill] stage 1 | step   1600 | action 0.000007
+[distill] stage 1 | step   1700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000061 | total 0.000006 | gpu_alloc 1.006GB gpu_reserved 1.357GB
+[distill] stage 1 | step   1700 | action 0.000006
+[distill] stage 1 | step   1800 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000350 | total 0.000035 | gpu_alloc 1.048GB gpu_reserved 1.424GB
+[distill] stage 1 | step   1800 | action 0.000035
+[distill] stage 1 | step   1900 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000107 | total 0.000011 | gpu_alloc 1.090GB gpu_reserved 1.468GB
+[distill] stage 1 | step   1900 | action 0.000011
+[distill] stage 1 | step   2000 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000050 | total 0.000005 | gpu_alloc 1.132GB gpu_reserved 1.510GB
+[distill] stage 1 | step   2000 | action 0.000005
+[distill] stage 1 | step   2100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000355 | total 0.000035 | gpu_alloc 1.175GB gpu_reserved 1.533GB
+[distill] stage 1 | step   2100 | action 0.000035
+[distill] stage 1 | step   2200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000111 | total 0.000011 | gpu_alloc 1.217GB gpu_reserved 1.577GB
+[distill] stage 1 | step   2200 | action 0.000011
+[distill] stage 1 | step   2300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000216 | total 0.000022 | gpu_alloc 1.259GB gpu_reserved 1.621GB
+[distill] stage 1 | step   2300 | action 0.000022
+[distill] stage 1 | step   2400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000412 | total 0.000041 | gpu_alloc 1.301GB gpu_reserved 1.686GB
+[distill] stage 1 | step   2400 | action 0.000041
+[distill] stage 1 | step   2500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000096 | total 0.000010 | gpu_alloc 1.343GB gpu_reserved 1.730GB
+[distill] stage 1 | step   2500 | action 0.000010
+[distill] stage 1 | step   2600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000106 | total 0.000011 | gpu_alloc 1.385GB gpu_reserved 1.774GB
+[distill] stage 1 | step   2600 | action 0.000011
+[distill] stage 1 | step   2700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000243 | total 0.000024 | gpu_alloc 1.428GB gpu_reserved 1.797GB
+[distill] stage 1 | step   2700 | action 0.000024
+[distill] stage 1 | step   2800 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000087 | total 0.000009 | gpu_alloc 1.470GB gpu_reserved 1.841GB
+[distill] stage 1 | step   2800 | action 0.000009
+[distill] stage 1 | step   2900 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000048 | total 0.000005 | gpu_alloc 1.512GB gpu_reserved 1.885GB
+[distill] stage 1 | step   2900 | action 0.000005
+[distill] stage 1 | step   3000 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000218 | total 0.000022 | gpu_alloc 1.554GB gpu_reserved 1.950GB
+[distill] stage 1 | step   3000 | action 0.000022
+[distill] stage 1 | step   3100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000081 | total 0.000008 | gpu_alloc 1.596GB gpu_reserved 1.994GB
+[distill] stage 1 | step   3100 | action 0.000008
+[distill] stage 1 | step   3200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000048 | total 0.000005 | gpu_alloc 1.638GB gpu_reserved 2.038GB
+[distill] stage 1 | step   3200 | action 0.000005
+[distill] stage 1 | step   3300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000236 | total 0.000024 | gpu_alloc 1.681GB gpu_reserved 2.062GB
+[distill] stage 1 | step   3300 | action 0.000024
+[distill] stage 1 | step   3400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000042 | total 0.000004 | gpu_alloc 1.723GB gpu_reserved 2.106GB
+[distill] stage 1 | step   3400 | action 0.000004
+[distill] stage 1 | step   3500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000073 | total 0.000007 | gpu_alloc 1.765GB gpu_reserved 2.147GB
+[distill] stage 1 | step   3500 | action 0.000007
+[distill] stage 1 | step   3600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000241 | total 0.000024 | gpu_alloc 1.807GB gpu_reserved 2.215GB
+[distill] stage 1 | step   3600 | action 0.000024
+[distill] stage 1 | step   3700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000068 | total 0.000007 | gpu_alloc 1.849GB gpu_reserved 2.257GB
+[distill] stage 1 | step   3700 | action 0.000007
+[distill] stage 1 | step   3800 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000077 | total 0.000008 | gpu_alloc 1.891GB gpu_reserved 2.301GB
+[distill] stage 1 | step   3800 | action 0.000008
+[distill] stage 1 | step   3900 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000234 | total 0.000023 | gpu_alloc 1.934GB gpu_reserved 2.326GB
+[distill] stage 1 | step   3900 | action 0.000023
+[distill] stage 1 | step   4000 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000042 | total 0.000004 | gpu_alloc 1.976GB gpu_reserved 2.368GB
+[distill] stage 1 | step   4000 | action 0.000004
+[distill] stage 1 | step   4100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000074 | total 0.000007 | gpu_alloc 2.018GB gpu_reserved 2.412GB
+[distill] stage 1 | step   4100 | action 0.000007
+[distill] stage 1 | step   4200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000139 | total 0.000014 | gpu_alloc 2.060GB gpu_reserved 2.477GB
+[distill] stage 1 | step   4200 | action 0.000014
+[distill] stage 1 | step   4300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000088 | total 0.000009 | gpu_alloc 2.102GB gpu_reserved 2.521GB
+[distill] stage 1 | step   4300 | action 0.000009
+[distill] stage 1 | step   4400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000051 | total 0.000005 | gpu_alloc 2.144GB gpu_reserved 2.565GB
+[distill] stage 1 | step   4400 | action 0.000005
+[distill] stage 1 | step   4500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000114 | total 0.000011 | gpu_alloc 2.187GB gpu_reserved 2.588GB
+[distill] stage 1 | step   4500 | action 0.000011
+[distill] stage 1 | step   4600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000070 | total 0.000007 | gpu_alloc 2.229GB gpu_reserved 2.632GB
+[distill] stage 1 | step   4600 | action 0.000007
+[distill] stage 1 | step   4700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000047 | total 0.000005 | gpu_alloc 2.271GB gpu_reserved 2.676GB
+[distill] stage 1 | step   4700 | action 0.000005
+[distill] stage 1 | step   4800 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000142 | total 0.000014 | gpu_alloc 2.313GB gpu_reserved 2.741GB
+[distill] stage 1 | step   4800 | action 0.000014
+[distill] stage 1 | step   4900 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000069 | total 0.000007 | gpu_alloc 2.355GB gpu_reserved 2.785GB
+[distill] stage 1 | step   4900 | action 0.000007
+[distill] stage 1 | step   5000 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000082 | total 0.000008 | gpu_alloc 2.397GB gpu_reserved 2.829GB
+[distill] stage 1 | step   5000 | action 0.000008
+[distill] stage 1 | step   5100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000107 | total 0.000011 | gpu_alloc 2.440GB gpu_reserved 2.852GB
+[distill] stage 1 | step   5100 | action 0.000011
+[distill] stage 1 | step   5200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000090 | total 0.000009 | gpu_alloc 2.482GB gpu_reserved 2.896GB
+[distill] stage 1 | step   5200 | action 0.000009
+[distill] stage 1 | step   5300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000066 | total 0.000007 | gpu_alloc 2.524GB gpu_reserved 2.940GB
+[distill] stage 1 | step   5300 | action 0.000007
+[distill] stage 1 | step   5400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000117 | total 0.000012 | gpu_alloc 2.566GB gpu_reserved 3.005GB
+[distill] stage 1 | step   5400 | action 0.000012
+[distill] stage 1 | step   5500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000046 | total 0.000005 | gpu_alloc 2.608GB gpu_reserved 3.049GB
+[distill] stage 1 | step   5500 | action 0.000005
+[distill] stage 1 | step   5600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000058 | total 0.000006 | gpu_alloc 2.650GB gpu_reserved 3.091GB
+[distill] stage 1 | step   5600 | action 0.000006
+[distill] stage 1 | step   5700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000103 | total 0.000010 | gpu_alloc 2.693GB gpu_reserved 3.116GB
+[distill] stage 1 | step   5700 | action 0.000010
+[distill] stage 1 | step   5800 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000033 | total 0.000003 | gpu_alloc 2.735GB gpu_reserved 3.158GB
+[distill] stage 1 | step   5800 | action 0.000003
+[distill] stage 1 | step   5900 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000024 | total 0.000002 | gpu_alloc 2.776GB gpu_reserved 3.202GB
+[distill] stage 1 | step   5900 | action 0.000002
+[distill] stage 1 | step   6000 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000083 | total 0.000008 | gpu_alloc 2.819GB gpu_reserved 3.267GB
+[distill] stage 1 | step   6000 | action 0.000008
+[distill] stage 1 | step   6100 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000040 | total 0.000004 | gpu_alloc 2.861GB gpu_reserved 3.311GB
+[distill] stage 1 | step   6100 | action 0.000004
+[distill] stage 1 | step   6200 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000031 | total 0.000003 | gpu_alloc 2.903GB gpu_reserved 3.355GB
+[distill] stage 1 | step   6200 | action 0.000003
+[distill] stage 1 | step   6300 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000143 | total 0.000014 | gpu_alloc 2.946GB gpu_reserved 3.379GB
+[distill] stage 1 | step   6300 | action 0.000014
+[distill] stage 1 | step   6400 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000080 | total 0.000008 | gpu_alloc 2.988GB gpu_reserved 3.423GB
+[distill] stage 1 | step   6400 | action 0.000008
+[distill] stage 1 | step   6500 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000026 | total 0.000003 | gpu_alloc 3.029GB gpu_reserved 3.467GB
+[distill] stage 1 | step   6500 | action 0.000003
+[distill] stage 1 | step   6600 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000112 | total 0.000011 | gpu_alloc 3.072GB gpu_reserved 3.532GB
+[distill] stage 1 | step   6600 | action 0.000011
+[distill] stage 1 | step   6700 | kinematic 0.000000 (root 0.000000 jrot 0.000000 jpos 0.000000) | action 0.000100 | total 0.000010 | gpu_alloc 3.114GB gpu_reserved 3.576GB
+[distill] stage 1 | step   6700 | action 0.000010

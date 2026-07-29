@@ -1,0 +1,46 @@
+[auto-recovery] starting supervised run for quest_distill_explicit_pose_smoke (max 1 crash retries, cap=2000 steps, num_envs=8)
+[auto-recovery] attempt 1: no existing checkpoint found -- fresh start (no student_checkpoint)
+[auto-recovery] GPU has 16069MiB free (>= 10000MiB threshold) — proceeding
+[auto-recovery] attempt 1 ended without a deliberate stop — treating as a crash
+    runner.algo_factory.register_builder('distill_quest', lambda **kwargs: distill_agent_quest.DistillAgentQuest(**kwargs))
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/distill_agent_quest.py", line 153, in __init__
+    IMAmpAgent.__init__(self, base_name, config)
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/im_amp.py", line 41, in __init__
+    super().__init__(base_name, config)
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/amp_agent.py", line 39, in __init__
+    super().__init__(base_name, config)
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/common_agent.py", line 37, in __init__
+    a2c_common.A2CBase.__init__(self, base_name, config)
+  File "/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/rl_games/common/a2c_common.py", line 172, in __init__
+    assert(self.batch_size % self.minibatch_size == 0)
+AssertionError
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+ERROR conda.cli.main_run:execute(127): `conda run python phc/run_hydra.py learning=distill_quest exp_name=quest_distill_explicit_pose_smoke env=env_quest_im_basic robot=quest_humanoid env.motion_file=/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion env.num_envs=8 env.cycle_motion=True env.min_length=5 learning.params.config.max_distill_step=2000 headless=True no_virtual_display=True no_log=True disable_multiprocessing=False test=False im_eval=False learning.params.config.explicit_pose_action_input=True` failed. (See above for error)
+[auto-recovery] pausing 30s before retry 2...
+[auto-recovery] attempt 2: no existing checkpoint found -- fresh start (no student_checkpoint)
+[auto-recovery] GPU has 16069MiB free (>= 10000MiB threshold) — proceeding
+[auto-recovery] attempt 2 ended without a deliberate stop — treating as a crash
+    runner.algo_factory.register_builder('distill_quest', lambda **kwargs: distill_agent_quest.DistillAgentQuest(**kwargs))
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/distill_agent_quest.py", line 153, in __init__
+    IMAmpAgent.__init__(self, base_name, config)
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/im_amp.py", line 41, in __init__
+    super().__init__(base_name, config)
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/amp_agent.py", line 39, in __init__
+    super().__init__(base_name, config)
+  File "/home/sia-irl/AvatarPoser/phc/phc/learning/common_agent.py", line 37, in __init__
+    a2c_common.A2CBase.__init__(self, base_name, config)
+  File "/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/rl_games/common/a2c_common.py", line 172, in __init__
+    assert(self.batch_size % self.minibatch_size == 0)
+AssertionError
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+ERROR conda.cli.main_run:execute(127): `conda run python phc/run_hydra.py learning=distill_quest exp_name=quest_distill_explicit_pose_smoke env=env_quest_im_basic robot=quest_humanoid env.motion_file=/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion env.num_envs=8 env.cycle_motion=True env.min_length=5 learning.params.config.max_distill_step=2000 headless=True no_virtual_display=True no_log=True disable_multiprocessing=False test=False im_eval=False learning.params.config.explicit_pose_action_input=True` failed. (See above for error)
+[auto-recovery] exceeded max_crash_retries (1) — giving up. Last checkpoint: 
+[auto-recovery] starting supervised run for quest_distill_explicit_pose_smoke (max 1 crash retries, cap=2000 steps, num_envs=32)
+[auto-recovery] attempt 1: no existing checkpoint found -- fresh start (no student_checkpoint)
+[auto-recovery] GPU has 16069MiB free (>= 10000MiB threshold) — proceeding
+[auto-recovery] run completed normally (attempt 1)
+[DistillAgent] Backbone loaded: 46 keys matched, 0 missing, 0 unexpected
+[DistillAgentQuest] Backbone UNFROZEN -- trained jointly via kinematic + action loss
+[DistillAgent] Training log -> output/HumanoidIm/quest_distill_explicit_pose_smoke/quest_distill_explicit_pose_smoke.log
