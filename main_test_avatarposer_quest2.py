@@ -104,6 +104,12 @@ def main():
     parser.add_argument('-ckpt', type=str, default=None,
                          help="Explicit checkpoint path (bypasses find_last_checkpoint, which "
                               "chokes on non-numeric filenames like latest_G.pth).")
+    parser.add_argument('-out', type=str, default=None,
+                         help="Output JSON path. Defaults to "
+                              "results/baselines/avatarposer_quest2_phase_a.json -- ALWAYS pass "
+                              "this explicitly when evaluating anything other than the canonical "
+                              "from-scratch Phase A checkpoint, or it will silently overwrite "
+                              "that baseline (bit us once already, 2026-07-29).")
     args = parser.parse_args()
 
     opt = option.parse(args.opt, is_train=True)
@@ -292,7 +298,7 @@ def main():
             "reference, not verified ground truth): success 73.0%, Eg-mpjpe 118.9mm.",
         ],
     }
-    out_path = os.path.join(REPO_ROOT, 'results', 'baselines', 'avatarposer_quest2_phase_a.json')
+    out_path = args.out or os.path.join(REPO_ROOT, 'results', 'baselines', 'avatarposer_quest2_phase_a.json')
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, 'w') as f:
         json.dump(result, f, indent=2)

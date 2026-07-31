@@ -1,0 +1,30 @@
+{
+  "model": "AvatarPoser (converted to PHC frame: 30fps, PHC generic skeleton)",
+  "date": "2026-07-13",
+  "source_pred_pkl": "/home/sia-irl/AvatarPoser/sample_data/avatarposer_all.pkl",
+  "source_gt": "phc/sample_data/phc_test.pkl",
+  "num_sequences": 536,
+  "metrics": {
+    "rot_error_deg": 5.74794491173024,
+    "pos_error_cm": 3.403816531575633,
+    "vel_error_cm_s": 24.242146059509313,
+    "jitter_m_s3": 272.42054849596167,
+    "foot_skate_cm_s": 15.530032788300655,
+    "gpen_mean_mm": 23.843270643211124,
+    "gpen_max_mm": 71.3759545941851,
+    "gpen_rate": 0.6541433266941553
+  },
+  "metric_units": {
+    "rot_error_deg": "degrees (geodesic distance, global post-FK rotation, mean per joint)",
+    "pos_error_cm": "cm (MPJPE, 22 joints)",
+    "vel_error_cm_s": "cm/s (MPJVE, finite-difference velocity)",
+    "jitter_m_s3": "m/s\u00b3 (mean jerk of predicted motion, no GT reference)",
+    "foot_skate_cm_s": "cm/s (weighted horizontal foot sliding while in contact)",
+    "gpen_mean_mm": "mm (mean SMPL-H mesh-vertex ground penetration depth)",
+    "gpen_max_mm": "mm (worst-case mesh-vertex penetration depth)",
+    "gpen_rate": "fraction of frames with any mesh vertex below Z=0"
+  },
+  "notes": [
+    "Computed at PHC's 30fps / generic skeleton / neutral (zero) SMPL-H betas, for apples-to-apples comparison with the 'PHC-corrected metrics' section \u2014 NOT the same basis as results/baselines/avatarposer_w40_baseline.json (that one uses AvatarPoser's native 60fps, per-subject skeleton, and local-rotation MPJRE; see scripts/evaluate_phc_metrics.py module docstring)."
+  ]
+}

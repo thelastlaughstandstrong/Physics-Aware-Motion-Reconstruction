@@ -14,7 +14,8 @@
 #
 # Usage:
 #   bash scripts/train_distill_quest_with_auto_recovery.sh <exp_name> <max_distill_step> \
-#        [num_envs] [max_crash_retries] [gpu_free_mib_threshold] [extra_hydra_overrides]
+#        [num_envs] [max_crash_retries] [gpu_free_mib_threshold] [extra_hydra_overrides] \
+#        [seed_checkpoint]
 #
 # extra_hydra_overrides (new, quoted as one argument) is appended verbatim to the hydra
 # command line -- e.g. to test the loss-reweighting experiment (action_loss dominant,
@@ -29,6 +30,16 @@
 # this wrapper crashed and was relaunched, or because training had already progressed before
 # this wrapper was first used) resumes from the latest one automatically.
 #
+# seed_checkpoint (new -- for Stage R launches, which DO intentionally chain off a finished
+# Stage E run's checkpoint, unlike every other exp_name here): used as student_checkpoint ONLY
+# on this exp_name's own attempt 1 (i.e. only when latest_checkpoint() finds nothing yet in
+# THIS exp_name's own student/ dir). Every later crash-retry resumes from this exp_name's own
+# latest checkpoint instead, exactly like the no-seed case -- otherwise a crash-retry would
+# silently reset Stage R training back to the seed checkpoint every time, discarding whatever
+# Stage R progress had been made in between (seed_checkpoint would still be the last of the two
+# resume args to appear on the hydra command line on every retry, and Hydra takes the last
+# occurrence of a repeated key).
+#
 # Example (continuing the already-crashed quest_distill_option2_scratch run):
 #   bash scripts/train_distill_quest_with_auto_recovery.sh quest_distill_option2_scratch 500000
 
@@ -40,6 +51,7 @@ NUM_ENVS=${3:-128}
 MAX_RETRIES=${4:-10}
 GPU_FREE_MIB_THRESHOLD=${5:-10000}
 EXTRA_OVERRIDES=${6:-}
+SEED_CHECKPOINT=${7:-}
 
 REPO=/home/sia-irl/AvatarPoser
 EXP_DIR="$REPO/phc/output/HumanoidIm/$EXP_NAME"
@@ -77,7 +89,12 @@ while true; do
     RESUME_CKPT=$(latest_checkpoint)
     RESUME_ARG=""
     if [ -z "$RESUME_CKPT" ]; then
-        echo "[auto-recovery] attempt $ATTEMPT: no existing checkpoint found -- fresh start (no student_checkpoint)" | tee -a "$RECOVERY_LOG"
+        if [ -n "$SEED_CHECKPOINT" ]; then
+            echo "[auto-recovery] attempt $ATTEMPT: no existing checkpoint for $EXP_NAME yet -- seeding from $SEED_CHECKPOINT" | tee -a "$RECOVERY_LOG"
+            RESUME_ARG="learning.params.config.student_checkpoint=$SEED_CHECKPOINT"
+        else
+            echo "[auto-recovery] attempt $ATTEMPT: no existing checkpoint found -- fresh start (no student_checkpoint)" | tee -a "$RECOVERY_LOG"
+        fi
     else
         echo "[auto-recovery] attempt $ATTEMPT: resuming from $RESUME_CKPT" | tee -a "$RECOVERY_LOG"
         RESUME_ARG="learning.params.config.student_checkpoint=$RESUME_CKPT"

@@ -1,5 +1,13 @@
 support_data/body_models
-results
+# results/ is ignored EXCEPT results/baselines/*.json (small, valuable eval-result summaries that
+# results_comparison.md cites by path -- everything else under results/, e.g. model checkpoint
+# dirs like AvatarPoseEstimationQuest2/, stays ignored). Needs the parent-dir re-include dance --
+# a plain `!results/baselines/*.json` alone wouldn't work, since gitignore prunes an excluded
+# directory's contents before ever checking negation patterns against paths inside it.
+results/*
+!results/baselines/
+results/baselines/*
+!results/baselines/*.json
 *.pkl
 *fps60
 **/__pycache__
@@ -12,5 +20,6 @@ output/HumanoidIm/phc_kp_mcp_iccv/eval_*.log
 results_*/
 model_zoo/*.pth
 output/HumanoidIm/phc_*/
-output/HumanoidIm/quest_distill_*/student/
+output/HumanoidIm/quest_distill_*/
+output/HumanoidIm/.recovery_logs/
 output/blender_renders/
