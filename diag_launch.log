@@ -1,0 +1,17 @@
+[diag] 2026-08-13 20:28:46 === quest_stager_condA === extra: <none>
+[diag] 2026-08-13 20:43:43 quest_stager_condA training done (warm-up end 381664, cap 386080)
+[diag] 2026-08-13 20:44:43 ABORT: only 1GB free, refusing to start quest_stager_condB
+[diag] 2026-08-13 20:44:43 ABORT: only 1GB free, refusing to start quest_stager_condC
+[diag] 2026-08-13 20:44:43 sweeping quest_stager_condA at steps: 381664 382144 382624 384064 386080
+[diag] 2026-08-13 20:45:00 quest_stager_condA sweep done
+step       ckpt        success  mpjpe_mm mpjre_deg mpjve_cms    jitter footskate
+381664     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_381664.log)
+382144     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_382144.log)
+382624     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_382624.log)
+384064     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_384064.log)
+386080     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_386080.log)
+[diag] 2026-08-13 20:45:00 sweeping quest_stager_condB at steps: 381664 382144 382624 384064 386080
+[diag] 2026-08-13 20:45:00 quest_stager_condB sweep done
+[diag] 2026-08-13 20:45:00 sweeping quest_stager_condC at steps: 381664 382144 382624 384064 386080
+[diag] 2026-08-13 20:45:00 quest_stager_condC sweep done
+[diag] 2026-08-13 20:45:00 DIAGNOSTIC COMPLETE

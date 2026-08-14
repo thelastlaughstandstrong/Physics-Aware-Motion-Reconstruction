@@ -1,0 +1,6 @@
+step       ckpt        success  mpjpe_mm mpjre_deg mpjve_cms    jitter footskate
+381664     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_381664.log)
+382144     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_382144.log)
+382624     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_382624.log)
+384064     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_384064.log)
+386080     ?         EVAL FAILED (see /home/sia-irl/AvatarPoser/phc/output/HumanoidIm/quest_stager_condA/sweep_eval_386080.log)

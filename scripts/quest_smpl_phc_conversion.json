@@ -1,0 +1,58 @@
+{
+  "standing": {
+    "frames": 426,
+    "fps": 30.0,
+    "duration_s": 14.166666666666666,
+    "rot_mean_deg": 4.699776161976457e-08,
+    "rot_max_deg": 2.4148365394514667e-06,
+    "root_rot_max_deg": 1.7075472925031877e-06,
+    "hand_rot_zeroed_max_deg": 0.00027936799214923916,
+    "root_pos_max_mm": 6.0599849298584484e-05,
+    "pos_mean_mm": 3.3572359419830824,
+    "pos_max_mm": 40.99762565430964,
+    "pos_mean_mm_no_hands": 0.07393200644308764,
+    "pos_max_mm_no_hands": 0.19179262081709061,
+    "l_hand_mm": 40.982794978946096,
+    "r_hand_mm": 37.96436348689996,
+    "max_lin_vel": 1.1546372762394521,
+    "max_ang_vel": 2.1922326828668934,
+    "dof_vels_shape": [
+      426,
+      23,
+      3
+    ],
+    "head_above_pelvis_min_m": 0.5725862979888916,
+    "max_step_mm": 40.53246833876174,
+    "n_discontinuities": 0,
+    "pkl": "data/quest_smpl_retarget/quest_smpl_standing_phc.pkl"
+  },
+  "walking": {
+    "frames": 427,
+    "fps": 30.0,
+    "duration_s": 14.2,
+    "rot_mean_deg": 4.933341075972291e-08,
+    "rot_max_deg": 2.091309789151873e-06,
+    "root_rot_max_deg": 1.7075472925031877e-06,
+    "hand_rot_zeroed_max_deg": 0.00026264608581229223,
+    "root_pos_max_mm": 0.00011849595917441022,
+    "pos_mean_mm": 3.356862145855065,
+    "pos_max_mm": 41.00699061753583,
+    "pos_mean_mm_no_hands": 0.07370679245805765,
+    "pos_max_mm_no_hands": 0.19330237510800588,
+    "l_hand_mm": 40.95710827576601,
+    "r_hand_mm": 37.98603379067829,
+    "max_lin_vel": 3.5332897773122256,
+    "max_ang_vel": 5.066607242323279,
+    "dof_vels_shape": [
+      427,
+      23,
+      3
+    ],
+    "head_above_pelvis_min_m": 0.5646306276321411,
+    "max_step_mm": 135.9035443027174,
+    "n_discontinuities": 0,
+    "pkl": "data/quest_smpl_retarget/quest_smpl_walking_phc.pkl"
+  },
+  "passed": true,
+  "failed_checks": []
+}

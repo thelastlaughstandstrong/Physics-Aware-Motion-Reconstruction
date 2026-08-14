@@ -57,10 +57,16 @@ while [ "$NEXT_CHECK" -le "$MAX_STEP" ]; do
         continue
     fi
 
+    # The checkpoint auto_eval_quest.sh actually ran is the NEAREST one to $NEXT_CHECK, not one at
+    # exactly that step -- checkpoints land every save_freq steps (480 for a 128-env run), so a
+    # round 10000-multiple file essentially never exists. Capture the real step it reports.
+    ACTUAL_STEP=$(grep "^\[auto_eval_quest\] CKPT_STEP=" "$EVAL_OUT" | tail -1 | cut -d= -f2 | tr -d ' ')
+    [ -n "$ACTUAL_STEP" ] || ACTUAL_STEP="$NEXT_CHECK"
+
     echo "[scan] step ~$NEXT_CHECK success_rate=$SUCCESS (best so far: $BEST_SUCCESS @ $BEST_STEP)" | tee -a "$SCAN_LOG"
     IMPROVED=$(python3 -c "print(1 if float('$SUCCESS') > float('$BEST_SUCCESS') else 0)")
     if [ "$IMPROVED" = "1" ]; then
-        BEST_SUCCESS="$SUCCESS"; BEST_STEP="$NEXT_CHECK"; FAILS=0
+        BEST_SUCCESS="$SUCCESS"; BEST_STEP="$ACTUAL_STEP"; FAILS=0
     else
         FAILS=$((FAILS + 1))
         echo "[scan] no improvement ($FAILS/$PATIENCE)" | tee -a "$SCAN_LOG"
@@ -73,4 +79,8 @@ while [ "$NEXT_CHECK" -le "$MAX_STEP" ]; do
     NEXT_CHECK=$((NEXT_CHECK + EVAL_INTERVAL))
 done
 
+# $BEST_STEP is now the ACTUAL evaluated checkpoint's step (see ACTUAL_STEP above), so this
+# filename is a real file. It previously printed the rounded scan target, naming a checkpoint that
+# does not exist -- which is why results_comparison.md cites both "student_0440000.pth" and
+# "student_0440160.pth" for the same finetuned_backbone result; only the latter is real.
 echo "[scan] DONE. Best checkpoint for $EXP_NAME: student_$(printf '%07d' $BEST_STEP).pth (success_rate=$BEST_SUCCESS)" | tee -a "$SCAN_LOG"

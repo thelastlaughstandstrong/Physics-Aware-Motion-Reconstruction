@@ -1,0 +1,24 @@
+{
+  "standing": {
+    "frames": 426,
+    "fps": 30.0,
+    "z_shift_mm": -64.22147829771279,
+    "first_frame_max_mm": 0.1843259064087122,
+    "seq_max_mm": 0.1917658975264067,
+    "root_orient_deg": 3.91568268967215e-15,
+    "max_vel": 1.154637724484631,
+    "lowest_joint_z": 0.01095660775899887
+  },
+  "walking": {
+    "frames": 427,
+    "fps": 30.0,
+    "z_shift_mm": -20.046224706907047,
+    "first_frame_max_mm": 0.17965971507669432,
+    "seq_max_mm": 0.19331616081635916,
+    "root_orient_deg": 7.763276575630859e-15,
+    "max_vel": 3.5332897776452765,
+    "lowest_joint_z": -0.011287562549114227
+  },
+  "passed": true,
+  "failed_checks": []
+}

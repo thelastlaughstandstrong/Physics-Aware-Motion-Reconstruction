@@ -1,0 +1,306 @@
+Importing module 'gym_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/gym_38.so)
+Setting GYM_USD_PLUG_INFO_PATH to /home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/usd/plugInfo.json
+PyTorch version 2.4.1+cu121
+Device count 1
+/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/src/gymtorch
+Using /home/sia-irl/.cache/torch_extensions/py38_cu121 as PyTorch extensions root...
+Emitting ninja build file /home/sia-irl/.cache/torch_extensions/py38_cu121/gymtorch/build.ninja...
+Building extension module gymtorch...
+Allowing ninja to set a default number of workers... (overridable by setting the environment variable MAX_JOBS=N)
+ninja: no work to do.
+Loading extension module gymtorch...
+2026-08-13 20:28:51,976 - INFO - logger - logger initialized
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+MOVING MOTION DATA TO GPU, USING CACHE: False
+MOVING MOTION DATA TO GPU, USING CACHE: False
+MOVING MOTION DATA TO GPU, USING CACHE: False
+Importing module 'rlgpu_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/rlgpu_38.so)
+2026-08-13 20:28:54,035 - DEBUG - Setting JobRuntime:name=UNKNOWN_NAME
+2026-08-13 20:28:54,035 - DEBUG - Setting JobRuntime:name=run_hydra
+Not connected to PVD
++++ Using GPU PhysX
+Physics Engine: PhysX
+Physics Device: cuda:0
+GPU Pipeline: enabled
+torch_deterministic: False
+torch_deterministic: False
+torch_deterministic: False
+Setting seed: 0
+Started to train
+Humanoid Weights [65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499, 65.53180958237499]
+SIM FPS: 29.999998435378156
+SIM FPS: 29.999998435378156
+
+****************************** Current motion keys ******************************
+Sampling motion: tensor([3552,  527, 3160, 3764, 3822, 3425, 1621, 1400, 3708, 2770, 2395,  228,
+         667, 2040, 2206, 3646, 1851,  235, 2507, 1047,  975, 1056, 4004,  966,
+        3329, 2841,  236, 1301, 3063,  933], device='cuda:0')
+['/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT050.ROM.pkl_434_867.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT019.ROM.pkl_1632_2039.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT021.gestures.pkl_3796_4216.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT009.standing.pkl_1337_1781.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT015.standing.pkl_4565_4978.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT064.gestures.pkl_1285_1712.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT049.jogging.pkl_0_449.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT040.ROM.pkl_433_865.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT051.photography.pkl_1269_1691.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT059.ROM.pkl_1293_1723.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT042.standing.pkl_4647_5068.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT023.gestures.pkl_1728_2159.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT038.gestures.pkl_1700_2124.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT041.walking.pkl_0_442.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT007.ROM.pkl_2209_2649.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT041.gestures.pkl_418_834.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT081.fixingcar.pkl_3352_3769.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT020.gestures.pkl_0_448.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT046.ROM.pkl_834_1250.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT051.photography.pkl_2115_2536.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT001.sports.pkl_0_393.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT014.standing.pkl_2234_2679.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT025.gestures.pkl_2129_2553.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT037.ROM.pkl_880_1319.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT021.interactions.pkl_2225_2669.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT039.ROM.pkl_3714_4125.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT019.walking.pkl_896_1342.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT050.whiteboard.pkl_3577_4023.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT046.walking.pkl_1734_2166.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT054.gestures.pkl_418_835.pkl'] .....
+*********************************************************************************
+
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+  0%|          | 0/31 [00:00<?, ?it/s]  3%|▎         | 1/31 [00:00<00:08,  3.49it/s] 32%|███▏      | 10/31 [00:00<00:00, 31.19it/s] 68%|██████▊   | 21/31 [00:00<00:00, 53.77it/s]100%|██████████| 31/31 [00:00<00:00, 53.14it/s]
+  0%|          | 0/128 [00:00<?, ?it/s]100%|██████████| 128/128 [00:00<00:00, 19329.29it/s]
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/gym/spaces/box.py:127: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+  logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/rl_games/common/a2c_common.py:175: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  self.scaler = torch.cuda.amp.GradScaler(enabled=self.mixed_precision)
+/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+  warnings.warn(f"enable_nested_tensor is True, but self.use_nested_tensor is False because {why_not_sparsity_fast_path}")
+[distill] Resumed from output/HumanoidIm/quest_distill_trackerr/student/student_0380160.pth at step 380160, stage E
+[critic-warmup] START lr=1.0e-04 min=47 max=47 patience=15 min_ev_gain=0.01 (actor frozen: backbone/state_enc/action_head/action_log_std)
+[critic-warmup] batch    1/47 | value_loss   102.8088 | EV -0.3241 (best -0.3241) | mean_pred    6.6469 | mean_target   12.4519 | step 380192
+[critic-warmup] batch    2/47 | value_loss    76.7153 | EV -0.2673 (best -0.2673) | mean_pred   20.1559 | mean_target   23.9301 | step 380224
+[critic-warmup] batch    3/47 | value_loss    76.3036 | EV  0.2054 (best  0.2054) | mean_pred   28.6033 | mean_target   31.3996 | step 380256
+[critic-warmup] batch    4/47 | value_loss    48.9592 | EV  0.5770 (best  0.5770) | mean_pred   36.1199 | mean_target   37.8379 | step 380288
+[critic-warmup] batch    5/47 | value_loss    39.6912 | EV  0.4615 (best  0.5770) | mean_pred   44.1499 | mean_target   45.6288 | step 380320
+[critic-warmup] batch    6/47 | value_loss    63.6365 | EV  0.5385 (best  0.5770) | mean_pred   48.6159 | mean_target   49.2854 | step 380352
+[critic-warmup] batch    7/47 | value_loss    37.4481 | EV  0.7603 (best  0.7603) | mean_pred   52.6304 | mean_target   53.3549 | step 380384
+[critic-warmup] batch    8/47 | value_loss    67.8520 | EV  0.4690 (best  0.7603) | mean_pred   57.7802 | mean_target   58.1697 | step 380416
+[critic-warmup] batch    9/47 | value_loss    65.1653 | EV  0.5111 (best  0.7603) | mean_pred   60.6183 | mean_target   60.8575 | step 380448
+[critic-warmup] batch   10/47 | value_loss   810.8760 | EV -0.0098 (best  0.7603) | mean_pred   49.5071 | mean_target   44.6311 | step 380480
+[critic-warmup] batch   11/47 | value_loss    58.1745 | EV  0.6316 (best  0.7603) | mean_pred   49.3229 | mean_target   49.7326 | step 380512
+[critic-warmup] batch   12/47 | value_loss    67.0344 | EV  0.7074 (best  0.7603) | mean_pred   53.9882 | mean_target   54.2404 | step 380544
+[critic-warmup] batch   13/47 | value_loss    74.7031 | EV  0.6071 (best  0.7603) | mean_pred   58.5580 | mean_target   58.8183 | step 380576
+[critic-warmup] batch   14/47 | value_loss   159.6835 | EV  0.6386 (best  0.7603) | mean_pred   58.2785 | mean_target   58.2705 | step 380608
+[critic-warmup] batch   15/47 | value_loss   180.5948 | EV  0.6718 (best  0.7603) | mean_pred   58.5651 | mean_target   58.6555 | step 380640
+[critic-warmup] batch   16/47 | value_loss   118.0657 | EV  0.7017 (best  0.7603) | mean_pred   61.4447 | mean_target   61.5306 | step 380672
+[critic-warmup] batch   17/47 | value_loss    82.1294 | EV  0.7749 (best  0.7749) | mean_pred   64.0597 | mean_target   64.1491 | step 380704
+[critic-warmup] batch   18/47 | value_loss    99.2266 | EV  0.7040 (best  0.7749) | mean_pred   66.4336 | mean_target   66.6214 | step 380736
+[critic-warmup] batch   19/47 | value_loss  1408.6008 | EV -0.1989 (best  0.7749) | mean_pred   51.4767 | mean_target   37.0736 | step 380768
+[critic-warmup] batch   20/47 | value_loss    73.1060 | EV  0.5409 (best  0.7749) | mean_pred   38.9818 | mean_target   39.7513 | step 380800
+[critic-warmup] batch   21/47 | value_loss    52.2069 | EV  0.6557 (best  0.7749) | mean_pred   45.0073 | mean_target   45.9174 | step 380832
+[critic-warmup] batch   22/47 | value_loss    90.9548 | EV  0.4867 (best  0.7749) | mean_pred   50.9772 | mean_target   51.2367 | step 380864
+[critic-warmup] batch   23/47 | value_loss    68.9653 | EV  0.7047 (best  0.7749) | mean_pred   53.8614 | mean_target   54.0101 | step 380896
+[critic-warmup] batch   24/47 | value_loss   111.6709 | EV  0.5911 (best  0.7749) | mean_pred   55.8925 | mean_target   56.1120 | step 380928
+[critic-warmup] batch   25/47 | value_loss    79.0816 | EV  0.7165 (best  0.7749) | mean_pred   57.5635 | mean_target   57.7120 | step 380960
+[critic-warmup] batch   26/47 | value_loss   116.2137 | EV  0.6478 (best  0.7749) | mean_pred   58.6229 | mean_target   58.7426 | step 380992
+[critic-warmup] batch   27/47 | value_loss    74.7125 | EV  0.7604 (best  0.7749) | mean_pred   61.9198 | mean_target   61.8910 | step 381024
+[critic-warmup] batch   28/47 | value_loss   146.4838 | EV  0.6503 (best  0.7749) | mean_pred   63.8092 | mean_target   63.8941 | step 381056
+[critic-warmup] batch   29/47 | value_loss   209.3067 | EV  0.5759 (best  0.7749) | mean_pred   63.7810 | mean_target   63.7286 | step 381088
+[critic-warmup] batch   30/47 | value_loss   105.2175 | EV  0.7579 (best  0.7749) | mean_pred   63.4744 | mean_target   63.4578 | step 381120
+[critic-warmup] batch   31/47 | value_loss   913.3865 | EV  0.3453 (best  0.7749) | mean_pred   60.9731 | mean_target   60.7265 | step 381152
+[critic-warmup] batch   32/47 | value_loss    92.6013 | EV  0.8087 (best  0.8087) | mean_pred   63.9126 | mean_target   63.8790 | step 381184
+[critic-warmup] batch   33/47 | value_loss   105.1635 | EV  0.7836 (best  0.8087) | mean_pred   66.2122 | mean_target   66.2407 | step 381216
+[critic-warmup] batch   34/47 | value_loss   145.8048 | EV  0.7181 (best  0.8087) | mean_pred   65.0095 | mean_target   65.1757 | step 381248
+[critic-warmup] batch   35/47 | value_loss   131.8830 | EV  0.7689 (best  0.8087) | mean_pred   65.1450 | mean_target   65.0342 | step 381280
+[critic-warmup] batch   36/47 | value_loss   137.9079 | EV  0.7791 (best  0.8087) | mean_pred   65.4654 | mean_target   65.2934 | step 381312
+[critic-warmup] batch   37/47 | value_loss   146.3463 | EV  0.7732 (best  0.8087) | mean_pred   65.8982 | mean_target   65.7178 | step 381344
+[critic-warmup] batch   38/47 | value_loss   991.2927 | EV  0.1172 (best  0.8087) | mean_pred   53.5493 | mean_target   49.9105 | step 381376
+[critic-warmup] batch   39/47 | value_loss    63.6556 | EV  0.7842 (best  0.8087) | mean_pred   52.9579 | mean_target   53.2044 | step 381408
+[critic-warmup] batch   40/47 | value_loss   113.6008 | EV  0.6914 (best  0.8087) | mean_pred   54.7531 | mean_target   55.1307 | step 381440
+[critic-warmup] batch   41/47 | value_loss   118.6322 | EV  0.7184 (best  0.8087) | mean_pred   57.2237 | mean_target   57.2539 | step 381472
+[critic-warmup] batch   42/47 | value_loss   132.9130 | EV  0.6625 (best  0.8087) | mean_pred   58.3048 | mean_target   58.2108 | step 381504
+[critic-warmup] batch   43/47 | value_loss   120.1768 | EV  0.6744 (best  0.8087) | mean_pred   61.1772 | mean_target   61.1078 | step 381536
+[critic-warmup] batch   44/47 | value_loss   117.1072 | EV  0.7438 (best  0.8087) | mean_pred   61.2685 | mean_target   61.3235 | step 381568
+[critic-warmup] batch   45/47 | value_loss    95.4050 | EV  0.7505 (best  0.8087) | mean_pred   63.5040 | mean_target   63.5687 | step 381600
+[critic-warmup] batch   46/47 | value_loss   188.3052 | EV  0.6190 (best  0.8087) | mean_pred   62.6518 | mean_target   62.3604 | step 381632
+[critic-warmup] batch   47/47 | value_loss  1044.8981 | EV -0.1930 (best  0.8087) | mean_pred   46.4642 | mean_target   39.1029 | step 381664
+[critic-warmup] EV plateau (15 batches without a +0.01 gain; best EV 0.8087) -- stopping at batch 47
+[critic-warmup] DONE after 47 batches | value_loss 102.8088 -> 1044.8981 | EV -0.3241 -> -0.1930 (best 0.8087) | mean_pred 46.4642 vs mean_target 39.1029 | actor verified BIT-IDENTICAL
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0381664.pth
+[critic-warmup] post-warmup checkpoint saved at step 381664 -- evaluate this to confirm success is still ~the Stage E seed
+/home/sia-irl/AvatarPoser/utils/utils_transform.py:55: UserWarning: Using torch.cross without specifying the dim arg is deprecated.
+Please either pass the dim explicitly or simply use torch.linalg.cross.
+The default value of dim will change to agree with that of linalg.cross in a future release. (Triggered internally at ../aten/src/ATen/native/Cross.cpp:62.)
+  rot_vec_3 = torch.cross(rot_vec_1, rot_vec_2)
+[distill-R] step  381696 | batch     1 | actor 0.070425 | critic 49.351921 | kinematic 0.005599 | kl 0.006423 | lr 7.50e-06 | EV 0.7465 | reward_mean 0.8194 | gpu_alloc 0.432GB gpu_reserved 2.059GB
+[distill-R] step  381728 | batch     2 | actor 0.068864 | critic 47.942722 | kinematic 0.004727 | kl 0.005862 | lr 1.13e-05 | EV 0.7127 | reward_mean 0.8051 | gpu_alloc 0.432GB gpu_reserved 2.062GB
+[distill-R] step  381760 | batch     3 | actor 0.175931 | critic 39.990746 | kinematic 0.004517 | kl 0.026568 | lr 1.13e-05 | EV 0.7583 | reward_mean 0.7978 | gpu_alloc 0.432GB gpu_reserved 2.064GB
+[distill-R] step  381792 | batch     4 | actor 0.142246 | critic 36.125816 | kinematic 0.004321 | kl 0.015097 | lr 1.13e-05 | EV 0.7294 | reward_mean 0.8249 | gpu_alloc 0.432GB gpu_reserved 2.064GB
+[distill-R] step  381824 | batch     5 | actor 0.227161 | critic 42.959480 | kinematic 0.004191 | kl 0.015078 | lr 1.13e-05 | EV 0.7601 | reward_mean 0.8129 | gpu_alloc 0.433GB gpu_reserved 2.066GB
+[distill-R] step  381856 | batch     6 | actor 0.207659 | critic 37.768219 | kinematic 0.004426 | kl 0.063679 | lr 7.50e-06 | EV 0.7306 | reward_mean 0.8173 | gpu_alloc 0.434GB gpu_reserved 2.066GB
+[distill-R] step  381888 | batch     7 | actor 0.120460 | critic 55.399666 | kinematic 0.004144 | kl 0.004641 | lr 1.13e-05 | EV 0.6340 | reward_mean 0.8167 | gpu_alloc 0.433GB gpu_reserved 2.066GB
+[distill-R] step  381920 | batch     8 | actor 0.257024 | critic 36.976593 | kinematic 0.004204 | kl 0.061607 | lr 7.50e-06 | EV 0.8048 | reward_mean 0.7829 | gpu_alloc 0.433GB gpu_reserved 2.066GB
+[distill-R] step  381952 | batch     9 | actor 0.037297 | critic 35.070427 | kinematic 0.004029 | kl 0.004967 | lr 1.13e-05 | EV 0.7606 | reward_mean 0.7824 | gpu_alloc 0.433GB gpu_reserved 2.066GB
+[distill-R] step  381984 | batch    10 | actor 0.111728 | critic 109.445816 | kinematic 0.005106 | kl 0.013550 | lr 1.69e-05 | EV 0.4438 | reward_mean 0.7773 | gpu_alloc 0.435GB gpu_reserved 2.068GB
+[distill-R] step  382016 | batch    11 | actor 0.247152 | critic 41.087585 | kinematic 0.004051 | kl 0.118432 | lr 1.13e-05 | EV 0.8321 | reward_mean 0.7722 | gpu_alloc 0.435GB gpu_reserved 2.068GB
+[distill-R] step  382048 | batch    12 | actor 0.192837 | critic 44.198242 | kinematic 0.003927 | kl 0.017137 | lr 1.13e-05 | EV 0.7432 | reward_mean 0.8195 | gpu_alloc 0.435GB gpu_reserved 2.068GB
+[distill-R] step  382080 | batch    13 | actor 0.206363 | critic 73.806274 | kinematic 0.004183 | kl 0.112812 | lr 7.50e-06 | EV 0.6313 | reward_mean 0.7885 | gpu_alloc 0.434GB gpu_reserved 2.068GB
+[distill-R] step  382112 | batch    14 | actor -0.022900 | critic 26.752354 | kinematic 0.004007 | kl 0.002784 | lr 1.13e-05 | EV 0.7951 | reward_mean 0.7357 | gpu_alloc 0.435GB gpu_reserved 2.068GB
+[distill-R] step  382144 | batch    15 | actor 0.192290 | critic 44.609894 | kinematic 0.003856 | kl 0.061916 | lr 7.50e-06 | EV 0.7779 | reward_mean 0.7183 | gpu_alloc 0.436GB gpu_reserved 2.068GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0382144.pth
+[distill-R] step  382176 | batch    16 | actor 0.053008 | critic 30.230095 | kinematic 0.003860 | kl 0.004465 | lr 1.13e-05 | EV 0.8256 | reward_mean 0.7235 | gpu_alloc 0.437GB gpu_reserved 2.070GB
+[distill-R] step  382208 | batch    17 | actor 0.193807 | critic 46.261520 | kinematic 0.003886 | kl 0.033275 | lr 1.13e-05 | EV 0.7205 | reward_mean 0.7288 | gpu_alloc 0.436GB gpu_reserved 2.070GB
+[distill-R] step  382240 | batch    18 | actor 0.199167 | critic 44.248428 | kinematic 0.003865 | kl 0.053830 | lr 1.13e-05 | EV 0.7115 | reward_mean 0.7120 | gpu_alloc 0.436GB gpu_reserved 2.070GB
+[distill-R] step  382272 | batch    19 | actor 0.201575 | critic 229.139008 | kinematic 0.005211 | kl 0.031650 | lr 1.13e-05 | EV 0.1945 | reward_mean 0.7419 | gpu_alloc 0.437GB gpu_reserved 2.070GB
+[distill-R] step  382304 | batch    20 | actor 0.370751 | critic 35.127159 | kinematic 0.004464 | kl 0.013654 | lr 1.69e-05 | EV 0.7951 | reward_mean 0.7110 | gpu_alloc 0.438GB gpu_reserved 2.070GB
+[distill-R] step  382336 | batch    21 | actor 0.261549 | critic 40.510735 | kinematic 0.004025 | kl 0.296448 | lr 1.13e-05 | EV 0.8206 | reward_mean 0.6917 | gpu_alloc 0.439GB gpu_reserved 2.072GB
+[distill-R] step  382368 | batch    22 | actor 0.171228 | critic 31.040970 | kinematic 0.004196 | kl 0.009750 | lr 1.69e-05 | EV 0.7945 | reward_mean 0.6545 | gpu_alloc 0.438GB gpu_reserved 2.072GB
+[distill-R] step  382400 | batch    23 | actor 0.240453 | critic 50.577126 | kinematic 0.003883 | kl 0.086499 | lr 1.13e-05 | EV 0.7624 | reward_mean 0.6762 | gpu_alloc 0.438GB gpu_reserved 2.072GB
+[distill-R] step  382432 | batch    24 | actor 0.211041 | critic 45.083282 | kinematic 0.004051 | kl 0.042706 | lr 1.13e-05 | EV 0.7124 | reward_mean 0.6557 | gpu_alloc 0.439GB gpu_reserved 2.072GB
+[distill-R] step  382464 | batch    25 | actor 0.095962 | critic 76.511429 | kinematic 0.003996 | kl 0.007112 | lr 1.69e-05 | EV 0.7400 | reward_mean 0.5783 | gpu_alloc 0.440GB gpu_reserved 2.072GB
+[distill-R] step  382496 | batch    26 | actor 0.235384 | critic 55.903862 | kinematic 0.004161 | kl 0.180851 | lr 1.13e-05 | EV 0.7858 | reward_mean 0.6406 | gpu_alloc 0.440GB gpu_reserved 2.074GB
+[distill-R] step  382528 | batch    27 | actor 0.104194 | critic 24.553543 | kinematic 0.004090 | kl 0.012014 | lr 1.69e-05 | EV 0.8369 | reward_mean 0.6379 | gpu_alloc 0.440GB gpu_reserved 2.074GB
+[distill-R] step  382560 | batch    28 | actor 0.349115 | critic 271.962402 | kinematic 0.004392 | kl 0.335859 | lr 1.13e-05 | EV 0.1389 | reward_mean 0.6968 | gpu_alloc 0.440GB gpu_reserved 2.074GB
+[distill-R] step  382592 | batch    29 | actor 0.121641 | critic 42.415367 | kinematic 0.004229 | kl 0.008940 | lr 1.69e-05 | EV 0.7662 | reward_mean 0.5844 | gpu_alloc 0.441GB gpu_reserved 2.076GB
+[distill-R] step  382624 | batch    30 | actor 0.241785 | critic 74.408897 | kinematic 0.004259 | kl 0.075132 | lr 1.13e-05 | EV 0.7385 | reward_mean 0.5599 | gpu_alloc 0.442GB gpu_reserved 2.076GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0382624.pth
+[distill-R] step  382656 | batch    31 | actor 0.153891 | critic 44.754463 | kinematic 0.003912 | kl 0.042243 | lr 1.13e-05 | EV 0.7329 | reward_mean 0.5747 | gpu_alloc 0.443GB gpu_reserved 2.076GB
+[distill-R] step  382688 | batch    32 | actor 0.274257 | critic 46.329010 | kinematic 0.004326 | kl 0.085957 | lr 7.50e-06 | EV 0.7905 | reward_mean 0.5805 | gpu_alloc 0.443GB gpu_reserved 2.078GB
+[distill-R] step  382720 | batch    33 | actor -0.017081 | critic 47.754845 | kinematic 0.004044 | kl 0.003586 | lr 1.13e-05 | EV 0.7648 | reward_mean 0.5657 | gpu_alloc 0.443GB gpu_reserved 2.080GB
+[distill-R] step  382752 | batch    34 | actor 1.811339 | critic 57.209949 | kinematic 0.004007 | kl 0.040175 | lr 1.13e-05 | EV 0.6917 | reward_mean 0.6000 | gpu_alloc 0.444GB gpu_reserved 2.080GB
+[distill-R] step  382784 | batch    35 | actor 0.287912 | critic 62.712543 | kinematic 0.004341 | kl 0.060873 | lr 7.50e-06 | EV 0.7291 | reward_mean 0.5493 | gpu_alloc 0.445GB gpu_reserved 2.082GB
+[distill-R] step  382816 | batch    36 | actor 0.036543 | critic 153.291626 | kinematic 0.004365 | kl 0.001891 | lr 1.13e-05 | EV 0.6505 | reward_mean 0.4323 | gpu_alloc 0.446GB gpu_reserved 2.085GB
+[distill-R] step  382848 | batch    37 | actor 0.177646 | critic 89.873756 | kinematic 0.004522 | kl 0.007874 | lr 1.69e-05 | EV 0.6901 | reward_mean 0.5239 | gpu_alloc 0.446GB gpu_reserved 2.085GB
+[distill-R] step  382880 | batch    38 | actor 0.259473 | critic 137.703247 | kinematic 0.004574 | kl 0.296825 | lr 1.13e-05 | EV 0.5109 | reward_mean 0.5069 | gpu_alloc 0.447GB gpu_reserved 2.085GB
+[distill-R] step  382912 | batch    39 | actor 0.143815 | critic 70.452225 | kinematic 0.004429 | kl 0.008533 | lr 1.69e-05 | EV 0.7352 | reward_mean 0.5148 | gpu_alloc 0.448GB gpu_reserved 2.087GB
+[distill-R] step  382944 | batch    40 | actor 0.269533 | critic 98.337677 | kinematic 0.004032 | kl 0.073605 | lr 1.13e-05 | EV 0.6951 | reward_mean 0.4601 | gpu_alloc 0.449GB gpu_reserved 2.087GB
+[distill-R] step  382976 | batch    41 | actor 0.181390 | critic 99.230431 | kinematic 0.004752 | kl 0.013157 | lr 1.69e-05 | EV 0.7104 | reward_mean 0.4862 | gpu_alloc 0.450GB gpu_reserved 2.087GB
+[distill-R] step  383008 | batch    42 | actor 0.278914 | critic 77.150383 | kinematic 0.004455 | kl 0.121113 | lr 1.13e-05 | EV 0.7636 | reward_mean 0.4912 | gpu_alloc 0.451GB gpu_reserved 2.087GB
+[distill-R] step  383040 | batch    43 | actor 0.083528 | critic 74.788803 | kinematic 0.004351 | kl 0.006019 | lr 1.69e-05 | EV 0.7825 | reward_mean 0.5032 | gpu_alloc 0.451GB gpu_reserved 2.089GB
+[distill-R] step  383072 | batch    44 | actor 0.225770 | critic 51.936043 | kinematic 0.004202 | kl 0.122501 | lr 1.13e-05 | EV 0.8047 | reward_mean 0.4934 | gpu_alloc 0.452GB gpu_reserved 2.089GB
+[distill-R] step  383104 | batch    45 | actor 0.222230 | critic 68.174698 | kinematic 0.004238 | kl 0.048207 | lr 1.13e-05 | EV 0.7531 | reward_mean 0.4941 | gpu_alloc 0.453GB gpu_reserved 2.089GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0383104.pth
+[distill-R] step  383136 | batch    46 | actor 0.292262 | critic 94.587433 | kinematic 0.004447 | kl 0.020707 | lr 1.13e-05 | EV 0.6847 | reward_mean 0.5152 | gpu_alloc 0.454GB gpu_reserved 2.091GB
+[distill-R] step  383168 | batch    47 | actor 0.243245 | critic 203.831024 | kinematic 0.004940 | kl 0.018651 | lr 1.13e-05 | EV 0.4812 | reward_mean 0.4949 | gpu_alloc 0.455GB gpu_reserved 2.091GB
+[distill-R] step  383200 | batch    48 | actor 0.313349 | critic 123.730705 | kinematic 0.004392 | kl 0.087950 | lr 7.50e-06 | EV 0.6698 | reward_mean 0.4847 | gpu_alloc 0.455GB gpu_reserved 2.093GB
+[distill-R] step  383232 | batch    49 | actor 0.102959 | critic 113.077477 | kinematic 0.004752 | kl 0.003695 | lr 1.13e-05 | EV 0.6549 | reward_mean 0.4956 | gpu_alloc 0.457GB gpu_reserved 2.093GB
+[distill-R] step  383264 | batch    50 | actor 0.202925 | critic 102.402802 | kinematic 0.005232 | kl 0.055278 | lr 1.13e-05 | EV 0.6654 | reward_mean 0.4590 | gpu_alloc 0.458GB gpu_reserved 2.095GB
+[distill-R] step  383296 | batch    51 | actor 0.308670 | critic 168.311890 | kinematic 0.005136 | kl 0.015745 | lr 1.13e-05 | EV 0.6621 | reward_mean 0.4684 | gpu_alloc 0.460GB gpu_reserved 2.095GB
+[distill-R] step  383328 | batch    52 | actor 0.292501 | critic 115.785400 | kinematic 0.005247 | kl 0.099784 | lr 7.50e-06 | EV 0.6613 | reward_mean 0.4795 | gpu_alloc 0.460GB gpu_reserved 2.095GB
+[distill-R] step  383360 | batch    53 | actor 0.142069 | critic 115.134720 | kinematic 0.005170 | kl 0.002659 | lr 1.13e-05 | EV 0.6895 | reward_mean 0.4711 | gpu_alloc 0.461GB gpu_reserved 2.097GB
+[distill-R] step  383392 | batch    54 | actor 0.276360 | critic 97.972504 | kinematic 0.004293 | kl 0.027129 | lr 1.13e-05 | EV 0.6929 | reward_mean 0.4919 | gpu_alloc 0.462GB gpu_reserved 2.099GB
+[distill-R] step  383424 | batch    55 | actor 0.136488 | critic 114.661026 | kinematic 0.004897 | kl 0.008658 | lr 1.69e-05 | EV 0.6554 | reward_mean 0.4797 | gpu_alloc 0.464GB gpu_reserved 2.099GB
+[distill-R] step  383456 | batch    56 | actor 0.316101 | critic 157.326111 | kinematic 0.004417 | kl 0.249283 | lr 1.13e-05 | EV 0.5587 | reward_mean 0.4966 | gpu_alloc 0.465GB gpu_reserved 2.101GB
+[distill-R] step  383488 | batch    57 | actor 0.333196 | critic 144.760345 | kinematic 0.004944 | kl 0.063748 | lr 7.50e-06 | EV 0.6109 | reward_mean 0.5001 | gpu_alloc 0.466GB gpu_reserved 2.101GB
+[distill-R] step  383520 | batch    58 | actor 0.033090 | critic 130.805542 | kinematic 0.005720 | kl 0.004100 | lr 1.13e-05 | EV 0.6230 | reward_mean 0.4436 | gpu_alloc 0.466GB gpu_reserved 2.103GB
+[distill-R] step  383552 | batch    59 | actor 0.287612 | critic 142.654816 | kinematic 0.005240 | kl 0.091082 | lr 7.50e-06 | EV 0.5938 | reward_mean 0.4670 | gpu_alloc 0.468GB gpu_reserved 2.103GB
+[distill-R] step  383584 | batch    60 | actor 0.105687 | critic 216.147018 | kinematic 0.005415 | kl 0.003419 | lr 1.13e-05 | EV 0.5431 | reward_mean 0.4179 | gpu_alloc 0.470GB gpu_reserved 2.106GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0383584.pth
+[distill-R] step  383616 | batch    61 | actor 0.279560 | critic 147.532288 | kinematic 0.005058 | kl 0.137877 | lr 7.50e-06 | EV 0.5461 | reward_mean 0.4899 | gpu_alloc 0.472GB gpu_reserved 2.106GB
+[distill-R] step  383648 | batch    62 | actor 0.053770 | critic 97.765030 | kinematic 0.005180 | kl 0.003291 | lr 1.13e-05 | EV 0.6859 | reward_mean 0.4779 | gpu_alloc 0.472GB gpu_reserved 2.106GB
+[distill-R] step  383680 | batch    63 | actor 0.285126 | critic 112.358704 | kinematic 0.004487 | kl 0.023280 | lr 1.13e-05 | EV 0.6885 | reward_mean 0.4624 | gpu_alloc 0.472GB gpu_reserved 2.106GB
+[distill-R] step  383712 | batch    64 | actor 0.280243 | critic 174.197083 | kinematic 0.004292 | kl 0.047138 | lr 1.13e-05 | EV 0.6160 | reward_mean 0.4235 | gpu_alloc 0.473GB gpu_reserved 2.108GB
+[distill-R] step  383744 | batch    65 | actor 0.266706 | critic 96.786957 | kinematic 0.004106 | kl 0.007874 | lr 1.69e-05 | EV 0.7487 | reward_mean 0.4754 | gpu_alloc 0.475GB gpu_reserved 2.110GB
+[distill-R] step  383776 | batch    66 | actor 0.269562 | critic 94.807343 | kinematic 0.004547 | kl 0.271229 | lr 1.13e-05 | EV 0.7170 | reward_mean 0.4966 | gpu_alloc 0.476GB gpu_reserved 2.110GB
+[distill-R] step  383808 | batch    67 | actor 0.485964 | critic 71.916458 | kinematic 0.004566 | kl 0.008388 | lr 1.69e-05 | EV 0.7539 | reward_mean 0.4568 | gpu_alloc 0.476GB gpu_reserved 2.112GB
+[distill-R] step  383840 | batch    68 | actor 0.262913 | critic 55.065323 | kinematic 0.004253 | kl 0.284751 | lr 1.13e-05 | EV 0.7682 | reward_mean 0.5036 | gpu_alloc 0.477GB gpu_reserved 2.112GB
+[distill-R] step  383872 | batch    69 | actor 0.223304 | critic 104.989738 | kinematic 0.004520 | kl 0.010111 | lr 1.69e-05 | EV 0.6869 | reward_mean 0.4607 | gpu_alloc 0.478GB gpu_reserved 2.114GB
+[distill-R] step  383904 | batch    70 | actor 0.288895 | critic 114.132011 | kinematic 0.004788 | kl 0.258187 | lr 1.13e-05 | EV 0.6179 | reward_mean 0.4945 | gpu_alloc 0.480GB gpu_reserved 2.114GB
+[distill-R] step  383936 | batch    71 | actor 0.236318 | critic 76.354919 | kinematic 0.004331 | kl 0.015631 | lr 1.13e-05 | EV 0.7523 | reward_mean 0.4678 | gpu_alloc 0.482GB gpu_reserved 2.114GB
+[distill-R] step  383968 | batch    72 | actor 0.126041 | critic 76.714561 | kinematic 0.004267 | kl 0.009198 | lr 1.69e-05 | EV 0.7850 | reward_mean 0.5027 | gpu_alloc 0.482GB gpu_reserved 2.114GB
+[distill-R] step  384000 | batch    73 | actor 0.290136 | critic 81.031471 | kinematic 0.004380 | kl 0.292327 | lr 1.13e-05 | EV 0.7304 | reward_mean 0.5032 | gpu_alloc 0.482GB gpu_reserved 2.118GB
+[distill-R] step  384032 | batch    74 | actor 0.288845 | critic 100.368286 | kinematic 0.004428 | kl 0.051833 | lr 1.13e-05 | EV 0.6588 | reward_mean 0.4999 | gpu_alloc 0.484GB gpu_reserved 2.120GB
+[distill-R] step  384064 | batch    75 | actor 0.347687 | critic 150.360657 | kinematic 0.004891 | kl 0.014704 | lr 1.69e-05 | EV 0.6169 | reward_mean 0.4414 | gpu_alloc 0.486GB gpu_reserved 2.120GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0384064.pth
+[distill-R] step  384096 | batch    76 | actor 0.284104 | critic 70.619835 | kinematic 0.004599 | kl 0.262367 | lr 1.13e-05 | EV 0.7728 | reward_mean 0.4734 | gpu_alloc 0.487GB gpu_reserved 2.122GB
+[distill-R] step  384128 | batch    77 | actor 0.092739 | critic 105.156357 | kinematic 0.004801 | kl 0.006168 | lr 1.69e-05 | EV 0.6806 | reward_mean 0.4754 | gpu_alloc 0.488GB gpu_reserved 2.122GB
+[distill-R] step  384160 | batch    78 | actor 0.307064 | critic 97.851875 | kinematic 0.005579 | kl 0.422885 | lr 1.13e-05 | EV 0.7093 | reward_mean 0.4867 | gpu_alloc 0.488GB gpu_reserved 2.124GB
+[distill-R] step  384192 | batch    79 | actor 0.257100 | critic 121.734100 | kinematic 0.005300 | kl 0.009547 | lr 1.69e-05 | EV 0.6808 | reward_mean 0.4130 | gpu_alloc 0.490GB gpu_reserved 2.124GB
+[distill-R] step  384224 | batch    80 | actor 0.330219 | critic 163.980728 | kinematic 0.004555 | kl 0.703132 | lr 1.13e-05 | EV 0.6563 | reward_mean 0.4287 | gpu_alloc 0.492GB gpu_reserved 2.127GB
+[distill-R] step  384256 | batch    81 | actor 0.508188 | critic 225.161591 | kinematic 0.005598 | kl 0.008332 | lr 1.69e-05 | EV 0.5841 | reward_mean 0.4489 | gpu_alloc 0.494GB gpu_reserved 2.129GB
+[distill-R] step  384288 | batch    82 | actor 0.389495 | critic 233.148422 | kinematic 0.006137 | kl 0.346512 | lr 1.13e-05 | EV 0.5798 | reward_mean 0.4398 | gpu_alloc 0.495GB gpu_reserved 2.131GB
+[distill-R] step  384320 | batch    83 | actor 0.109849 | critic 151.607117 | kinematic 0.005364 | kl 0.004603 | lr 1.69e-05 | EV 0.6216 | reward_mean 0.4727 | gpu_alloc 0.496GB gpu_reserved 2.133GB
+[distill-R] step  384352 | batch    84 | actor 0.339132 | critic 140.077530 | kinematic 0.005010 | kl 0.161105 | lr 1.13e-05 | EV 0.6912 | reward_mean 0.4757 | gpu_alloc 0.497GB gpu_reserved 2.135GB
+[distill-R] step  384384 | batch    85 | actor 0.311353 | critic 154.396973 | kinematic 0.005117 | kl 0.031575 | lr 1.13e-05 | EV 0.6605 | reward_mean 0.4540 | gpu_alloc 0.500GB gpu_reserved 2.137GB
+[distill-R] step  384416 | batch    86 | actor 0.307724 | critic 189.721832 | kinematic 0.005845 | kl 0.290790 | lr 7.50e-06 | EV 0.5307 | reward_mean 0.4643 | gpu_alloc 0.502GB gpu_reserved 2.139GB
+[distill-R] step  384448 | batch    87 | actor 0.082419 | critic 185.622009 | kinematic 0.006092 | kl 0.003794 | lr 1.13e-05 | EV 0.5409 | reward_mean 0.4540 | gpu_alloc 0.503GB gpu_reserved 2.141GB
+[distill-R] step  384480 | batch    88 | actor 0.303583 | critic 208.278503 | kinematic 0.006075 | kl 0.172557 | lr 7.50e-06 | EV 0.5099 | reward_mean 0.4261 | gpu_alloc 0.504GB gpu_reserved 2.143GB
+[distill-R] step  384512 | batch    89 | actor 0.116248 | critic 352.524170 | kinematic 0.007454 | kl 0.004752 | lr 1.13e-05 | EV 0.1321 | reward_mean 0.4753 | gpu_alloc 0.507GB gpu_reserved 2.147GB
+[distill-R] step  384544 | batch    90 | actor 0.271491 | critic 338.208252 | kinematic 0.006726 | kl 0.102602 | lr 7.50e-06 | EV 0.2171 | reward_mean 0.4611 | gpu_alloc 0.510GB gpu_reserved 2.147GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0384544.pth
+[distill-R] step  384576 | batch    91 | actor 0.375882 | critic 425.033386 | kinematic 0.007178 | kl 0.005741 | lr 1.13e-05 | EV 0.1804 | reward_mean 0.4691 | gpu_alloc 0.513GB gpu_reserved 2.150GB
+[distill-R] step  384608 | batch    92 | actor 0.371741 | critic 436.298767 | kinematic 0.007667 | kl 0.308325 | lr 7.50e-06 | EV 0.0443 | reward_mean 0.4957 | gpu_alloc 0.515GB gpu_reserved 2.152GB
+[distill-R] step  384640 | batch    93 | actor 0.168630 | critic 325.859528 | kinematic 0.007401 | kl 0.005613 | lr 1.13e-05 | EV 0.2648 | reward_mean 0.4671 | gpu_alloc 0.517GB gpu_reserved 2.156GB
+[distill-R] step  384672 | batch    94 | actor 0.306940 | critic 304.419556 | kinematic 0.006937 | kl 0.085288 | lr 7.50e-06 | EV 0.3399 | reward_mean 0.4257 | gpu_alloc 0.520GB gpu_reserved 2.158GB
+[distill-R] step  384704 | batch    95 | actor 0.135914 | critic 251.788940 | kinematic 0.006980 | kl 0.004047 | lr 1.13e-05 | EV 0.4019 | reward_mean 0.4698 | gpu_alloc 0.523GB gpu_reserved 2.160GB
+[distill-R] step  384736 | batch    96 | actor 0.303598 | critic 190.636536 | kinematic 0.006079 | kl 0.070166 | lr 7.50e-06 | EV 0.5099 | reward_mean 0.4295 | gpu_alloc 0.525GB gpu_reserved 2.162GB
+[distill-R] step  384768 | batch    97 | actor -0.001965 | critic 182.440063 | kinematic 0.005960 | kl 0.003539 | lr 1.13e-05 | EV 0.4972 | reward_mean 0.4471 | gpu_alloc 0.526GB gpu_reserved 2.162GB
+[distill-R] step  384800 | batch    98 | actor 0.341723 | critic 223.103882 | kinematic 0.006006 | kl 0.162573 | lr 7.50e-06 | EV 0.4272 | reward_mean 0.4453 | gpu_alloc 0.528GB gpu_reserved 2.164GB
+[distill-R] step  384832 | batch    99 | actor 0.025927 | critic 162.680145 | kinematic 0.006274 | kl 0.003182 | lr 1.13e-05 | EV 0.5056 | reward_mean 0.4313 | gpu_alloc 0.530GB gpu_reserved 2.166GB
+[distill-R] step  384864 | batch   100 | actor 0.199472 | critic 197.155640 | kinematic 0.006013 | kl 0.041861 | lr 1.13e-05 | EV 0.3659 | reward_mean 0.4389 | gpu_alloc 0.533GB gpu_reserved 2.171GB
+[distill-R] step  384896 | batch   101 | actor 0.329549 | critic 197.667709 | kinematic 0.007314 | kl 0.145716 | lr 7.50e-06 | EV 0.3971 | reward_mean 0.4276 | gpu_alloc 0.536GB gpu_reserved 2.171GB
+[distill-R] step  384928 | batch   102 | actor 0.166111 | critic 248.072235 | kinematic 0.006127 | kl 0.008089 | lr 1.13e-05 | EV 0.3322 | reward_mean 0.4300 | gpu_alloc 0.537GB gpu_reserved 2.175GB
+[distill-R] step  384960 | batch   103 | actor 0.326398 | critic 226.432770 | kinematic 0.006317 | kl 0.129692 | lr 7.50e-06 | EV 0.3378 | reward_mean 0.4661 | gpu_alloc 0.539GB gpu_reserved 2.175GB
+[distill-R] step  384992 | batch   104 | actor 0.045756 | critic 210.980286 | kinematic 0.006228 | kl 0.003583 | lr 1.13e-05 | EV 0.2886 | reward_mean 0.4497 | gpu_alloc 0.541GB gpu_reserved 2.179GB
+[distill-R] step  385024 | batch   105 | actor 0.325562 | critic 218.626617 | kinematic 0.008497 | kl 0.162360 | lr 7.50e-06 | EV 0.3236 | reward_mean 0.4479 | gpu_alloc 0.544GB gpu_reserved 2.181GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0385024.pth
+[distill-R] step  385056 | batch   106 | actor 0.146120 | critic 241.390991 | kinematic 0.006423 | kl 0.006342 | lr 1.13e-05 | EV 0.1684 | reward_mean 0.3728 | gpu_alloc 0.547GB gpu_reserved 2.183GB
+[distill-R] step  385088 | batch   107 | actor 0.322173 | critic 220.191925 | kinematic 0.006934 | kl 0.123314 | lr 7.50e-06 | EV 0.1893 | reward_mean 0.4226 | gpu_alloc 0.548GB gpu_reserved 2.185GB
+[distill-R] step  385120 | batch   108 | actor 0.140461 | critic 246.778870 | kinematic 0.007238 | kl 0.006819 | lr 1.13e-05 | EV 0.1393 | reward_mean 0.4552 | gpu_alloc 0.550GB gpu_reserved 2.187GB
+[distill-R] step  385152 | batch   109 | actor 0.316443 | critic 177.785065 | kinematic 0.006206 | kl 0.236507 | lr 7.50e-06 | EV 0.3335 | reward_mean 0.4365 | gpu_alloc 0.552GB gpu_reserved 2.189GB
+[distill-R] step  385184 | batch   110 | actor 0.123819 | critic 254.149292 | kinematic 0.006877 | kl 0.003908 | lr 1.13e-05 | EV 0.0722 | reward_mean 0.4425 | gpu_alloc 0.556GB gpu_reserved 2.192GB
+[distill-R] step  385216 | batch   111 | actor 0.336143 | critic 230.800415 | kinematic 0.006735 | kl 0.181763 | lr 7.50e-06 | EV 0.0568 | reward_mean 0.4544 | gpu_alloc 0.559GB gpu_reserved 2.194GB
+[distill-R] step  385248 | batch   112 | actor 0.128418 | critic 244.531342 | kinematic 0.007432 | kl 0.003578 | lr 1.13e-05 | EV 0.1216 | reward_mean 0.4021 | gpu_alloc 0.560GB gpu_reserved 2.196GB
+[distill-R] step  385280 | batch   113 | actor 0.258873 | critic 219.177948 | kinematic 0.006340 | kl 0.055672 | lr 1.13e-05 | EV 0.0250 | reward_mean 0.4270 | gpu_alloc 0.562GB gpu_reserved 2.198GB
+[distill-R] step  385312 | batch   114 | actor 0.351833 | critic 218.801544 | kinematic 0.007269 | kl 0.157150 | lr 7.50e-06 | EV 0.0789 | reward_mean 0.4098 | gpu_alloc 0.565GB gpu_reserved 2.200GB
+[distill-R] step  385344 | batch   115 | actor 0.081217 | critic 237.165619 | kinematic 0.007384 | kl 0.004131 | lr 1.13e-05 | EV -0.2131 | reward_mean 0.4043 | gpu_alloc 0.569GB gpu_reserved 2.202GB
+[distill-R] step  385376 | batch   116 | actor 0.334044 | critic 220.407135 | kinematic 0.006230 | kl 0.246523 | lr 7.50e-06 | EV -0.1722 | reward_mean 0.4269 | gpu_alloc 0.572GB gpu_reserved 2.206GB
+[distill-R] step  385408 | batch   117 | actor 0.037901 | critic 237.346405 | kinematic 0.007103 | kl 0.003022 | lr 1.13e-05 | EV -0.3706 | reward_mean 0.4693 | gpu_alloc 0.575GB gpu_reserved 2.210GB
+[distill-R] step  385440 | batch   118 | actor 0.340361 | critic 250.715729 | kinematic 0.007335 | kl 0.092684 | lr 7.50e-06 | EV -0.2457 | reward_mean 0.4373 | gpu_alloc 0.577GB gpu_reserved 2.212GB
+[distill-R] step  385472 | batch   119 | actor 0.010001 | critic 212.222504 | kinematic 0.007032 | kl 0.002795 | lr 1.13e-05 | EV -0.2109 | reward_mean 0.4101 | gpu_alloc 0.580GB gpu_reserved 2.215GB
+[distill-R] step  385504 | batch   120 | actor 0.378765 | critic 212.888000 | kinematic 0.006528 | kl 0.107001 | lr 7.50e-06 | EV -0.1506 | reward_mean 0.4346 | gpu_alloc 0.584GB gpu_reserved 2.219GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0385504.pth
+[distill-R] step  385536 | batch   121 | actor 0.080445 | critic 190.448151 | kinematic 0.006824 | kl 0.003028 | lr 1.13e-05 | EV -0.0502 | reward_mean 0.4143 | gpu_alloc 0.587GB gpu_reserved 2.221GB
+[distill-R] step  385568 | batch   122 | actor 0.306111 | critic 195.627014 | kinematic 0.006362 | kl 0.041774 | lr 1.13e-05 | EV -0.0936 | reward_mean 0.4090 | gpu_alloc 0.589GB gpu_reserved 2.225GB
+[distill-R] step  385600 | batch   123 | actor 0.475790 | critic 190.849289 | kinematic 0.007078 | kl 0.018416 | lr 1.13e-05 | EV -0.2840 | reward_mean 0.4487 | gpu_alloc 0.591GB gpu_reserved 2.227GB
+[distill-R] step  385632 | batch   124 | actor 0.249486 | critic 164.042740 | kinematic 0.006288 | kl 0.076256 | lr 7.50e-06 | EV -0.0701 | reward_mean 0.4039 | gpu_alloc 0.594GB gpu_reserved 2.229GB
+[distill-R] step  385664 | batch   125 | actor -0.041173 | critic 120.958878 | kinematic 0.007337 | kl 0.003432 | lr 1.13e-05 | EV -0.0477 | reward_mean 0.4250 | gpu_alloc 0.597GB gpu_reserved 2.231GB
+[distill-R] step  385696 | batch   126 | actor 0.333178 | critic 155.057587 | kinematic 0.006366 | kl 0.072184 | lr 7.50e-06 | EV -0.0079 | reward_mean 0.3861 | gpu_alloc 0.600GB gpu_reserved 2.233GB
+[distill-R] step  385728 | batch   127 | actor 0.005083 | critic 111.954071 | kinematic 0.006637 | kl 0.003272 | lr 1.13e-05 | EV 0.1678 | reward_mean 0.4067 | gpu_alloc 0.602GB gpu_reserved 2.238GB
+[distill-R] step  385760 | batch   128 | actor 0.279721 | critic 134.157776 | kinematic 0.005992 | kl 0.034639 | lr 1.13e-05 | EV 0.0881 | reward_mean 0.4109 | gpu_alloc 0.603GB gpu_reserved 2.240GB
+[distill-R] step  385792 | batch   129 | actor 0.311273 | critic 109.209488 | kinematic 0.005989 | kl 0.012763 | lr 1.69e-05 | EV 0.2612 | reward_mean 0.4174 | gpu_alloc 0.606GB gpu_reserved 2.244GB
+[distill-R] step  385824 | batch   130 | actor 0.329592 | critic 101.184998 | kinematic 0.006111 | kl 0.349108 | lr 1.13e-05 | EV 0.2350 | reward_mean 0.4208 | gpu_alloc 0.609GB gpu_reserved 2.244GB
+[distill-R] step  385856 | batch   131 | actor 0.212357 | critic 84.448723 | kinematic 0.005591 | kl 0.005861 | lr 1.69e-05 | EV 0.4632 | reward_mean 0.3942 | gpu_alloc 0.611GB gpu_reserved 2.248GB
+[distill-R] step  385888 | batch   132 | actor 0.368358 | critic 78.287872 | kinematic 0.006304 | kl 0.116137 | lr 1.13e-05 | EV 0.5138 | reward_mean 0.3990 | gpu_alloc 0.612GB gpu_reserved 2.248GB
+[distill-R] step  385920 | batch   133 | actor 0.271036 | critic 74.244316 | kinematic 0.005821 | kl 0.006045 | lr 1.69e-05 | EV 0.5065 | reward_mean 0.4402 | gpu_alloc 0.614GB gpu_reserved 2.250GB
+[distill-R] step  385952 | batch   134 | actor 0.349061 | critic 81.427353 | kinematic 0.006169 | kl 0.163013 | lr 1.13e-05 | EV 0.5155 | reward_mean 0.4010 | gpu_alloc 0.617GB gpu_reserved 2.252GB
+[distill-R] step  385984 | batch   135 | actor 0.215534 | critic 63.790924 | kinematic 0.006435 | kl 0.006191 | lr 1.69e-05 | EV 0.4618 | reward_mean 0.4337 | gpu_alloc 0.619GB gpu_reserved 2.254GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0385984.pth
+[distill-R] step  386016 | batch   136 | actor 0.343225 | critic 64.015862 | kinematic 0.005831 | kl 0.484989 | lr 1.13e-05 | EV 0.4901 | reward_mean 0.4385 | gpu_alloc 0.622GB gpu_reserved 2.254GB
+[distill-R] step  386048 | batch   137 | actor 0.107247 | critic 60.320633 | kinematic 0.005622 | kl 0.005921 | lr 1.69e-05 | EV 0.4300 | reward_mean 0.4072 | gpu_alloc 0.623GB gpu_reserved 2.259GB
+[distill-R] step  386080 | batch   138 | actor 0.306315 | critic 45.172577 | kinematic 0.005778 | kl 0.253851 | lr 1.13e-05 | EV 0.5255 | reward_mean 0.3732 | gpu_alloc 0.625GB gpu_reserved 2.263GB
+[distill] saved -> output/HumanoidIm/quest_stager_condA/student/student_0386080.pth
+[distill] hit max_distill_step cap (386080) at step 386080 -- stopping
+Loaded 128 motions with a total length of 1824.533s and 54864 frames.
+RL device:  cuda:0
+128
+72
+972
+0
+Box(-1.0, 1.0, (72,), float32) Box(-inf, inf, (972,), float32)
+Env info:
+{'action_space': Box(-1.0, 1.0, (72,), float32), 'observation_space': Box(-inf, inf, (972,), float32), 'amp_observation_space': Box(-inf, inf, (2220,), float32), 'enc_amp_observation_space': Box(-inf, inf, (2220,), float32), 'task_obs_size': 0}
+RunningMeanStd:  (1,)
+RunningMeanStd:  (972,)
+build mlp: 972
+build mlp: 972
+build mlp: 2220
+sigma
+actor_mlp.0.weight
+actor_mlp.0.bias
+actor_mlp.2.weight
+actor_mlp.2.bias
+actor_mlp.4.weight
+actor_mlp.4.bias
+critic_mlp.0.weight
+critic_mlp.0.bias
+critic_mlp.2.weight
+critic_mlp.2.bias
+critic_mlp.4.weight
+critic_mlp.4.bias
+value.weight
+value.bias
+mu.weight
+mu.bias
+_disc_mlp.0.weight
+_disc_mlp.0.bias
+_disc_mlp.2.weight
+_disc_mlp.2.bias
+_disc_logits.weight
+_disc_logits.bias
+RunningMeanStd:  (1,)
+RunningMeanStd:  (2220,)
+[DistillAgentQuest] Loading PHC teacher from ../output/HumanoidIm/phc_prim_quest/Humanoid.pth
+[DistillAgentQuest] PHC self_obs_dim = 372
+[DistillAgentQuest] PHC action_dim   = 72
+[DistillAgentQuest] tracking-error obs: ON (27D)
+[DistillAgent] Backbone loaded: 46 keys matched, 0 missing, 0 unexpected
+[DistillAgentQuest] Backbone UNFROZEN -- trained jointly via kinematic + action loss
+[DistillAgent] Training log -> output/HumanoidIm/quest_stager_condA/quest_stager_condA.log
+[DistillAgentQuest] Stage R ENABLED -- lr=5.0e-06 (kl_adaptive=True, kl_threshold=0.03), entropy_coef=0.003, action_log_std_init=-3.6, lambda_kinematic_stage_r=0.3

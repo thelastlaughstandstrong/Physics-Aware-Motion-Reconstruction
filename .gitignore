@@ -14,12 +14,14 @@ results/baselines/*
 amass/
 support_data/
 
-# experiment outputs
-output/HumanoidIm/ap_phc_*/
-output/HumanoidIm/phc_kp_mcp_iccv/eval_*.log
+# data/ holds the heavy datasets (quest2_synthetic/ alone is ~300G) alongside the dataset loader
+# modules, so ignore the contents but re-include the top-level .py files -- a bare `data/` would
+# silently swallow any new loader added here.
+data/*
+!data/*.py
+
+# experiment outputs -- the blanket output/ subsumes the per-run rules that used to live here
+# (phc_*/, quest_distill_*/, .recovery_logs/, renderings/, states/, blender_renders/).
+output/
 results_*/
 model_zoo/*.pth
-output/HumanoidIm/phc_*/
-output/HumanoidIm/quest_distill_*/
-output/HumanoidIm/.recovery_logs/
-output/blender_renders/

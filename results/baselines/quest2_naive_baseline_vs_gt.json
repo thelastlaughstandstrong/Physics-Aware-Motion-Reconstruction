@@ -1,0 +1,84 @@
+{
+  "label": "naive_baseline_quest2_finetuned_backbone",
+  "scored_against": "ground truth (test_seg_motion), NOT the tracked reference",
+  "num_sequences": 1072,
+  "missing_gt": 0,
+  "success_rate_phc_survival": 0.7667910447761194,
+  "success_rate_frame_head": 0.9740476583123303,
+  "mpjpe_mm": 96.38064731009749,
+  "mpjpe_cm": 9.638064731009749,
+  "mpjre_deg": 13.821277096931896,
+  "mpjve_cm_s": 24.16723862676117,
+  "jitter_m_s3": 221.9368572008254,
+  "foot_skate_cm_s": 21.41086101206807,
+  "per_activity_success": {
+    "ROM": {
+      "rate": 0.7615384615384615,
+      "n": 130
+    },
+    "cooking": {
+      "rate": 1.0,
+      "n": 10
+    },
+    "dancing": {
+      "rate": 0.5,
+      "n": 20
+    },
+    "drinks": {
+      "rate": 1.0,
+      "n": 7
+    },
+    "gestures": {
+      "rate": 0.8301886792452831,
+      "n": 159
+    },
+    "interactions": {
+      "rate": 0.5333333333333333,
+      "n": 75
+    },
+    "jogging": {
+      "rate": 0.7794117647058824,
+      "n": 136
+    },
+    "martialarts": {
+      "rate": 0.0,
+      "n": 9
+    },
+    "retail": {
+      "rate": 0.5454545454545454,
+      "n": 11
+    },
+    "sports": {
+      "rate": 0.044444444444444446,
+      "n": 45
+    },
+    "standing": {
+      "rate": 0.9848484848484849,
+      "n": 132
+    },
+    "stretching": {
+      "rate": 0.09090909090909091,
+      "n": 11
+    },
+    "teaching": {
+      "rate": 0.9166666666666666,
+      "n": 12
+    },
+    "walking": {
+      "rate": 0.7916666666666666,
+      "n": 144
+    },
+    "whiteboard": {
+      "rate": 0.9743589743589743,
+      "n": 156
+    },
+    "workout": {
+      "rate": 0.1,
+      "n": 10
+    },
+    "yoga": {
+      "rate": 0.2,
+      "n": 5
+    }
+  }
+}

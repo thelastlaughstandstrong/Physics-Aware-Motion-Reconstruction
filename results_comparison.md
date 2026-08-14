@@ -8,13 +8,7 @@ Results saved to `phc/output/HumanoidIm/<EXP>/phc_eval.log`.
 | Model | Checkpoint | Success | MPJPE (cm) | qref_MPJPE (cm) | MPJVE (cm/s) | MPJRE (°) | Jitter (m/s³) | Foot Skate (cm/s) | gpen_mean (mm) | gpen_rate |
 |---|---|---|---|---|---|---|---|---|---|---|
 | `frozen_bb` — frozen backbone | 489.5k | 0.584 | 34.83 | — | 89.39 | 38.73 | 1188 | 2.66 | — | — |
-| `v2` — trainable heads, z.detach() | 1.95M | 0.455 | 50.71 | — | 113.59 | 45.02 | 1612 | 2.28 | — | — |
-| `v3` — refinement head, no staged training | 431k | 0.440 | 47.18 | — | 105.24 | 43.07 | 1418 | 2.63 | — | — |
-| `v4` — staged training 1→2→3→E | 750k | 0.498 | 41.14 | 61.40 | 99.59 | 40.86 | 1345 | 2.51 | 0.04 | 0.003 |
-| `v5` — position-space L_ref (no isolation) | 500k | 0.465 | 46.12 | 21.57 | 107.89 | 43.04 | 1513 | 2.61 | 0.74 | 0.167 |
-| `v5` — position-space L_ref (no isolation) | 750k | 0.461 | 47.06 | 22.02 | 109.56 | 43.40 | 1544 | 2.81 | 0.74 | 0.157 |
-| `v6` — full gradient isolation + angle-bounded Δq | 500k | 0.476 | 43.60 | 61.36 | 104.47 | 42.44 | 1438 | 2.48 | 0.05 | 0.003 |
-| `v6` — full gradient isolation + angle-bounded Δq | 750k | 0.470 | 44.56 | 61.23 | 104.38 | 42.30 | 1462 | 2.65 | 0.09 | 0.003 |
+| `v2`–`v6` — pre-v7 refinement-branch line (7 rows, collapsed)† | 431k–1.95M | 0.440–0.498 | 41.14–50.71 | 21.57–61.40 | 99.59–113.59 | 40.86–45.02 | 1345–1612 | 2.28–2.81 | 0.04–0.74 | 0.003–0.167 |
 | **`v7` — action distillation (Stage E), post HMD-pipeline fix**¹ | 250k | 0.545 | 38.18 | 10.42 | 96.69 | 40.31 | 1337 | 2.41 | 2.46 | 0.745 |
 | `v7_stager` — Stage R (reward PPO), 10k steps, coarse manual milestone | 260k | 0.644 | 30.84 | 10.72 | 82.88 | 37.35 | 1028 | 2.13 | 1.24 | 0.388 |
 | `v7_stager` — Stage R, 30k steps (regressing) | 280k | 0.506 | 39.71 | 10.50 | 97.40 | 44.75 | 1275 | 1.64 | 1.30 | 0.375 |
@@ -32,9 +26,13 @@ Results saved to `phc/output/HumanoidIm/<EXP>/phc_eval.log`.
 > naive-baseline row. Rows with no q_ref/backbone-reconstruction step (`frozen_bb`, `v2`, `v3`) have no
 > pre-sim reference to measure against, hence `—`.
 > AvatarPoser kinematic baseline: MPJPE 2.51 cm, Jitter 1357 m/s³, Foot Skate 33.67 cm/s, gpen_mean 23.79 mm, gpen_rate 0.654.
-> v4 was the best of the old (pre-v7) refinement-branch line, peaking at 750k.
-> v5: qref_MPJPE improved dramatically (61→22 cm) but physics degraded and gpen spiked (16.7%) — L_ref conflicted with encoder training.
-> v6: full isolation protected physics (gpen clean, success closer to v4) but refinement head produces near-zero corrections — qref_MPJPE unchanged from v4.
+> † **Pre-v7 rows collapsed 2026-08-13.** All seven were superseded by `v7` and every one of their
+> `qref_MPJPE` values was computed on the broken HMD input pipeline (footnote ¹), so none is
+> comparable to anything below. What they established, in one line: v4 was the best of the line
+> (peaking at 750k); v5's position-space `L_ref` improved qref_MPJPE 61→22cm but degraded physics
+> and spiked gpen to 16.7% (L_ref conflicted with encoder training); v6's full gradient isolation
+> protected physics but made the refinement head produce near-zero corrections. Full per-version
+> numbers are in git history if ever needed.
 >
 > ¹ `v7`/`v7_stager` supersede all rows above them — six distinct bugs in the pre-v7 HMD
 > feature construction were found and fixed (joint indices, rotation frame, feature layout,
@@ -52,6 +50,21 @@ Results saved to `phc/output/HumanoidIm/<EXP>/phc_eval.log`.
 > a sparse 3-point HMD signal, vs. handing PHC's teacher its full intended per-frame kinematic
 > input). Don't present the distillation work as an accuracy win over this baseline without
 > closing this gap first, or reframe it around a latency/compute tradeoff instead.
+>
+> > **⚠ 2026-08-13: "it's not that the distillation pipeline is broken" is now an OPEN QUESTION,
+> > not an established fact.** On Quest2 the pipeline *was* broken, in a way that produced this
+> > exact signature — naive baseline far ahead of every distilled variant — because the student's
+> > observations could not express its own tracking error (see the ⚠ banner in the Quest2 section).
+> > Fixing that took Quest2 from 0.317 to 0.738 success and closed almost the whole gap to its
+> > naive baseline (0.767). **The AMASS/SMPL pipeline here has NOT been checked for the same
+> > defect**, and it is a different code path (`DistillAgent`, frozen backbone, SMPL rig), so the
+> > Quest2 result does not transfer automatically. But `DistillAgent` feeds `action_head` the same
+> > `[z, state_enc(self_obs)]` with the task-obs slice dropped, so the defect is *structurally
+> > present* here too. Note footnote ⁶'s `goal-delta-input` experiment fed the delta and did not
+> > help — that is the one piece of counter-evidence, and it deserves a re-read now that the
+> > Quest2 mechanism is understood, since it conditioned on ground-truth task_obs rather than the
+> > deployable HMD-vs-current delta. **Until someone runs it, treat this footnote's "harder
+> > problem" framing as a hypothesis, not a conclusion.**
 >
 > ³ Naive baseline has no q_ref/backbone reconstruction step at all — it tracks AvatarPoser's
 > raw predicted output directly. Its pre-sim reference gpen is therefore identical to the
@@ -129,6 +142,199 @@ python scripts/evaluate_phc_metrics.py \
 
 ## Quest2 PHC Physics Evaluation
 
+> ## ⚠ 2026-08-11: root cause of the 0%-locomotion result found, and it is architectural
+>
+> Every `quest_distill` number below was produced by a student that **structurally cannot observe
+> its own tracking error**, which is why its per-activity breakdown is 0.000 on all 461
+> locomotion/dynamic clips. Two independent fixes landed; the reruns are in progress. Read this
+> before quoting any distilled row.
+>
+> **1. The fatal one — the student had no closed-loop feedback.** `action_head`'s two inputs are
+> `z` (the AvatarPoser latent, built from HMD features in **absolute world coordinates**,
+> describing only the reference) and `state_enc(proprio)`, where `proprio =
+> obs[:, :env._num_self_obs]` deliberately drops PHC's task-obs slice and
+> `compute_humanoid_observations_quest_max` keeps only root **height** — world XY and heading are
+> stripped out by construction. Neither input carries the humanoid's own world pose, so
+> "how far am I from the reference and in which direction" is **not a function of the student's
+> observations at all**. The frozen teacher it distills from *does* get exactly that signal (PHC's
+> task_obs; cf. SimXR's `compute_imitation_observations`, `ref_body_pos - body_pos` rotated into
+> the heading frame). An open-loop pose predictor keeps stationary error bounded but cannot servo
+> to a moving reference — hence 0.60–0.80 on stationary activities and exactly 0.000 on
+> locomotion. Fixed by `use_tracking_error` (default **True**, `learning/distill_quest.yaml`): a
+> 27D reference-minus-simulated delta at the 3 HMD-tracked bodies, in the humanoid's heading
+> frame, appended to `action_head`/`value_head`'s input. This is **deployable, not an oracle** — a
+> real headset knows where the user's head and wrists are, and the simulator knows where its
+> avatar's are; it never sees the reference's full-body pose. Unit-tested for zero-error,
+> heading-invariance, world-translation-invariance and PHC's per-env `_global_offset` (which
+> `resample_motions()` makes nonzero during training).
+>
+> **2. A real but minor one — velocity features at the wrong frame rate.** `_get_cur_prev_ref_states`
+> queried the motion lib at `t - 1/60` for *both* pipelines, but the quest backbone is trained by
+> `data/dataset_quest2.py` on **consecutive frames of 30fps pkls**, so 27 of its 54 input channels
+> arrived at half the magnitude it was trained on. Fixed via `_HMD_VEL_DT_QUEST = 1/30` (the AMASS
+> path keeps 1/60 by default and is unchanged). Measured cost before the fix: **+0.27° / +4.4mm**
+> on locomotion, ~0 on stationary — real, worth fixing, but not the cause of the 0%.
+>
+> **3. The missing control, now run — and it is the best Quest2 result to date.** There was never
+> a Quest2 counterpart to the SMPL section's naive baseline. Running it (frozen `phc_prim_quest`
+> teacher tracking AvatarPoser's own predicted motion, **no distillation student at all**) gives
+> **0.767 success / 96.4mm MPJPE / 13.82° MPJRE** against ground truth — including **walking 0.792
+> and jogging 0.779**, versus 0.000/0.000 for every distilled checkpoint. It also beats the SimXR
+> no-vision ablation (0.717 / 112.5mm / 29.76°), and does so on the *held-out test split* where
+> SimXR's own per-activity dump is a train-split eval. See the naive-baseline subsection below.
+>
+> Taken together: the backbone's kinematic output is good enough for the physics teacher to
+> locomote at ~79%, and the teacher tracks ground truth at 99.9% — so the 0% is neither the data,
+> nor the backbone, nor the fps bug. It is the student's observation space.
+>
+> ### FINAL result of the fixed rerun (`quest_distill_trackerr`, Stage E, 500k steps, complete)
+>
+> **Best checkpoint `student_0380160.pth` (full-range scan, patience disabled): 0.7379 success.**
+> Same backbone, same teacher, same recipe as `finetuned_backbone`; `use_tracking_error` is the
+> only real variable (plus the 1/30 fps fix). Stage E only — `enable_stage_r: false`, verified
+> 15,625 Stage E batches and 0 Stage R batches in the training log.
+>
+> | Metric | `finetuned_backbone` @440,160 | **`trackerr` @380,160** | Naive baseline | SimXR no-vision |
+> |---|---|---|---|---|
+> | Success (`phc_survival`) | 0.317 | **0.738** | 0.767 | 0.717 |
+> | Success (`frame_head`) | 0.980 | **0.989** | 0.974 | 0.997 |
+> | MPJPE (mm) | 185.60 | **87.43** | 96.38 | 112.5 |
+> | MPJRE (°) | 25.65 | **15.23** | 13.82 | 29.76 |
+> | MPJVE (cm/s) | 49.94 | **34.25** | 24.17 | 40.93 |
+> | Jitter (m/s³) | 1117.46 | **524.78** | 221.94 | 704.29 |
+> | Foot skate (cm/s) | 20.75 | **17.14** | 21.41 | 14.39 |
+> | gpen_mean (mm) | 0.003 | 0.008 | — | 0.00 |
+>
+> **Every metric improves over the old run, most by ~2x** (success 2.3x, MPJPE 2.1x, jitter 2.1x).
+> It also **beats the SimXR no-vision ablation on every metric except foot skate** — and SimXR is
+> the like-for-like comparison (same frozen `phc_prim_quest` teacher, same `only_kin_loss`
+> behavior cloning; see the correction further down). Against the no-student naive baseline it is
+> *better* on MPJPE (87.4 vs 96.4mm) while still slightly behind on success (0.738 vs 0.767), so
+> distillation is now roughly at parity with skipping distillation entirely — the first time that
+> has been true in this project.
+>
+> Per-activity, best checkpoint vs the old run:
+>
+> | activity | old @440k | **new @380k** | | activity | old @440k | **new @380k** |
+> |---|---|---|---|---|---|---|
+> | walking | 0.000 | **0.812** | | standing | 0.689 | **0.985** |
+> | jogging | 0.000 | **0.390** | | whiteboard | 0.647 | **0.968** |
+> | interactions | 0.000 | **0.573** | | gestures | 0.314 | **0.893** |
+> | dancing | 0.000 | **0.250** | | ROM | 0.600 | **0.800** |
+>
+> **Locomotion/dynamic aggregate: 236/461 = 0.512, from 0/461 = 0.000.** martialarts (0/9) and
+> sports (5/45) remain near-zero and are the obvious next target.
+>
+> Training-dynamics notes for future runs: the run learns fast and then **plateaus at ~130k
+> steps**, oscillating in a 0.58–0.74 band for the remaining 370k — the extra budget bought almost
+> nothing, and the best checkpoint (380k) beat the final one (500k, 0.707). Adjacent checkpoints
+> differ by up to ±0.10 success (0.700 @250k vs 0.598 @260k), which is *larger than the entire
+> 2.3pp `finetuned_backbone`-vs-`Option2` gap* this project previously treated as a result.
+> Single-checkpoint comparisons at that scale are not meaningful here.
+>
+> ### Stage R on top of the fixed Stage E: CATASTROPHIC, and now root-caused (2026-08-13)
+>
+> Seeded from the 0.73787 Stage E best (`student_0380160.pth`), 30k Stage R steps, trial 2's
+> conservative hyperparameters (`stage_r_lr=5e-6`, `kl_threshold=0.03`, `entropy_coef=0.003`,
+> `lambda_kinematic_stage_r=0.3`). It did not trade rotation for survival this time — **it simply
+> destroyed the policy**, monotonically, from the first checkpoint:
+>
+> | step | +480 | +2k | +4k | +8k | +12k | +30k |
+> |---|---|---|---|---|---|---|
+> | success | 0.394 | 0.190 | 0.040 | 0.009 | 0.001 | 0.006 |
+>
+> Seed 0.738 → **0.394 after 480 steps** → ~0.005 and flat thereafter. The scan's "best" (0.39366)
+> is just the least-damaged checkpoint; nothing ever exceeded the seed.
+>
+> **Root cause: PPO starts with an untrained critic.** `_train_on_batch` (Stage E) only ever calls
+> `action_head` — `value_head` is never trained, so it enters Stage R at random initialization, and
+> `_train_stage_r_on_batch` optimizes actor and critic *jointly from batch 1* with no warm-up.
+> Observed critic loss starts at **~79** and only reaches ~6 by batch ~287. Until then GAE
+> advantages are computed from a garbage value function, so the sign of the advantage is close to
+> noise and the first PPO updates push the actor in essentially random directions — by the time the
+> critic is usable, the actor is already wrecked.
+>
+> #### Critic warm-up experiment (`quest_stager_warmup`, 2026-08-13) — OUTCOME B
+>
+> Single-variable test of the above: identical Stage R settings (`stage_r_lr=5e-6`,
+> `kl_threshold=0.03`, `entropy_coef=0.003`, `action_log_std_init=-3.6`,
+> `lambda_kinematic_stage_r=0.3`), same seed, with `stage_r_critic_warmup=True` added. Warm-up
+> trains `value_head` alone against **lambda=1 Monte-Carlo returns** (at lambda=1 the
+> `_stage_r_gae` recursion telescopes, so the critic enters only via the tail bootstrap; the
+> default 0.95 makes every target depend on the random critic), with backbone/state_enc/
+> action_head/action_log_std frozen and asserted **bit-identical** afterwards. Ran 47 batches to
+> an EV plateau (best **EV 0.809**, calibration `mean_pred 58.6` vs `mean_target 58.7`, from
+> `2.9 vs 9.8` at random init), then 4,416 PPO steps.
+>
+> **Invariant (required): post-warm-up, pre-PPO eval reproduced the seed EXACTLY** — 0.73787
+> success / 87.43mm / 15.23°, bit-for-bit. The actor was genuinely untouched.
+>
+> | steps after warm-up | success | MPJPE | MPJRE | un-warmed run |
+> |---|---|---|---|---|
+> | 0 (pre-PPO) | **0.7379** | 87.43 | 15.23 | 0.7379 (seed) |
+> | +480 | **0.6185** | 101.38 | 18.83 | **0.394** |
+> | +960 | 0.3601 | 129.58 | 23.37 | — |
+> | +1440 | 0.1810 | 143.99 | 28.19 | — |
+> | +2400 | 0.0858 | 147.85 | 31.17 | 0.190 (@+2000) |
+> | +3360 | 0.0065 | 203.34 | 37.78 | — |
+> | +4416 | 0.0215 | 210.28 | 45.49 | 0.040 (@+4000) |
+>
+> **The immediate cliff is roughly two-thirds smaller** (first-checkpoint drop -0.119 vs -0.344),
+> so the random critic was a real contributor. **But the policy still collapses**, only more
+> slowly. Warm-up alone is not sufficient.
+>
+> Two concrete suspects, both visible in the PPO diagnostics and neither changed in this run:
+> - **The KL-adaptive controller undid the conservative LR.** Measured KL early was 0.006-0.015,
+>   below `kl_threshold*0.5`, so `_adapt_lr` *raised* `stage_r_lr` 5e-6 -> 7.5e-6 -> 1.13e-5 ->
+>   **1.69e-5** — it accelerates precisely because the policy is (correctly) barely moving. KL
+>   then ran away late: 0.0034 -> 0.0419 -> **0.2539**, ~8x the threshold.
+> - **Critic gradient floods the SHARED trunk.** `_action_feat` detaches `z` but **not**
+>   `h = state_enc(proprio)`, so critic loss backprops into `state_enc` with `critic_coef=5`.
+>   Critic loss fell 49 -> 35 while the policy was healthy, then exploded to **216** as the policy
+>   drifted (distribution shift) — a ~1000-magnitude gradient into the shared trunk against an
+>   actor loss of ~0.1-0.3, i.e. a plausible runaway loop.
+>
+> `reward_mean` decays monotonically (0.819 -> 0.711 -> 0.418 -> 0.373), so the degradation is
+> real in the environment's own terms, not an eval artifact. Next steps, in order: pin the LR
+> (disable `kl_adaptive`) to test suspect 1, then detach `h` for the critic path or drop
+> `critic_coef` to test suspect 2. Warm-up itself should be kept — it is a strict improvement.
+>
+> This retroactively explains all three Stage R trials. Trials 1–2 were seeded from the *broken*
+> 31.7% Stage E policy, which had little to lose, so the damage read as "noisy trade-off"
+> (38.3% success / 39° MPJRE). Seeded from a genuinely good policy the same mechanism is
+> unmistakable. **Stage R should not be used in its current form.** The fix to try before any
+> further Stage R work is a critic warm-up phase — freeze `action_head`, train `value_head` alone
+> until critic loss plateaus, then enable actor updates. Until that exists, the Stage E result
+> stands as the Quest2 headline.
+>
+> Also note the live periodic eval **silently died at 130k** (Isaac Gym OOM on the concurrent sim,
+> as training's own allocation grew 0.4GB → 7.2GB via the documented env-stepping leak) and kept
+> reporting a stale best. On a 16GB card, trust the post-hoc scan, not live tracking, past ~130k.
+>
+> <details><summary>Earlier interim reading at ~110k steps (superseded by the above)</summary>
+>
+> Matched-step aggregate success, both on the 1072-clip held-out test:
+>
+> | step | `finetuned_backbone` (old) | `trackerr` (fixed) |
+> |---|---|---|
+> | 20k | 0.212 | 0.351 |
+> | 40k | 0.300 | 0.493 |
+> | 60k | 0.195 | 0.489 |
+> | 80k | 0.249 | 0.571 |
+> | 100k | 0.181 | **0.675** |
+>
+> The old run oscillated in 0.18–0.30 for its entire 500k budget and never beat 0.317 (@440k).
+> The fixed run passes that at ~40k steps and is still climbing at 100k. Per-activity at ~110k:
+> **walking 0.000 → 0.736, jogging 0.000 → 0.301, interactions 0.000 → 0.547, dancing 0.000 →
+> 0.500**; stationary activities also improved across the board (standing 0.689 → 0.985,
+> whiteboard 0.647 → 0.904, gestures 0.314 → 0.761). Locomotion/dynamic aggregate **0.000 →
+> 0.462**.
+>
+> For scale: walking 0.736 and jogging 0.301 essentially match SimXR's own 0.755/0.298 — and
+> ours is held-out test where theirs is a train-split dump.
+>
+> </details>
+
 Same idea as the SMPL section above, but for the `quest_humanoid` rig (SimXR's 25-joint skeleton,
 `has_upright_start: False`) and the real SimXR Quest2 synthetic dataset
 (`data/quest2_synthetic/`, 1072-sequence held-out test split, `test_seg_motion`). Two
@@ -137,18 +343,58 @@ the harder, headline number) and `frame_head` (a looser per-frame head-tracking 
 consistently ~0.97-0.99 across every distilled checkpoint below, i.e. not a differentiating
 metric here).
 
-| Metric | Phase A (kinematic, no physics)¹ | Phase B (teacher)² | **SimXR reference ablation, no-vision (upstream repo)**⁶ | **Option3 `actionloss` @149.8k (best via periodic eval)**³ | **Option2 `scratch` @399.8k (best via periodic eval)**³ | **`explicit_pose` @490.08k (best via full-range scan)**⁸ | **`finetuned_backbone` @440k (best via full-range scan)**⁹ | **`finetuned_backbone_stager` @443.6k (Stage R peak, UNVERIFIED)**¹¹ |
-|---|---|---|---|---|---|---|---|---|
-| Success (`phc_survival`) | 1.000 | 0.999 | **0.717**⁶ | 0.241 | 0.294 | 0.293 | 0.317 | **0.383** |
-| Success (`frame_head`) | — | 0.9999 | 0.997⁷ | 0.974 | 0.976 | 0.972 | 0.980 | 0.967 |
-| MPJPE (mm)⁵ | 40.24 | 21.81 | **112.5**⁶ | 177.67 | 185.87 | 189.14 | 185.60 | 192.04 |
-| MPJRE (°) | 10.91 | 4.52 | 29.76⁷ | 25.03 | 26.35 | 29.27 | 25.65 | **39.11** |
-| MPJPE (cm)⁵ | 4.02 | 2.18 | **11.25**⁶ | 17.77 | 18.59 | 18.91 | 18.56 | 19.20 |
-| MPJVE (cm/s) | 15.47 | 9.29 | 40.93⁷ | 50.33 | 52.91 | 64.29 | 49.94 | 57.66 |
-| Jitter (m/s³) | 136.95 | 59.97 | 704.29⁷ | 1232.05 | 1193.38 | 1102.75 | 1117.46 | 834.67 |
-| Foot Skate (cm/s) | 29.17 | 5.90 | 14.39⁷ | 20.57 | 21.75 | 22.83 | 20.75 | 20.14 |
-| gpen_mean (mm)⁴ | 12.82 | 0.005 | 0.00⁷ | 0.003 | 0.015 | 0.006 | 0.003 | 0.006 |
-| gpen_rate⁴ | 0.541 | 0.0001 | 0.000⁷ | 0.000 | 0.001 | 0.000 | 0.000 | 0.000 |
+> **Split caveat — the test split is subject-OVERLAPPING (verified 2026-08-04).** Train/test
+> separation itself is correctly enforced everywhere: `data/dataset_quest2.py`'s
+> `subdir = 'train_seg_motion' if phase=='train' else 'test_seg_motion'` handles the AvatarPoser
+> side, and every PHC run passes `env.motion_file=.../train_seg_motion` for training vs
+> `.../test_seg_motion` for eval — 4,097 train clips vs 1,072 test clips, **zero overlapping
+> filenames**. However, the split is by (subject, activity) take, **not by subject**: 13 of the 23
+> test subjects also appear in train (with disjoint activities — e.g. `SUBJECT008.drinks` is the
+> only test take while its other 7 activities are all in train). That makes **326/1072 = 30.4% of
+> the test set "seen subject, unseen activity"**, and only the remaining 69.6% a genuine
+> unseen-person test. Consequence: absolute numbers here are mildly optimistic as an estimate of
+> generalization to a brand-new headset user — state them as a clip-level/subject-dependent split
+> if reporting externally. Two things this does NOT affect: (1) every internal comparison
+> (Option2 vs `finetuned_backbone` vs `explicit_pose` vs Stage R…) is unaffected, since the same
+> split is a constant across all of them; (2) the SimXR comparison stays apples-to-apples — the
+> overlap is present in SimXR's own **raw released** `train/`+`test/` directories (verified: same
+> 13 subjects, before any processing this project did), and their `split_data.py` only segments
+> those pre-existing dirs into clips rather than creating the division. This is the dataset's own
+> split convention, not something introduced here. **Confirmed by the CVPR 2024 paper itself**
+> (Sec. 4, Datasets): *"We randomly split the data using an 8:2 ratio, resulting in 1758k frames
+> for training and 458k frames for testing"* — an explicitly **random** split, so subject overlap
+> is expected and the paper makes no cross-subject/subject-independent claim. Their Table 1 lists
+> Quest2-Synthetic as `4097 / 1758k` train and `1072 / 458k` test, **exactly matching our local
+> clip counts (4097/1072)** — confirming we hold their released split unmodified.
+>
+> **Metric-definition caveat (from the paper, Sec. 4 Metrics):** SimXR reports joint errors over
+> **11 selected common joints** (head, L/R shoulders, elbows, wrists, knees, ankles) — *"rather
+> than evaluating all joints as in the prior art"* — because they need one metric consistent
+> across their SMPL (24-joint) and Quest (25-joint) humanoids. This repo's
+> `scripts/evaluate_phc_metrics_quest.py` computes over **all 25 joints**. Note the upstream
+> code's own joint-subsetting (`pred_pos_all = [i[:, _reset_bodies_id] ...]` in
+> `im_amp_players.py`) is gated behind `if flags.real_traj:` — i.e. NOT active on the standard
+> synthetic-test path — so the replication column here is also all-joints and remains directly
+> comparable to the `quest_distill` columns. But **neither is computed under the paper's own
+> stated 11-joint definition**, so treat any comparison against numbers quoted from the paper's
+> tables as approximate. Also note the paper's success rate is defined per-sequence (*"at every
+> point during imitation, the head joint is < 0.5m from the headset pose"*), i.e. a whole sequence
+> fails if any single frame exceeds the threshold — closest to our `phc_survival`, not `frame_head`.
+
+> **All five `quest_distill` columns below (Option3 / Option2 / `explicit_pose` / `finetuned_backbone` / both Stage R trials) are SUPERSEDED.** They were trained without the tracking-error observation and are retained as the before-state for that finding, not as current numbers — the comparable current result is `trackerr` @380,160 (0.738 success, 87.43mm), in the ⚠ banner at the top of this section. Do not quote a number from these columns without saying which defect it predates.
+
+| Metric | Phase A (kinematic, no physics)¹ | Phase B (teacher)² | **SimXR reference ablation, no-vision (upstream repo)**⁶ | **Option3 `actionloss` @149.8k (best via periodic eval)**³ | **Option2 `scratch` @399.8k (best via periodic eval)**³ | **`explicit_pose` @490.08k (best via full-range scan)**⁸ | **`finetuned_backbone` @440k (best via full-range scan)**⁹ | **`finetuned_backbone_stager` @443.6k (Stage R trial 1, UNVERIFIED)**¹¹ | **`finetuned_backbone_stager_v2` @442.08k (Stage R trial 2, bug-fixed)**¹² |
+|---|---|---|---|---|---|---|---|---|---|
+| Success (`phc_survival`) | 1.000 | 0.999 | **0.717**⁶ | 0.241 | 0.294 | 0.293 | 0.317 | **0.383** | 0.326 |
+| Success (`frame_head`) | — | 0.9999 | 0.997⁷ | 0.974 | 0.976 | 0.972 | 0.980 | 0.967 | 0.976 |
+| MPJPE (mm)⁵ | 40.24 | 21.81 | **112.5**⁶ | 177.67 | 185.87 | 189.14 | 185.60 | 192.04 | 190.01 |
+| MPJRE (°) | 10.91 | 4.52 | 29.76⁷ | 25.03 | 26.35 | 29.27 | 25.65 | **39.11** | 37.01 |
+| MPJPE (cm)⁵ | 4.02 | 2.18 | **11.25**⁶ | 17.77 | 18.59 | 18.91 | 18.56 | 19.20 | 19.00 |
+| MPJVE (cm/s) | 15.47 | 9.29 | 40.93⁷ | 50.33 | 52.91 | 64.29 | 49.94 | 57.66 | 56.13 |
+| Jitter (m/s³) | 136.95 | 59.97 | 704.29⁷ | 1232.05 | 1193.38 | 1102.75 | 1117.46 | 834.67 | 969.71 |
+| Foot Skate (cm/s) | 29.17 | 5.90 | 14.39⁷ | 20.57 | 21.75 | 22.83 | 20.75 | 20.14 | 18.73 |
+| gpen_mean (mm)⁴ | 12.82 | 0.005 | 0.00⁷ | 0.003 | 0.015 | 0.006 | 0.003 | 0.006 | 0.000 |
+| gpen_rate⁴ | 0.541 | 0.0001 | 0.000⁷ | 0.000 | 0.001 | 0.000 | 0.000 | 0.000 | 0.000 |
 
 > ¹ Phase A = `AvatarPoser`/`quest_humanoid` backbone alone, no PHC physics simulation at all
 > (`main_test_avatarposer_quest2.py`). `results/baselines/avatarposer_quest2_phase_a.json`. Its
@@ -222,6 +468,24 @@ metric here).
 > rotation accuracy for survival" in Results Discussion below for what this checkpoint actually
 > costs, and why it needs the same reproducibility check `v7_validate` got in the SMPL pipeline
 > before being adopted as anything more than a single noisy data point.
+>
+> ¹² **Second Stage R attempt, with a real bug fixed along the way (not just retuned
+> hyperparameters).** `_collect_stage_r_batch()`/`_train_stage_r_on_batch()` never called
+> `.eval()`, so the backbone's transformer encoder (PyTorch default `dropout=0.1`, never
+> overridden) computed `old_logp`/`logp` under two *different* random dropout masks of the same
+> weights — contaminating the PPO ratio/KL with dropout noise indistinguishable from real policy
+> drift (the SMPL pipeline's own Stage R already avoids this, a detail missed when porting to
+> Quest2). Fixed (`self.student.eval()` in both methods — doesn't affect `backward()`/gradients),
+> combined with retuned hyperparameters (`stage_r_lr` 2e-5→5e-6, `kl_threshold` 0.1→0.03,
+> `entropy_coef` 0.01→0.003, `lambda_kinematic_stage_r` 0.1→0.3), same seed
+> (`student_0440160.pth`), 5k-step budget. Full 13-point scan (250-step resolution, full range):
+> best 0.326 @ step 442,080 (barely above the seed's 0.317) — but MPJRE is still 37.01° (vs. the
+> seed's 25.65°), and the trajectory still crashed to 0.2% success later on (steps 443,890–
+> 444,140) before partially recovering. **Conclusion: the bug fix made the LR-adaptation
+> mechanism itself behave correctly (verified via smoke test), but did not eliminate the
+> instability or the rotation-accuracy trade-off** — both persisted even with clean gradients,
+> pointing at the reward function/training dynamics themselves rather than the earlier numerical
+> bug as the primary cause. See "Stage R trades rotation accuracy for survival" below.
 
 ### Pre-sim (backbone-only) kinematic quality of each distilled checkpoint
 
@@ -258,93 +522,132 @@ finetuned_backbone}.json`.
 
 ### Results Discussion
 
-**Pre-sim quality vs. post-sim outcome: `finetuned_backbone`'s kinematic advantage disappears
-during distillation, but its physics-sim advantage doesn't.** All three kinematically-supervised
-variants (`Option2`, `explicit_pose`, `finetuned_backbone`) converge to nearly identical pre-sim
-rotation error (~14.3°) regardless of their pre-distillation starting point — `finetuned_backbone`
-began with a real, verified kinematic edge (10.65° vs. Option2's 10.91°, the whole point of the
-AMASS-fine-tuning gate it passed), but that edge is gone by the time distillation finishes: its
-backbone ends up statistically indistinguishable from Option2's own (14.27° vs. 14.34°). Also
-notable: joint kinematic+action training measurably *worsens* rotation/position accuracy relative
-to a standalone-trained backbone for all three (~10.9°→~14.3°, ~4.0cm→~5.3cm), even though
-`lambda_kinematic=1.0` dominates `lambda_action=0.1` by design — action-loss gradients (and/or the
-different FK path through `QuestHumanoidBodyModel`) pull the backbone measurably away from pure
-per-frame accuracy regardless of the loss weighting. Despite this, `finetuned_backbone` still shows
-a real, broad post-sim improvement (31.7% vs. 29.4% success, plus MPJRE/MPJVE/jitter/foot-skate all
-better — see the table above). **Together this means whatever `finetuned_backbone` is winning on
-post-sim isn't "the kinematic backbone stayed better through distillation"** — since it
-provably didn't — but something else the fine-tuned initialization left behind (e.g. a
-better-conditioned latent `z`/`state_enc` representation, or a better action_head starting point)
-that current pre-sim metrics can't see. Open question, not yet investigated further.
+> **The findings below are from the SUPERSEDED (pre-`use_tracking_error`) runs.** Compressed
+> 2026-08-13 from a chronological write-up into claims only; full prose and dates are in git
+> history. Several are now explained by, or subsumed into, the root-cause finding in the ⚠ banner
+> at the top of this section.
 
-**Stage R trades rotation accuracy for survival — not a free improvement, and not yet trusted.**
-Quest2's first real Stage R trial (footnote 11) found a checkpoint with meaningfully higher
-success (38.3% vs. `finetuned_backbone`'s 31.7%), but MPJRE is *much* worse everywhere sampled in
-that trial (38–48° vs. 25.65°) — including the very first checkpoint saved after the seed, before
-success rate had even started recovering from its initial crash to 0.3%. This isn't noise at one
-lucky point; it's consistent across every checkpoint checked. It's the same signature already
-flagged in "SimXR's upstream ablation" below (success/position improve, rotation doesn't) — now
-confirmed a second, independent time, this time from this project's own from-scratch Stage R
-implementation rather than a replication of someone else's code. Read together, both point at the
-same mechanism: reward-based training optimizes for not-falling-over, which a policy can satisfy
-via corrective strategies that don't require accurate per-joint rotation tracking, since nothing
-in the reward directly supervises rotation the way `kinematic_loss`/`action_loss` do. Whether a
-38.3%-success/39°-MPJRE policy is actually "better" than a 31.7%-success/25.65°-MPJRE one depends
-entirely on what a downstream use case weights more heavily — it is not a strict improvement.
-Separately, the trial's full trajectory (10 points, 1,000-step resolution) oscillated far more
-severely than the regression recipe's already-established noisy plateau (crashing to <10%
-success three separate times within one 10k-step budget, not just dipping within a ~0.23–0.29
-band) — before drawing any conclusion from the 443.6k checkpoint specifically, it needs the same
-"confirmed deterministic/reproducible across independent reruns" check `v7_validate` got in the
-SMPL pipeline, not a single scan pass through a trajectory this noisy.
+- **Locomotion was exactly 0.000.** `finetuned_backbone`'s per-activity split was binary:
+  stationary 0.60–0.80, and **0/461 on every locomotion/dynamic clip** (walking 0/144, jogging
+  0/136, interactions 0/75, dancing 0/20, martialarts+stretching+retail+workout 0/41). The 31.7%
+  headline was close to a restatement of "what fraction of this test set is stationary", which is
+  why averaged MPJPE/MPJRE barely moved across those columns. **Root-caused and fixed** — see the
+  ⚠ banner; the same split is now 0.512 on those 461 clips.
+- **Near-zero gpen was a symptom of that, not of safer motion** — the character was often standing
+  still rather than attempting the reference at all (confirmed by direct rollout inspection at an
+  early 11.85%-success checkpoint).
+- **Explicit-pose conditioning (`q_base`) ≈ opaque latent `z`: no measurable difference** (29.3% vs
+  Option2's 29.4%). With the SMPL pipeline's `v8` (concatenating `q_base` *alongside* `z`, also a
+  no-op), these triangulate: **which pose representation feeds the action head is not the
+  bottleneck.** That conclusion survives the root-cause finding — the bottleneck was the *missing*
+  feedback signal, not the pose encoding.
+- **Joint kinematic+action training degrades the backbone** (~10.9°→~14.3°, ~4.0cm→~5.3cm) for all
+  three variants, despite `lambda_kinematic=1.0` dominating `lambda_action=0.1`. Action-loss
+  gradients and/or the `QuestHumanoidBodyModel` FK path pull it away from per-frame accuracy
+  regardless of loss weighting. Not revisited post-fix.
+- **Early stopping does not transfer from the SMPL/Stage-R pipeline.** `success_rate` is noisy and
+  non-monotonic across the *entire* range for this recipe (Option2 oscillates ~0.23–0.29 from 100k
+  to 500k). Patience=2 would have stopped both Option2 and Option3 hundreds of thousands of steps
+  before their real best. **Always use a full-range scan or live periodic eval.** Reconfirmed on
+  the fixed run, which also plateaus and whose best (380k) beats its final (500k).
+- **Stage R traded rotation accuracy for survival, twice.** Trial 1: 38.3% success but MPJRE
+  38–48° vs the 25.65° seed. Trial 2, after fixing a real bug (`_collect_stage_r_batch`/
+  `_train_stage_r_on_batch` never called `.eval()`, so PPO's ratio compared log-probs under
+  *different* dropout masks — batch-1 KL dropped ~40-50x once fixed) and with conservative
+  hyperparameters: only 32.6%, MPJRE still 37.0°, trajectory still crashing to ~0.2% before
+  partially recovering. **The bug fix corrected the numerics but eliminated neither the
+  instability nor the rotation trade-off** — it is a property of the reward setup, which never
+  directly supervises rotation. Neither trial was adopted.
+- **The `finetuned_backbone` 2.3pp "win" is probably noise.** A frozen-backbone probe (freeze each
+  backbone, train fresh `state_enc`/`action_head` for a matched 50k budget) put `Option2` *ahead*
+  by 2.1pp — same magnitude, opposite direction, both inside Option2's own oscillation band. Two
+  cheaper checks (raw `z` cosine similarity; "frankenstein" head/backbone swaps, 0.000 success
+  both ways) were uninformative because they test basis compatibility, not information content.
+  The probe did establish one thing cleanly: **frozen backbones land at ~20–22% vs ~29–32%
+  unfrozen**, so keeping the backbone trainable is worth ~8–10pp. Reproduce:
+  `bash scripts/run_frozen_backbone_probe.sh [max_distill_step] [num_envs]`.
+- **SimXR's replication handles locomotion** (walking 0.755, jogging 0.298, interactions 0.568,
+  dancing 0.161) versus 0.000 for all of those here, while stationary gaps were far smaller — i.e.
+  essentially the entire aggregate gap to SimXR was locomotion. *Its dump is a TRAIN-split eval,
+  so those absolute rates are optimistically biased; the safe reading is only "SimXR's policy can
+  locomote, ours could not".*
 
-**Early-stopping doesn't transfer from the SMPL/Stage-R pipeline.** The SMPL pipeline's Stage R
-collapse-detection heuristic (patience=2, assumes an early-peak-then-monotonic-collapse
-trajectory) does not apply to `quest_distill`'s recipe. Retroactively scanning `option3_actionloss`/
-`option2_scratch` with that same patience would have stopped both runs at a temporary early dip
-(hundreds of thousands of steps before their real best checkpoints), because `success_rate` is
-genuinely noisy/non-monotonic across the *entire* training range for this recipe, not just early
-on (`option2_scratch` oscillates ~0.23–0.29 from step 100k all the way to 500k with no discernible
-trend). Conclusion: any `quest_distill` variant needs either a full-range retroactive scan
-(patience disabled) or live periodic eval throughout training — never an early-stopping heuristic
-carried over from the SMPL/Stage-R pipeline.
+### Quest2 naive baseline (2026-08-11) — no distillation student at all
 
-**Explicit-pose conditioning vs. the opaque latent: no measurable difference.** Conditioning
-`action_head`/`value_head` on the backbone's explicitly decoded pose (`q_base`) instead of the
-opaque transformer latent `z` (`explicit_pose_action_input=True`) produced a best success rate
-(29.3%) statistically indistinguishable from the z-conditioned `Option2` recipe's own best
-(29.4%) — not a win, not a loss. This is informative precisely because it isn't dramatic: combined
-with the SMPL pipeline's earlier `v8` result (concatenating `q_base` *alongside* `z` was also a
-no-op, since `q_base = decode(z)` is a deterministic function `action_head` already had implicit
-access to), these two experiments together triangulate to a real conclusion — **using the decoder
-layer's explicit output essentially does not differ from using the raw latent representation `z`
-for control purposes.** Whatever capacity `z` has beyond what's needed to reconstruct the explicit
-pose isn't being exploited for control in either direction: adding it on top of `q_base` changed
-nothing (`v8`), and removing it in favor of the explicit decode doesn't help either (this result).
-The implication is that the bottleneck keeping this whole distillation family well behind Phase
-B's physics-tracking-ground-truth ceiling is *not* which pose representation feeds the action
-head — it's more likely the fundamental difficulty of compressing full-body control into a small
-network that only ever sees a sparse 3-point HMD signal, echoing the SMPL pipeline's own
-"naive baseline beats every distilled variant" finding.
+Naivew baseline: frozen teacher tracks
+AvatarPoser's raw output fro Quest 2 motion. 
 
-**gpen stays near-zero regardless of success rate — likely a static-sequence bias, not safer
-motion.** Every `quest_distill` checkpoint evaluated post-fix (footnote 4) shows near-zero gpen,
-including `explicit_pose`'s *best* checkpoint (0.006mm) despite its 29.3% success rate. This is
-the same signature seen at this same run's very first (11.85%-success) checkpoint, where direct
-inspection of the recorded rollout confirmed the character was essentially standing still rather
-than attempting the reference motion at all. Since success rate climbed to 29.3% without gpen ever
-becoming meaningfully nonzero, the open (unconfirmed) question is whether these checkpoints
-succeed mainly on this test set's more static sequences (standing/gestures/yoga-type activities)
-while continuing to fail dynamic ones (walking/jogging/dancing) without literally falling, rather
-than genuinely learning safer or more careful dynamic control. Resolving this needs a
-per-activity-type success breakdown or watching actual rollouts — the aggregate success/gpen
-numbers alone can't distinguish the two explanations.
+Location of script for experiment: `scripts/convert_avatarposer_quest2_to_phc.py` It requires no training — one conversion pass plus one eval rollout.
+
+Recipe: `convert_avatarposer_quest2_to_phc.py` with the *same* fine-tuned backbone behind the
+`finetuned_backbone` column (`AvatarPoseEstimationQuest2Finetune/models/15000_G.pth`) over all
+1072 test sequences → frozen `phc_prim_quest` teacher tracks those predicted pkls → scored against
+ground truth with `scripts/score_naive_baseline_vs_gt.py`. Result:
+`results/baselines/quest2_naive_baseline_vs_gt.json`.
+
+| Metric | Phase B (teacher on GT) | **Naive baseline (this)** | SimXR no-vision ablation | `finetuned_backbone` @440k |
+|---|---|---|---|---|
+| Success (`phc_survival`) | 0.999 | **0.767** | 0.717 | 0.317 |
+| Success (`frame_head`) | 0.9999 | **0.974** | 0.997 | 0.980 |
+| MPJPE (mm) | 21.81 | **96.4** | 112.5 | 185.60 |
+| MPJRE (°) | 4.52 | **13.82** | 29.76 | 25.65 |
+| MPJVE (cm/s) | 9.29 | **24.17** | 40.93 | 49.94 |
+| Foot skate (cm/s) | 5.90 | 21.41 | 14.39 | 20.75 |
+
+Per-activity `phc_survival`: walking **0.792**, jogging **0.779**, standing 0.985, whiteboard
+0.974, gestures 0.830, ROM 0.762, interactions 0.533, dancing 0.500 — against **0.000 for walking,
+jogging, interactions and dancing** in the distilled column. Locomotion is not hard for this
+pipeline; it was unreachable for that student.
+
+**This is the best Quest2 result in this table**, and it beats SimXR's own no-vision ablation on
+success, MPJPE, MPJRE and MPJVE — on the held-out test split, where SimXR's per-activity dump is a
+train-split eval. Same framing caveat as the SMPL naive baseline applies: it solves an easier
+problem than the distilled student (it hands the teacher a full per-frame kinematic target instead
+of compressing tracking into a 3-point-only network), so it belongs in the table as the control
+that bounds what the physics stage can do, not as a headline accuracy claim over distillation.
+
+> **Alignment matters here and is easy to get wrong.** The predicted pkls start `window_size+1`
+> frames into each clip, and PHC's own dump lags by one further frame. Scoring at offset 0 reports
+> **568mm MPJPE / 0.108 success** — pure temporal misalignment (a walker covers ~1.5m in 42
+> frames), not tracking error. The offset of **42** is derived, not tuned: 41 from the prediction
+> pipeline (`dataset_quest2`'s test branch drops 2 raw frames, and the converter predicts the
+> window's `(W-1)`th element), plus 1 for PHC's dump lag — the latter established independently on
+> the **Phase B** artifacts, where the teacher tracked ground truth with no windowing at all and
+> still aligns best at offset 1 (23.6mm vs 37.1mm at offset 0, matching Phase B's published
+> 21.81mm). Anything scoring a PHC dump against source pkls must apply this.
 
 **SimXR's upstream ablation: much better success/position, but not rotation accuracy.**
 Replicating SimXR's own no-vision ablation in the upstream repo scores far higher on success
 (71.7% vs. 24–29%) and position error (112.5mm vs. 178–189mm) than every `quest_distill` variant
 tried here — but `MPJRE` (rotation error) is *not* better (29.76° there vs. 25–29° here), if
-anything slightly worse. A pure bug in a shared code path would be expected to move every metric
+anything slightly worse.
+
+> **CORRECTION (2026-08-11): the "different training objective" explanation below was wrong, and
+> the config side-by-side it asked for has now been done.** SimXR's no-vision quest run is *not*
+> PPO+AMP+reward. `env_simxr_quest.yaml` sets `distill: True`, `only_kin_loss: True`, and
+> `models: ['output/HumanoidIm/phc_prim_quest/Humanoid.pth']` — **it is a student behavior-cloned
+> from the exact same frozen teacher checkpoint this repo distills from**, and `amp_agent.py:243`
+> comments that branch "pure behavior cloning, kinemaitc loss" while stepping the sim with the
+> student's own action (`env_step(res_dict['mus'])`). Same teacher, same objective, same
+> student-driven rollout, same 0.5m termination threshold (`im_amp_players.py:43`, identical line
+> in both repos). So 71.7% vs 31.7% is a **like-for-like** comparison, not an
+> apples-to-oranges one.
+>
+> The structural difference is the observation space. SimXR's policy consumes
+> `compute_imitation_observations_v6` over `trackBodies: ["b_head"]` — `ref_body_pos - body_pos`
+> plus rotation/velocity deltas, rotated into the humanoid's heading frame, i.e. **the head's
+> tracking error**. Ours consumed no equivalent signal at all (see the ⚠ banner at the top of this
+> section). Note SimXR gets *less* reference information than we do — head only, versus our
+> head + 2 wrists into the backbone — and still locomotes, which is further evidence the deficit
+> was closed-loop feedback rather than input richness.
+>
+> The MPJRE split is still real and still unexplained by the above: SimXR never directly
+> supervises per-joint rotation, whereas `distill_agent_quest.py` adds an explicit
+> `kinematic_loss` on rotations, which plausibly explains why our rotation error is competitive
+> while everything else is not. That part of the original reasoning survives; the "PPO + AMP +
+> head reward" premise does not.
+
+~~A pure bug in a shared code path would be expected to move every metric
 in the same direction; this split (success/position much better, rotation not) is more consistent
 with a genuine algorithmic difference: SimXR's `im_simxr` trains with full PPO + an AMP
 discriminator + a head-tracking task reward, which directly rewards keeping the head on-target
@@ -352,17 +655,12 @@ and motion looking natural, but never directly supervises exact per-joint rotati
 reference the way `distill_agent_quest.py`'s pure action-regression loss does. Not confirmed — a
 direct side-by-side of the two training code paths would be needed to rule out a remaining port
 bug — but the MPJRE split is real, non-obvious evidence pointing toward "different training
-objective," not just "bug."
+objective," not just "bug."~~
 
-**AMASS-pretrained backbone fine-tuned on Quest2: modest but consistent kinematic improvement,
-gate passed.** Every prior Quest2 backbone (Phase A and everything built on it — Option2/3,
-`explicit_pose`) was trained from scratch on Quest2 data alone. Warm-starting instead from the
-existing AMASS-pretrained SMPL checkpoint (`model_zoo/avatarposer.pth`) — transferring
-`linear_embedding`/`transformer_encoder`/`stabilizer`/`joint_rotation_decoder`'s hidden layer
-directly (all skeleton-agnostic in shape) and randomly re-initializing only
-`joint_rotation_decoder`'s final layer (126-dim for SMPL vs. 144 needed for quest_humanoid) —
-then fine-tuning on the same Quest2 data for the same 15k-step budget, improved every single
-kinematic metric, none got worse:
+**AMASS-pretrained backbone fine-tuned on Quest2 — kinematic gate, PASSED (still valid).**
+Warm-starting the Quest2 backbone from `model_zoo/avatarposer.pth` instead of training from
+scratch (transferring everything except `joint_rotation_decoder`'s final layer, 126-dim for
+SMPL vs 144 for quest_humanoid) improved **every** kinematic metric, none worse:
 
 | Metric | From-scratch | Fine-tuned from AMASS |
 |---|---|---|
@@ -376,40 +674,25 @@ kinematic metric, none got worse:
 | gpen_rate | 0.541 | 0.489 |
 | eg_mpjpe_mm | 40.24 | 37.85 |
 
-The gains are modest (mostly 2–20%) rather than dramatic — expected, since the from-scratch fit
-was already reasonably close to the AMASS/SMPL baseline (4.05°/2.51cm) to begin with, leaving
-limited headroom for a better prior to close. Still, every metric moving the same direction is
-real signal, not noise: the AMASS-pretrained encoder/temporal-reasoning stack transfers useful
-general "how does sparse head/wrist motion relate to full-body configuration" knowledge across
-skeletons, even though quest_humanoid's kinematic tree (25 joints, SimXR's own rig) is genuinely
-different from SMPL's (verified elsewhere in this project — not "SMPL+1"). Result:
-`results/baselines/avatarposer_quest2_phase_a_finetuned.json`, checkpoint
-`results/AvatarPoseEstimationQuest2Finetune/models/15000_G.pth`. **This passed the gate**, and
-the distillation rerun (`exp_name=quest_distill_finetuned_backbone`, same z-conditioned
-Option2-style recipe -- default `explicit_pose_action_input=False`, only `avatarposer_checkpoint`
-swapped to this fine-tuned backbone, no other variable changed, for a clean single-variable
-comparison against Option2's own 29.4% best) trained to 500k steps (2026-07-29 to 2026-07-30, one
-crash-recovery at step 294,720) and was scanned full-range afterward exactly like `explicit_pose`.
+Gains are modest (2–20%) — the from-scratch fit was already near the AMASS/SMPL baseline
+(4.05°/2.51cm), leaving little headroom — but every metric moving the same way is signal: the
+AMASS encoder transfers useful "sparse head/wrist → full-body configuration" structure across
+genuinely different skeletons. This is a backbone result and is **unaffected by the
+distillation defect**; it is why `trackerr` uses this checkpoint.
+`results/baselines/avatarposer_quest2_phase_a_finetuned.json`,
+`results/AvatarPoseEstimationQuest2Finetune/models/15000_G.pth`.
 
-**The kinematic gate's improvement DOES transfer through physics -- best result of the Quest2
-family so far, on essentially every metric, not just success rate.** Best checkpoint
-`student_0440000.pth` (found via the same full-range `quest_checkpoint_scan.sh`, patience
-disabled): 31.7% success, beating both Option2 (29.4%) and `explicit_pose` (29.3%). Unlike the
-`explicit_pose` result (a real experiment whose conclusion was "no measurable difference"), this
-is a broad, consistent win: MPJRE improves the most (25.65° vs. Option2's 26.35°, closer to
-`explicit_pose`'s 29.27° for context), MPJVE improves (49.94 vs. 52.91 cm/s), jitter improves
-(1117 vs. 1193 m/s³), foot skate improves (20.75 vs. 21.75 cm/s), and MPJPE holds essentially flat
-(185.60mm vs. 185.87mm -- see the "MPJPE stays roughly flat" note above for why this particular
-metric is a weak differentiator here regardless). No metric got worse. Combined with the
-kinematic-gate result above, this is the first Quest2 variant tried where an upstream backbone
-change survives all the way through the physics distillation pipeline and shows up as a genuine,
-broad-based improvement -- not just a single noisy success-rate draw (the checkpoint was found via
-the same full-range scan used everywhere else in this table, and the improvement holds across
-essentially every metric simultaneously, which a single lucky rollout wouldn't produce). Of the
-three variables this project has now tried varying independently -- action-head input
-representation (`explicit_pose`, no effect), loss reweighting (`Option3`, worse), and backbone
-initialization (`finetuned_backbone`, this result) -- backbone initialization is the only one
-that has moved the needle so far.
+> Downstream, this gate's improvement appeared to transfer through physics (31.7% vs Option2's
+> 29.4%, every metric better) — but see the frozen-backbone-probe bullet above: that 2.3pp is
+> most likely noise. Both are superseded by `trackerr` regardless.
+
+### Per-clip metrics for the rendered clips
+
+Everything in this section is averaged over all 1072 test clips. For the **individual clips that
+were rendered to video** (one per motion category: planted / full-body-transition / locomotion),
+with the same metric definitions plus a root-drift vs root-relative-pose decomposition, see
+**`results_per_clip_renders.md`** (generated by `scripts/per_clip_metrics.py`). Videos live in
+`output/renderings/`.
 
 ### Quest2 eval commands
 

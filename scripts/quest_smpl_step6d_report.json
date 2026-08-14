@@ -1,0 +1,97 @@
+{
+  "quest_retarget_walking": {
+    "ref_frames": 426,
+    "sim_frames": 426,
+    "survival_ratio": 1.0,
+    "survived": true,
+    "terminated": false,
+    "fail_frame": null,
+    "mpjpe_cm": 3.2949451357126236,
+    "mpjre_deg": 14.214232093353381,
+    "mpjve_cm_s": 13.946053385734558,
+    "jitter_m_s3": 71.36550903320312,
+    "foot_skate_cm_s": 0.7161717861890793,
+    "gpen_mean_mm": 0.0,
+    "gpen_max_mm": 0.0,
+    "gpen_rate": 0.0,
+    "root_drift_cm": 2.45272908359766,
+    "root_drift_max_cm": 6.848608702421188,
+    "pose_err_cm": 2.6329563930630684,
+    "trajectory": "data/quest_smpl_retarget/step6d_sim/quest_retarget_walking_sim.pkl",
+    "pre_vs_post": {
+      "ground penetration mean (mm)": {
+        "pre": 3.9132870733737946,
+        "post": 0.0,
+        "verdict": "improved"
+      },
+      "ground penetration max (mm)": {
+        "pre": 11.287562549114227,
+        "post": 0.0,
+        "verdict": "improved"
+      },
+      "ground penetration rate": {
+        "pre": 0.06103286384976526,
+        "post": 0.0,
+        "verdict": "improved"
+      },
+      "foot skate (cm/s)": {
+        "pre": 2.4058839306235313,
+        "post": 0.7161717861890793,
+        "verdict": "improved"
+      },
+      "jitter (m/s^3)": {
+        "pre": 35.3135871887207,
+        "post": 71.36551666259766,
+        "verdict": "WORSE"
+      }
+    }
+  },
+  "quest_retarget_standing": {
+    "ref_frames": 425,
+    "sim_frames": 425,
+    "survival_ratio": 1.0,
+    "survived": true,
+    "terminated": false,
+    "fail_frame": null,
+    "mpjpe_cm": 3.6611825227737427,
+    "mpjre_deg": 19.755087462402038,
+    "mpjve_cm_s": 4.00821678340435,
+    "jitter_m_s3": 9.104377746582031,
+    "foot_skate_cm_s": 0.16103157540783286,
+    "gpen_mean_mm": 0.0,
+    "gpen_max_mm": 0.0,
+    "gpen_rate": 0.0,
+    "root_drift_cm": 2.5647610425949097,
+    "root_drift_max_cm": 3.626534342765808,
+    "pose_err_cm": 2.805096097290516,
+    "trajectory": "data/quest_smpl_retarget/step6d_sim/quest_retarget_standing_sim.pkl",
+    "pre_vs_post": {
+      "ground penetration mean (mm)": {
+        "pre": 0.0,
+        "post": 0.0,
+        "verdict": "unchanged"
+      },
+      "ground penetration max (mm)": {
+        "pre": 0.0,
+        "post": 0.0,
+        "verdict": "unchanged"
+      },
+      "ground penetration rate": {
+        "pre": 0.0,
+        "post": 0.0,
+        "verdict": "unchanged"
+      },
+      "foot skate (cm/s)": {
+        "pre": 0.49154222942888737,
+        "post": 0.16103157540783286,
+        "verdict": "improved"
+      },
+      "jitter (m/s^3)": {
+        "pre": 10.783767700195312,
+        "post": 9.104377746582031,
+        "verdict": "improved"
+      }
+    }
+  },
+  "success_rate": 1.0
+}
