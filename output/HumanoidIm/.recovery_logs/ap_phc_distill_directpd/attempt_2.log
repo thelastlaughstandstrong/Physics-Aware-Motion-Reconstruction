@@ -1,7 +1,0 @@
-bash: /home/sia-irl/anaconda3/envs/avatarposer/lib/libtinfo.so.6: no version information available (required by bash)
-[collapse-detect] fresh run from step 0 (Stage 1 -> E -> R all in this launch)
-[collapse-detect] training launched (wrapper pid 1960831), num_envs=16
-[collapse-detect] stage_e_step=100000 stage_r_step=250000
-[collapse-detect] eval every 10000 steps after Stage R starts, patience=2, hard cap=450000
-[collapse-detect] training process is no longer running — stopping watch
-[collapse-detect] DONE. Best checkpoint: student_0000000.pth (success_rate=-1)

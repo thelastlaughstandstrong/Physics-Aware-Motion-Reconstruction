@@ -1,7 +1,0 @@
-- learning=im
-- test=True
-- env=env_quest_basic
-- robot=quest_humanoid
-- env.num_envs=2
-- headless=True
-- epoch=0

@@ -1,7 +1,0 @@
-[auto-recovery] starting supervised run for ap_phc_distill_v7_scaled (max 5 crash retries)
-[auto-recovery] attempt 1: fresh start
-[auto-recovery] GPU has 16066MiB free (>= 10000MiB threshold) — proceeding
-[auto-recovery] run completed normally (attempt 1)
-[collapse-detect] patience exceeded — stopping training.
-[collapse-detect] BEST CHECKPOINT: student_0280000.pth (success_rate=0.0224)
-[collapse-detect] DONE. Best checkpoint: student_0280000.pth (success_rate=0.0224)
