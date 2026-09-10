@@ -1,0 +1,92 @@
+{
+  "clips": {
+    "sports": {
+      "post-PHC (pred)": {
+        "frames": 417,
+        "fps": 30,
+        "pelvis_max_mm": 6.143906154658885e-05,
+        "joints_mean_mm": 34.527715406401306,
+        "joints_max_mm": 86.6732295140197,
+        "proximal_mean_mm": 11.423548938715207,
+        "root_rot_mean_deg": 5.953452775851176e-06,
+        "root_rot_max_deg": 2.3434644061886085e-05,
+        "ground_rig_mm": -14.88804817199707,
+        "ground_phc_mm": 14.73130751401186,
+        "corr_with_rest_diff": 0.9787324543928367
+      },
+      "pre-PHC (gt)": {
+        "frames": 417,
+        "fps": 30,
+        "pelvis_max_mm": 6.664001874625056e-05,
+        "joints_mean_mm": 34.857483822438034,
+        "joints_max_mm": 88.5093965835183,
+        "proximal_mean_mm": 11.423602762939614,
+        "root_rot_mean_deg": 5.6889017651200375e-06,
+        "root_rot_max_deg": 1.7967132507059594e-05,
+        "ground_rig_mm": -83.47749710083008,
+        "ground_phc_mm": -59.237971901893616,
+        "corr_with_rest_diff": 0.9778229280433077
+      }
+    },
+    "gestures": {
+      "post-PHC (pred)": {
+        "frames": 423,
+        "fps": 30,
+        "pelvis_max_mm": 6.143906154658885e-05,
+        "joints_mean_mm": 33.47340858580451,
+        "joints_max_mm": 84.94969576626664,
+        "proximal_mean_mm": 11.423560820862557,
+        "root_rot_mean_deg": 5.652897034991324e-06,
+        "root_rot_max_deg": 2.5236354626351244e-05,
+        "ground_rig_mm": -5.745887756347656,
+        "ground_phc_mm": 14.783741906285286,
+        "corr_with_rest_diff": 0.9876433315905886
+      },
+      "pre-PHC (gt)": {
+        "frames": 423,
+        "fps": 30,
+        "pelvis_max_mm": 6.143917183892283e-05,
+        "joints_mean_mm": 33.58623202221126,
+        "joints_max_mm": 88.4878743776356,
+        "proximal_mean_mm": 11.423805081145753,
+        "root_rot_mean_deg": 5.608606082534242e-06,
+        "root_rot_max_deg": 1.7285480764522063e-05,
+        "ground_rig_mm": -47.049760818481445,
+        "ground_phc_mm": -26.58991515636444,
+        "corr_with_rest_diff": 0.9865551186701075
+      }
+    },
+    "martialarts": {
+      "post-PHC (pred)": {
+        "frames": 444,
+        "fps": 30,
+        "pelvis_max_mm": 6.664001874625056e-05,
+        "joints_mean_mm": 33.95523156044612,
+        "joints_max_mm": 98.80281450748166,
+        "proximal_mean_mm": 11.423549342020968,
+        "root_rot_mean_deg": 4.8329010450158575e-06,
+        "root_rot_max_deg": 1.895733047073457e-05,
+        "ground_rig_mm": -7.470488548278809,
+        "ground_phc_mm": 15.15747606754303,
+        "corr_with_rest_diff": 0.9876757115033062
+      },
+      "pre-PHC (gt)": {
+        "frames": 444,
+        "fps": 30,
+        "pelvis_max_mm": 6.143906154658885e-05,
+        "joints_mean_mm": 33.18215610070659,
+        "joints_max_mm": 86.97234462568612,
+        "proximal_mean_mm": 11.423555964538627,
+        "root_rot_mean_deg": 4.8315445822935126e-06,
+        "root_rot_max_deg": 2.0077499680096034e-05,
+        "ground_rig_mm": -74.42700862884521,
+        "ground_phc_mm": -67.81734526157379,
+        "corr_with_rest_diff": 0.9899645137831774
+      }
+    }
+  },
+  "rest_diff_mean_mm": 31.373725873885572,
+  "rest_diff_max_mm": 74.41718836322406,
+  "passed": true,
+  "failed": []
+}

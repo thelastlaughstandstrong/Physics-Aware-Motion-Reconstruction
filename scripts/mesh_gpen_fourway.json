@@ -1,0 +1,152 @@
+{
+  "SUBJECT072.gestures.pkl_427_853": {
+    "gt": {
+      "frames": 427,
+      "ik_all_mean_mm": 37.08667341703314,
+      "ik_group_a_mean_mm": 31.397531136329196,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.07740926742553711,
+      "n_vertices": 6890,
+      "wall_s": 119.5,
+      "cached": false
+    },
+    "simxr": {
+      "frames": 426,
+      "ik_all_mean_mm": 37.15379607510842,
+      "ik_group_a_mean_mm": 30.394083968070085,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.06168532371520996,
+      "n_vertices": 6890,
+      "wall_s": 122.7,
+      "cached": false
+    },
+    "finetuned_backbone": {
+      "frames": 426,
+      "ik_all_mean_mm": 38.934721039060705,
+      "ik_group_a_mean_mm": 32.640291059010124,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.05372905731201172,
+      "n_vertices": 6890,
+      "wall_s": 119.2,
+      "cached": false
+    },
+    "naive": {
+      "frames": 384,
+      "ik_all_mean_mm": 38.34106408143211,
+      "ik_group_a_mean_mm": 32.40891019242464,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.05410563945770264,
+      "n_vertices": 6890,
+      "wall_s": 110.4,
+      "cached": false
+    }
+  },
+  "SUBJECT086.walking.pkl_0_412": {
+    "gt": {
+      "frames": 413,
+      "ik_all_mean_mm": 33.55287871893276,
+      "ik_group_a_mean_mm": 26.887172888153877,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.033622682094573975,
+      "n_vertices": 6890,
+      "wall_s": 147.2,
+      "cached": false
+    },
+    "simxr": {
+      "frames": 412,
+      "ik_all_mean_mm": 35.865178917830924,
+      "ik_group_a_mean_mm": 29.998001659510447,
+      "gpen_mean_mm": 1.59954035282135,
+      "gpen_rate": 0.0024271844886243343,
+      "gpen_max_mm": 2.5190114974975586,
+      "lowest_vertex_z_m": -0.0025190114974975586,
+      "n_vertices": 6890,
+      "wall_s": 121.1,
+      "cached": false
+    },
+    "finetuned_backbone": {
+      "frames": 412,
+      "ik_all_mean_mm": 33.71217240088468,
+      "ik_group_a_mean_mm": 27.37621300253725,
+      "gpen_mean_mm": 5.766851902008057,
+      "gpen_rate": 0.014563106931746006,
+      "gpen_max_mm": 17.40288734436035,
+      "lowest_vertex_z_m": -0.01740288734436035,
+      "n_vertices": 6890,
+      "wall_s": 145.7,
+      "cached": false
+    },
+    "naive": {
+      "frames": 370,
+      "ik_all_mean_mm": 33.96938691586433,
+      "ik_group_a_mean_mm": 27.590386410266397,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.005508363246917725,
+      "n_vertices": 6890,
+      "wall_s": 118.8,
+      "cached": false
+    }
+  },
+  "SUBJECT075.ROM.pkl_3820_4243": {
+    "gt": {
+      "frames": 424,
+      "ik_all_mean_mm": 40.355136233196475,
+      "ik_group_a_mean_mm": 31.540341076889348,
+      "gpen_mean_mm": 18.127878189086914,
+      "gpen_rate": 0.10613207519054413,
+      "gpen_max_mm": 48.23601150512695,
+      "lowest_vertex_z_m": -0.04823601245880127,
+      "n_vertices": 6890,
+      "wall_s": 186.5,
+      "cached": false
+    },
+    "simxr": {
+      "frames": 423,
+      "ik_all_mean_mm": 41.89680704073708,
+      "ik_group_a_mean_mm": 33.69802541910019,
+      "gpen_mean_mm": 26.457199096679688,
+      "gpen_rate": 0.14420804381370544,
+      "gpen_max_mm": 98.04570770263672,
+      "lowest_vertex_z_m": -0.0980457067489624,
+      "n_vertices": 6890,
+      "wall_s": 156.3,
+      "cached": false
+    },
+    "finetuned_backbone": {
+      "frames": 423,
+      "ik_all_mean_mm": 45.882336943564766,
+      "ik_group_a_mean_mm": 35.71500686771419,
+      "gpen_mean_mm": 22.085615158081055,
+      "gpen_rate": 0.21040189266204834,
+      "gpen_max_mm": 70.15168762207031,
+      "lowest_vertex_z_m": -0.070151686668396,
+      "n_vertices": 6890,
+      "wall_s": 144.3,
+      "cached": false
+    },
+    "naive": {
+      "frames": 381,
+      "ik_all_mean_mm": 37.469936029004565,
+      "ik_group_a_mean_mm": 29.519868948241555,
+      "gpen_mean_mm": 25.21712875366211,
+      "gpen_rate": 0.06561680138111115,
+      "gpen_max_mm": 58.782039642333984,
+      "lowest_vertex_z_m": -0.05878204107284546,
+      "n_vertices": 6890,
+      "wall_s": 173.8,
+      "cached": false
+    }
+  }
+}

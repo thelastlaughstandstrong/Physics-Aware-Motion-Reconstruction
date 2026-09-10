@@ -1,0 +1,45 @@
+{
+  "clips": {
+    "sports": {
+      "frames": 417,
+      "fps": 30.0,
+      "duration": 13.9,
+      "motion_frames": 417,
+      "pngs": 417,
+      "resolution": "1920x1080",
+      "stills": [
+        "sports_still_f0105.png",
+        "sports_still_f0209.png",
+        "sports_still_f0313.png"
+      ]
+    },
+    "gestures": {
+      "frames": 423,
+      "fps": 30.0,
+      "duration": 14.1,
+      "motion_frames": 423,
+      "pngs": 423,
+      "resolution": "1920x1080",
+      "stills": [
+        "gestures_still_f0106.png",
+        "gestures_still_f0212.png",
+        "gestures_still_f0317.png"
+      ]
+    },
+    "martialarts": {
+      "frames": 444,
+      "fps": 30.0,
+      "duration": 14.8,
+      "motion_frames": 444,
+      "pngs": 444,
+      "resolution": "1920x1080",
+      "stills": [
+        "martialarts_still_f0111.png",
+        "martialarts_still_f0222.png",
+        "martialarts_still_f0333.png"
+      ]
+    }
+  },
+  "passed": true,
+  "failed": []
+}

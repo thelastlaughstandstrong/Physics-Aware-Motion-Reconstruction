@@ -1,0 +1,632 @@
+[
+ {
+  "clip": "SUBJECT034.workout.pkl_0_405",
+  "category": "full-body/dynamic",
+  "activity": "workout",
+  "fb_foot_err_cm": 66.29148721694946,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT061.stretching.pkl_3947_4384",
+  "category": "full-body/dynamic",
+  "activity": "stretching",
+  "fb_foot_err_cm": 54.486799240112305,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT034.workout.pkl_2030_2435",
+  "category": "full-body/dynamic",
+  "activity": "workout",
+  "fb_foot_err_cm": 45.74899971485138,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT072.sports.pkl_3052_3487",
+  "category": "full-body/dynamic",
+  "activity": "sports",
+  "fb_foot_err_cm": 41.0994678735733,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT072.sports.pkl_4359_4793",
+  "category": "full-body/dynamic",
+  "activity": "sports",
+  "fb_foot_err_cm": 32.198625802993774,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT072.sports.pkl_436_871",
+  "category": "full-body/dynamic",
+  "activity": "sports",
+  "fb_foot_err_cm": 31.967562437057495,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT061.stretching.pkl_0_438",
+  "category": "full-body/dynamic",
+  "activity": "stretching",
+  "fb_foot_err_cm": 29.23947274684906,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT034.workout.pkl_3651_4055",
+  "category": "full-body/dynamic",
+  "activity": "workout",
+  "fb_foot_err_cm": 28.955736756324768,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT080.interactions.pkl_3717_4128",
+  "category": "full-body/dynamic",
+  "activity": "interactions",
+  "fb_foot_err_cm": 28.802978992462158,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT079.interactions.pkl_426_850",
+  "category": "full-body/dynamic",
+  "activity": "interactions",
+  "fb_foot_err_cm": 27.98255980014801,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT070.ROM.pkl_2180_2615",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 27.157703042030334,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT079.ROM.pkl_2572_2999",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 27.10392475128174,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT073.ROM.pkl_0_406",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 3.321240469813347,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT081.ROM.pkl_828_1241",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 2.607254311442375,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT080.ROM.pkl_0_419",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 2.4537894874811172,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT086.ROM.pkl_0_437",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 2.2551773115992546,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT075.ROM.pkl_850_1274",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 1.9677793607115746,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT073.ROM.pkl_814_1220",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 1.7723295837640762,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT075.ROM.pkl_0_424",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 1.45152872428298,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT080.ROM.pkl_840_1258",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 1.3251051306724548,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT072.walking.pkl_3282_3691",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 35.24633347988129,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT080.walking.pkl_440_879",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 27.51581072807312,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT070.walking.pkl_3073_3510",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 26.67245864868164,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT079.walking.pkl_436_871",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 25.785884261131287,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT076.walking.pkl_444_887",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 24.1112157702446,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT079.walking.pkl_2616_3051",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 24.111148715019226,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT069.walking.pkl_3732_4145",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 23.72179627418518,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT076.walking.pkl_3992_4434",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 23.63632619380951,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT073.walking.pkl_872_1307",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 23.434989154338837,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT072.walking.pkl_822_1231",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 22.84363955259323,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.walking.pkl_864_1295",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 22.71103709936142,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.walking.pkl_3021_3451",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 22.70158976316452,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT073.walking.pkl_3051_3485",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 11.170395463705063,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT086.walking.pkl_3713_4124",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 11.16393730044365,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT081.walking.pkl_0_415",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 11.125348508358002,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT076.jogging.pkl_0_446",
+  "category": "lower-body",
+  "activity": "jogging",
+  "fb_foot_err_cm": 11.040502041578293,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT084.walking.pkl_2132_2557",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 11.037100106477737,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT086.walking.pkl_0_412",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 10.818938910961151,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT081.jogging.pkl_3802_4223",
+  "category": "lower-body",
+  "activity": "jogging",
+  "fb_foot_err_cm": 10.7705757021904,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT072.walking.pkl_2052_2461",
+  "category": "lower-body",
+  "activity": "walking",
+  "fb_foot_err_cm": 9.589651226997375,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT086.standing.pkl_1269_1690",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 38.53991627693176,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT066.standing.pkl_3389_3811",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 19.80784684419632,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT076.standing.pkl_2535_2956",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 19.51068937778473,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT076.standing.pkl_423_845",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 19.088050723075867,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.standing.pkl_2175_2609",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 18.017388880252838,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.standing.pkl_3045_3479",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 17.856989800930023,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT086.standing.pkl_1691_2112",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 17.173446714878082,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT086.standing.pkl_2113_2534",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 16.367407143115997,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.standing.pkl_3480_3913",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 15.86136668920517,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.standing.pkl_1740_2174",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 15.193834900856018,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.standing.pkl_2610_3044",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 14.75224643945694,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.standing.pkl_1305_1739",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 14.684635400772095,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT078.standing.pkl_1279_1704",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 4.252032563090324,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT079.standing.pkl_0_425",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 3.5909075289964676,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT066.standing.pkl_1272_1695",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 3.487034887075424,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT078.standing.pkl_0_426",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 3.2324831932783127,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT070.standing.pkl_1269_1691",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 3.23033407330513,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT073.standing.pkl_1275_1699",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 3.208281844854355,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT080.standing.pkl_409_817",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 2.9731955379247665,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT080.standing.pkl_0_408",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 2.6199165731668472,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT072.gestures.pkl_4270_4695",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 30.202758312225342,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT072.gestures.pkl_2989_3415",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 28.744399547576904,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT072.gestures.pkl_3416_3842",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 24.804161489009857,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT081.gestures.pkl_2130_2555",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 24.55184757709503,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT078.gestures.pkl_892_1337",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 24.371792376041412,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT080.gestures.pkl_3504_3941",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.999816179275513,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT088.gestures.pkl_4582_4997",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.682917654514313,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT078.gestures.pkl_446_891",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.47487211227417,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT070.gestures.pkl_848_1271",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.311609029769897,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT074.gestures.pkl_1692_2113",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.180046677589417,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT086.gestures.pkl_4625_5044",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.073314130306244,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT086.gestures.pkl_4205_4624",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 23.070204257965088,
+  "stratum": "high-foot-error"
+ },
+ {
+  "clip": "SUBJECT078.whiteboard.pkl_435_869",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 2.1655209362506866,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT072.gestures.pkl_427_853",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 1.9602715969085693,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT069.whiteboard.pkl_850_1274",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 1.9266117364168167,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT079.whiteboard.pkl_892_1337",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 1.8525853753089905,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT088.whiteboard.pkl_1760_2198",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 1.7296914011240005,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT088.whiteboard.pkl_880_1319",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 1.7243416979908943,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT076.whiteboard.pkl_832_1247",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 1.717781089246273,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT080.whiteboard.pkl_1684_2104",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 1.5224684029817581,
+  "stratum": "clean-control"
+ },
+ {
+  "clip": "SUBJECT078.standing.pkl_427_852",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 5.078252404928207,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT008.drinks.pkl_1987_2383",
+  "category": "upper-body",
+  "activity": "drinks",
+  "fb_foot_err_cm": 12.158544361591339,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT073.gestures.pkl_0_440",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 13.923728466033936,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT073.ROM.pkl_1221_1627",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 4.486215114593506,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT081.ROM.pkl_1656_2069",
+  "category": "full-body/dynamic",
+  "activity": "ROM",
+  "fb_foot_err_cm": 12.058035284280777,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT076.cooking.pkl_1652_2064",
+  "category": "upper-body",
+  "activity": "cooking",
+  "fb_foot_err_cm": 10.24547815322876,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT074.gestures.pkl_3380_3801",
+  "category": "upper-body",
+  "activity": "gestures",
+  "fb_foot_err_cm": 18.275578320026398,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT072.whiteboard.pkl_3038_3471",
+  "category": "upper-body",
+  "activity": "whiteboard",
+  "fb_foot_err_cm": 12.111049145460129,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT080.standing.pkl_2042_2449",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 12.135917693376541,
+  "stratum": "random"
+ },
+ {
+  "clip": "SUBJECT075.standing.pkl_3289_3699",
+  "category": "other",
+  "activity": "standing",
+  "fb_foot_err_cm": 10.663580894470215,
+  "stratum": "random"
+ }
+]

@@ -9,7 +9,7 @@ Building extension module gymtorch...
 Allowing ninja to set a default number of workers... (overridable by setting the environment variable MAX_JOBS=N)
 ninja: no work to do.
 Loading extension module gymtorch...
-2026-08-13 20:28:51,976 - INFO - logger - logger initialized
+2026-08-19 10:19:49,573 - INFO - logger - logger initialized
 Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
 Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
 Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
@@ -18,8 +18,8 @@ MOVING MOTION DATA TO GPU, USING CACHE: False
 MOVING MOTION DATA TO GPU, USING CACHE: False
 MOVING MOTION DATA TO GPU, USING CACHE: False
 Importing module 'rlgpu_38' (/home/sia-irl/isaacgym_workspace/isaacgym/python/isaacgym/_bindings/linux-x86_64/rlgpu_38.so)
-2026-08-13 20:28:54,035 - DEBUG - Setting JobRuntime:name=UNKNOWN_NAME
-2026-08-13 20:28:54,035 - DEBUG - Setting JobRuntime:name=run_hydra
+2026-08-19 10:19:51,637 - DEBUG - Setting JobRuntime:name=UNKNOWN_NAME
+2026-08-19 10:19:51,637 - DEBUG - Setting JobRuntime:name=run_hydra
 Not connected to PVD
 +++ Using GPU PhysX
 Physics Engine: PhysX
@@ -41,15 +41,15 @@ Sampling motion: tensor([3552,  527, 3160, 3764, 3822, 3425, 1621, 1400, 3708, 2
 ['/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT050.ROM.pkl_434_867.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT019.ROM.pkl_1632_2039.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT021.gestures.pkl_3796_4216.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT009.standing.pkl_1337_1781.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT015.standing.pkl_4565_4978.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT064.gestures.pkl_1285_1712.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT049.jogging.pkl_0_449.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT040.ROM.pkl_433_865.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT051.photography.pkl_1269_1691.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT059.ROM.pkl_1293_1723.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT042.standing.pkl_4647_5068.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT023.gestures.pkl_1728_2159.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT038.gestures.pkl_1700_2124.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT041.walking.pkl_0_442.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT007.ROM.pkl_2209_2649.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT041.gestures.pkl_418_834.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT081.fixingcar.pkl_3352_3769.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT020.gestures.pkl_0_448.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT046.ROM.pkl_834_1250.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT051.photography.pkl_2115_2536.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT001.sports.pkl_0_393.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT014.standing.pkl_2234_2679.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT025.gestures.pkl_2129_2553.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT037.ROM.pkl_880_1319.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT021.interactions.pkl_2225_2669.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT039.ROM.pkl_3714_4125.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT019.walking.pkl_896_1342.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT050.whiteboard.pkl_3577_4023.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT046.walking.pkl_1734_2166.pkl' '/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion/SUBJECT054.gestures.pkl_418_835.pkl'] .....
 *********************************************************************************
 
-/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
+/home/sia-irl/anaconda3/envs/rlgpu/lib/python3.8/site-packages/torch/functional.py:513: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ../aten/src/ATen/native/TensorShape.cpp:3609.)
   return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
-  0%|          | 0/31 [00:00<?, ?it/s]  3%|▎         | 1/31 [00:00<00:08,  3.49it/s] 32%|███▏      | 10/31 [00:00<00:00, 31.19it/s] 68%|██████▊   | 21/31 [00:00<00:00, 53.77it/s]100%|██████████| 31/31 [00:00<00:00, 53.14it/s]
-  0%|          | 0/128 [00:00<?, ?it/s]100%|██████████| 128/128 [00:00<00:00, 19329.29it/s]
-/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/gym/spaces/box.py:127: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+  0%|          | 0/31 [00:00<?, ?it/s]  3%|▎         | 1/31 [00:00<00:14,  2.13it/s] 32%|███▏      | 10/31 [00:00<00:00, 21.65it/s] 68%|██████▊   | 21/31 [00:00<00:00, 42.82it/s]100%|██████████| 31/31 [00:00<00:00, 41.18it/s]
+  0%|          | 0/128 [00:00<?, ?it/s]100%|██████████| 128/128 [00:00<00:00, 22299.01it/s]
+/home/sia-irl/anaconda3/envs/rlgpu/lib/python3.8/site-packages/gym/spaces/box.py:127: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
   logger.warn(f"Box bound precision lowered by casting to {self.dtype}")
-/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/rl_games/common/a2c_common.py:175: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+/home/sia-irl/anaconda3/envs/rlgpu/lib/python3.8/site-packages/rl_games/common/a2c_common.py:175: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
   self.scaler = torch.cuda.amp.GradScaler(enabled=self.mixed_precision)
-/home/sia-irl/anaconda3/envs/avatarposer/lib/python3.8/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
+/home/sia-irl/anaconda3/envs/rlgpu/lib/python3.8/site-packages/torch/nn/modules/transformer.py:307: UserWarning: enable_nested_tensor is True, but self.use_nested_tensor is False because encoder_layer.self_attn.batch_first was not True(use batch_first for better inference performance)
   warnings.warn(f"enable_nested_tensor is True, but self.use_nested_tensor is False because {why_not_sparsity_fast_path}")
 [distill] Resumed from output/HumanoidIm/quest_distill_trackerr/student/student_0380160.pth at step 380160, stage E
 [critic-warmup] START lr=1.0e-04 min=47 max=47 patience=15 min_ev_gain=0.01 (actor frozen: backbone/state_enc/action_head/action_log_std)

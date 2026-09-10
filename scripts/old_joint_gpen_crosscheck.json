@@ -1,0 +1,122 @@
+{
+  "SUBJECT072.gestures.pkl_427_853": {
+    "SimXR": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 70.11473178863525
+    },
+    "Finetuned Backbone": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.6105882525444
+    },
+    "Naive PHC Baseline": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.72996145486832
+    }
+  },
+  "SUBJECT086.walking.pkl_0_412": {
+    "SimXR": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 68.73618811368942
+    },
+    "Finetuned Backbone": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.14006173610687
+    },
+    "Naive PHC Baseline": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 67.98192858695984
+    }
+  },
+  "SUBJECT075.ROM.pkl_3820_4243": {
+    "SimXR": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 68.5933381319046
+    },
+    "Finetuned Backbone": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 59.207018464803696
+    },
+    "Naive PHC Baseline": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.26929950714111
+    }
+  },
+  "SUBJECT070.sports.pkl_0_417": {
+    "SimXR": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 55.40753901004791
+    },
+    "Finetuned Backbone": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 55.55807054042816
+    },
+    "Naive PHC Baseline": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 68.67694854736328
+    }
+  },
+  "SUBJECT070.gestures.pkl_0_423": {
+    "SimXR": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.11499798297882
+    },
+    "Finetuned Backbone": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 41.43381491303444
+    },
+    "Naive PHC Baseline": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.28631663322449
+    }
+  },
+  "SUBJECT059.martialarts.pkl_0_444": {
+    "SimXR": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.42647695541382
+    },
+    "Finetuned Backbone": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.2664310336113
+    },
+    "Naive PHC Baseline": {
+      "mean_mm": 0.0,
+      "max_mm": 0.0,
+      "rate": 0.0,
+      "min_joint_z_mm": 69.29577887058258
+    }
+  }
+}

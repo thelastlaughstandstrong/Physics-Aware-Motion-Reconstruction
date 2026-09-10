@@ -96,7 +96,16 @@ def build_rig(label, x_offset, texture):
     for smpl_idx, name in SMPL_TO_SMPLX_BONE.items():
         bone = armature.data.bones[name]
         parent = bone.parent
-        if parent is None:
+        if parent is None or smpl_idx == 0:
+            # The pelvis's parent is this rig's extra "root" bone, which is NOT part of the SMPL
+            # chain and is therefore never posed -- it keeps its rest orientation (a +90 deg X
+            # rotation, i.e. this rig expresses its Y-up pose convention as a root bone). Using the
+            # parent-RELATIVE rest here leaves that 90 deg uncancelled, so
+            # pelvis_arm_rot = root_rest . local_smpl and the whole body renders rotated 90 deg
+            # about X (measured: 568 mm mean / 1383 mm max joint error vs the PHC trajectory).
+            # Correcting against the ABSOLUTE rest rotation cancels it:
+            #   pelvis_arm_rot = pelvis_rest_abs . (pelvis_rest_abs^-1 . local_smpl) = local_smpl
+            # Every other bone's parent IS in the chain, so parent-relative is right for them.
             rest_relative[smpl_idx] = bone.matrix_local.to_quaternion()
         else:
             rest_relative[smpl_idx] = (parent.matrix_local.inverted() @ bone.matrix_local).to_quaternion()

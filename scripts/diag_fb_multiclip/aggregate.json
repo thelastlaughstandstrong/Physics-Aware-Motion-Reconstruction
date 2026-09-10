@@ -1,0 +1,105 @@
+{
+ "n_clips": 49,
+ "corrs": {
+  "s_ankle_p95|ankle_angvel_p95": {
+   "rho": 0.9383673469387754,
+   "p": 0.0,
+   "n": 49
+  },
+  "s_ankle_p95|jitter_m_s3": {
+   "rho": 0.8959183673469386,
+   "p": 0.0,
+   "n": 49
+  },
+  "s_ankle_p95|foot_skate_cm_s": {
+   "rho": 0.8792857142857142,
+   "p": 0.0,
+   "n": 49
+  },
+  "s_ankle_p95|contact_trans_per_s": {
+   "rho": 0.844081632653061,
+   "p": 0.0,
+   "n": 49
+  },
+  "t_ankle_p95|ankle_angvel_p95": {
+   "rho": 0.9156122448979591,
+   "p": 0.0,
+   "n": 49
+  },
+  "t_ankle_p95|jitter_m_s3": {
+   "rho": 0.8758163265306123,
+   "p": 0.0,
+   "n": 49
+  },
+  "t_ankle_p95|foot_skate_cm_s": {
+   "rho": 0.8838775510204081,
+   "p": 0.0,
+   "n": 49
+  },
+  "t_ankle_p95|contact_trans_per_s": {
+   "rho": 0.8253061224489795,
+   "p": 0.0,
+   "n": 49
+  },
+  "ratio_ankle_p95|ankle_angvel_p95": {
+   "rho": 0.5362244897959183,
+   "p": 0.0,
+   "n": 49
+  },
+  "ratio_ankle_p95|jitter_m_s3": {
+   "rho": 0.5149999999999999,
+   "p": 0.0,
+   "n": 49
+  },
+  "ratio_ankle_p95|foot_skate_cm_s": {
+   "rho": 0.43051020408163265,
+   "p": 0.0005,
+   "n": 49
+  },
+  "ratio_ankle_p95|contact_trans_per_s": {
+   "rho": 0.4889795918367346,
+   "p": 0.0005,
+   "n": 49
+  },
+  "imit_err_ankle|ankle_angvel_p95": {
+   "rho": 0.7291836734693877,
+   "p": 0.0,
+   "n": 49
+  },
+  "imit_err_ankle|jitter_m_s3": {
+   "rho": 0.6983673469387753,
+   "p": 0.0,
+   "n": 49
+  },
+  "imit_err_ankle|foot_skate_cm_s": {
+   "rho": 0.743265306122449,
+   "p": 0.0,
+   "n": 49
+  },
+  "imit_err_ankle|contact_trans_per_s": {
+   "rho": 0.6325510204081631,
+   "p": 0.0,
+   "n": 49
+  },
+  "partial|s_ankle_p95|ankle_angvel_p95": {
+   "rho": 0.5149490508327469,
+   "p": 0.0,
+   "n": 49
+  },
+  "partial|s_ankle_p95|jitter_m_s3": {
+   "rho": 0.396400587303421,
+   "p": 0.0055,
+   "n": 49
+  },
+  "partial|s_ankle_p95|foot_skate_cm_s": {
+   "rho": 0.1979335747292287,
+   "p": 0.194,
+   "n": 49
+  },
+  "partial|s_ankle_p95|contact_trans_per_s": {
+   "rho": 0.3180730394483534,
+   "p": 0.0265,
+   "n": 49
+  }
+ }
+}

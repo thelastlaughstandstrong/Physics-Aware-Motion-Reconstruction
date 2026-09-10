@@ -1,0 +1,376 @@
+{
+ "SUBJECT086.walking.pkl_2889_3300": {
+  "fb": {
+   "hip_angvel": 115.81006951044787,
+   "hip_angvel_p95": 263.3609637373661,
+   "knee_angvel": 161.1467793269183,
+   "knee_angvel_p95": 350.09426244134534,
+   "ankle_angvel": 214.0118505591925,
+   "ankle_angvel_p95": 503.6683450523997,
+   "ankle_linvel": 1.8799078464508057,
+   "ankle_linvel_p95": 3.861655676364898
+  },
+  "naive": {
+   "hip_angvel": 114.19932404056354,
+   "hip_angvel_p95": 190.25254174213137,
+   "knee_angvel": 166.10535806574597,
+   "knee_angvel_p95": 349.69980333126875,
+   "ankle_angvel": 250.6259806758485,
+   "ankle_angvel_p95": 406.6516956185947,
+   "ankle_linvel": 2.121939182281494,
+   "ankle_linvel_p95": 3.974581122398376
+  }
+ },
+ "SUBJECT078.walking.pkl_3468_3900": {
+  "fb": {
+   "hip_angvel": 121.66245139299365,
+   "hip_angvel_p95": 261.4310622018287,
+   "knee_angvel": 159.14222214179915,
+   "knee_angvel_p95": 343.5384004923019,
+   "ankle_angvel": 257.09603394392536,
+   "ankle_angvel_p95": 733.9033254091433,
+   "ankle_linvel": 1.2843867540359497,
+   "ankle_linvel_p95": 3.476672887802124
+  },
+  "naive": {
+   "hip_angvel": 88.33708916752936,
+   "hip_angvel_p95": 186.38527304761658,
+   "knee_angvel": 133.78287378160925,
+   "knee_angvel_p95": 283.817055313361,
+   "ankle_angvel": 201.86447267913712,
+   "ankle_angvel_p95": 463.55131540357917,
+   "ankle_linvel": 1.4478763341903687,
+   "ankle_linvel_p95": 3.26942663192749
+  }
+ },
+ "SUBJECT074.jogging.pkl_2180_2615": {
+  "fb": {
+   "hip_angvel": 232.17727297250588,
+   "hip_angvel_p95": 597.2603307807324,
+   "knee_angvel": 308.83702412851477,
+   "knee_angvel_p95": 759.083952859776,
+   "ankle_angvel": 416.36017167253567,
+   "ankle_angvel_p95": 1450.4271438607918,
+   "ankle_linvel": 3.4742791652679443,
+   "ankle_linvel_p95": 5.555406451225281
+  },
+  "naive": {
+   "hip_angvel": 170.3110535622145,
+   "hip_angvel_p95": 360.5114947491224,
+   "knee_angvel": 232.64437823997167,
+   "knee_angvel_p95": 463.9624526178575,
+   "ankle_angvel": 339.30459107125375,
+   "ankle_angvel_p95": 717.3011225301631,
+   "ankle_linvel": 2.997483730316162,
+   "ankle_linvel_p95": 4.91982364654541
+  }
+ },
+ "SUBJECT076.walking.pkl_3992_4434": {
+  "fb": {
+   "hip_angvel": 113.12840137409002,
+   "hip_angvel_p95": 275.3404839170424,
+   "knee_angvel": 154.65948870669797,
+   "knee_angvel_p95": 346.85874607359284,
+   "ankle_angvel": 205.93989939858355,
+   "ankle_angvel_p95": 625.8610038429257,
+   "ankle_linvel": 1.3096306324005127,
+   "ankle_linvel_p95": 3.158672332763672
+  },
+  "naive": {
+   "hip_angvel": 89.20881954889568,
+   "hip_angvel_p95": 220.63619677894403,
+   "knee_angvel": 121.58811724349628,
+   "knee_angvel_p95": 280.6869087338289,
+   "ankle_angvel": 166.82786944250662,
+   "ankle_angvel_p95": 470.7121672425703,
+   "ankle_linvel": 1.2261358499526978,
+   "ankle_linvel_p95": 2.9122219085693355
+  }
+ },
+ "SUBJECT070.walking.pkl_3511_3948": {
+  "fb": {
+   "hip_angvel": 113.30814845071629,
+   "hip_angvel_p95": 279.0568209892857,
+   "knee_angvel": 155.50737363528805,
+   "knee_angvel_p95": 356.13267602659914,
+   "ankle_angvel": 234.0158115422287,
+   "ankle_angvel_p95": 670.750507100753,
+   "ankle_linvel": 1.4246727228164673,
+   "ankle_linvel_p95": 3.241632342338562
+  },
+  "naive": {
+   "hip_angvel": 93.4897001090115,
+   "hip_angvel_p95": 181.9418226884264,
+   "knee_angvel": 119.71119680508471,
+   "knee_angvel_p95": 285.96739175737713,
+   "ankle_angvel": 169.9607336701829,
+   "ankle_angvel_p95": 345.3023171584441,
+   "ankle_linvel": 1.2068734169006348,
+   "ankle_linvel_p95": 3.1429524660110473
+  }
+ },
+ "SUBJECT086.jogging.pkl_879_1317": {
+  "fb": {
+   "hip_angvel": 153.31711997678525,
+   "hip_angvel_p95": 290.28163478888735,
+   "knee_angvel": 196.62009496566245,
+   "knee_angvel_p95": 416.8028875757582,
+   "ankle_angvel": 272.1679948155501,
+   "ankle_angvel_p95": 638.5587285843089,
+   "ankle_linvel": 2.0943338871002197,
+   "ankle_linvel_p95": 4.590263366699219
+  },
+  "naive": {
+   "hip_angvel": 122.33412591839058,
+   "hip_angvel_p95": 221.87901156395253,
+   "knee_angvel": 173.64085881522826,
+   "knee_angvel_p95": 323.9325251688219,
+   "ankle_angvel": 236.74645727437144,
+   "ankle_angvel_p95": 471.4932635610848,
+   "ankle_linvel": 1.963650107383728,
+   "ankle_linvel_p95": 3.621581482887268
+  }
+ },
+ "SUBJECT083.jogging.pkl_2209_2649": {
+  "fb": {
+   "hip_angvel": 156.5953825385505,
+   "hip_angvel_p95": 432.47288278073034,
+   "knee_angvel": 206.83647833027274,
+   "knee_angvel_p95": 588.9376081101307,
+   "ankle_angvel": 327.40630394419065,
+   "ankle_angvel_p95": 966.3846944109141,
+   "ankle_linvel": 2.4063570499420166,
+   "ankle_linvel_p95": 5.087587118148802
+  },
+  "naive": {
+   "hip_angvel": 142.6807404454093,
+   "hip_angvel_p95": 271.03830551477233,
+   "knee_angvel": 204.8134226334758,
+   "knee_angvel_p95": 343.1132250482944,
+   "ankle_angvel": 305.3953546989678,
+   "ankle_angvel_p95": 578.8193550899774,
+   "ankle_linvel": 2.7628345489501953,
+   "ankle_linvel_p95": 4.875569915771484
+  }
+ },
+ "SUBJECT074.jogging.pkl_2616_3051": {
+  "fb": {
+   "hip_angvel": 236.56404005644646,
+   "hip_angvel_p95": 474.69623864077823,
+   "knee_angvel": 265.40290859124605,
+   "knee_angvel_p95": 577.388082248062,
+   "ankle_angvel": 434.13669512231183,
+   "ankle_angvel_p95": 1062.1656047851034,
+   "ankle_linvel": 2.7702574729919434,
+   "ankle_linvel_p95": 5.187679266929626
+  },
+  "naive": {
+   "hip_angvel": 195.01748091338902,
+   "hip_angvel_p95": 456.71804797373085,
+   "knee_angvel": 279.4129774971011,
+   "knee_angvel_p95": 562.8854347952702,
+   "ankle_angvel": 394.97729865858025,
+   "ankle_angvel_p95": 879.3670755252521,
+   "ankle_linvel": 3.4045443534851074,
+   "ankle_linvel_p95": 5.4113870620727536
+  }
+ },
+ "SUBJECT078.jogging.pkl_1744_2179": {
+  "fb": {
+   "hip_angvel": 164.63586676923177,
+   "hip_angvel_p95": 337.2423775154119,
+   "knee_angvel": 215.92629950047086,
+   "knee_angvel_p95": 447.3619017736199,
+   "ankle_angvel": 313.88138421726546,
+   "ankle_angvel_p95": 807.674403340126,
+   "ankle_linvel": 2.5494542121887207,
+   "ankle_linvel_p95": 4.516458344459533
+  },
+  "naive": {
+   "hip_angvel": 145.4981112814363,
+   "hip_angvel_p95": 225.50527471474004,
+   "knee_angvel": 211.551342453883,
+   "knee_angvel_p95": 355.60770087271595,
+   "ankle_angvel": 302.7382154143478,
+   "ankle_angvel_p95": 508.32734840455026,
+   "ankle_linvel": 2.57004976272583,
+   "ankle_linvel_p95": 4.05982174873352
+  }
+ },
+ "SUBJECT076.jogging.pkl_2235_2680": {
+  "fb": {
+   "hip_angvel": 153.9762373394315,
+   "hip_angvel_p95": 597.9532593523247,
+   "knee_angvel": 224.3572214749595,
+   "knee_angvel_p95": 791.3002969441438,
+   "ankle_angvel": 293.0928344626421,
+   "ankle_angvel_p95": 962.1219432722544,
+   "ankle_linvel": 2.45406436920166,
+   "ankle_linvel_p95": 4.501178574562069
+  },
+  "naive": {
+   "hip_angvel": 135.50810449467548,
+   "hip_angvel_p95": 287.8455380764474,
+   "knee_angvel": 196.39966801742452,
+   "knee_angvel_p95": 486.90968397315737,
+   "ankle_angvel": 272.5097409492477,
+   "ankle_angvel_p95": 788.605130604129,
+   "ankle_linvel": 2.1795148849487305,
+   "ankle_linvel_p95": 3.6704115867614746
+  }
+ },
+ "SUBJECT076.walking.pkl_2663_3105": {
+  "fb": {
+   "hip_angvel": 93.10011480243776,
+   "hip_angvel_p95": 290.1439525441741,
+   "knee_angvel": 124.06461719083303,
+   "knee_angvel_p95": 374.5450799901608,
+   "ankle_angvel": 165.43722862711212,
+   "ankle_angvel_p95": 739.8132515323935,
+   "ankle_linvel": 0.9803562164306641,
+   "ankle_linvel_p95": 3.3115696907043457
+  },
+  "naive": {
+   "hip_angvel": 79.49532145439478,
+   "hip_angvel_p95": 230.11570338934206,
+   "knee_angvel": 121.32505726045864,
+   "knee_angvel_p95": 318.8924290482066,
+   "ankle_angvel": 180.36064632722992,
+   "ankle_angvel_p95": 412.6882775099841,
+   "ankle_linvel": 1.2204402685165405,
+   "ankle_linvel_p95": 3.121663737297058
+  }
+ },
+ "SUBJECT084.walking.pkl_1280_1705": {
+  "fb": {
+   "hip_angvel": 146.9985299702808,
+   "hip_angvel_p95": 377.64362537727277,
+   "knee_angvel": 196.06981421822795,
+   "knee_angvel_p95": 458.66337033593317,
+   "ankle_angvel": 292.9474671467583,
+   "ankle_angvel_p95": 771.0433859387988,
+   "ankle_linvel": 1.6974269151687622,
+   "ankle_linvel_p95": 4.621158719062799
+  },
+  "naive": {
+   "hip_angvel": 116.59846581549803,
+   "hip_angvel_p95": 246.0181791199581,
+   "knee_angvel": 159.42610025931418,
+   "knee_angvel_p95": 355.55870598295735,
+   "ankle_angvel": 202.30593345726018,
+   "ankle_angvel_p95": 433.29650487251354,
+   "ankle_linvel": 1.4161090850830078,
+   "ankle_linvel_p95": 4.169744896888733
+  }
+ },
+ "SUBJECT080.jogging.pkl_1720_2149": {
+  "fb": {
+   "hip_angvel": 142.86798595383738,
+   "hip_angvel_p95": 333.37199616789417,
+   "knee_angvel": 172.44933240668465,
+   "knee_angvel_p95": 454.34526574100414,
+   "ankle_angvel": 246.97235762807202,
+   "ankle_angvel_p95": 816.8570231681858,
+   "ankle_linvel": 1.0717980861663818,
+   "ankle_linvel_p95": 4.263802695274353
+  },
+  "naive": {
+   "hip_angvel": 120.2178213106865,
+   "hip_angvel_p95": 268.55311504248874,
+   "knee_angvel": 159.4703024375553,
+   "knee_angvel_p95": 367.98477427453946,
+   "ankle_angvel": 230.11731729319538,
+   "ankle_angvel_p95": 580.0638967718414,
+   "ankle_linvel": 1.4245927333831787,
+   "ankle_linvel_p95": 4.330537557601929
+  }
+ },
+ "SUBJECT072.jogging.pkl_2550_2974": {
+  "fb": {
+   "hip_angvel": 174.33314028213852,
+   "hip_angvel_p95": 456.0253664774923,
+   "knee_angvel": 221.61668923165797,
+   "knee_angvel_p95": 648.1483472815561,
+   "ankle_angvel": 309.4784353950482,
+   "ankle_angvel_p95": 1081.2238928391555,
+   "ankle_linvel": 1.7144795656204224,
+   "ankle_linvel_p95": 6.704004764556885
+  },
+  "naive": {
+   "hip_angvel": 168.8499149453595,
+   "hip_angvel_p95": 384.4012211717377,
+   "knee_angvel": 237.09515779038722,
+   "knee_angvel_p95": 462.11052514230136,
+   "ankle_angvel": 354.4440449946453,
+   "ankle_angvel_p95": 909.3573245393502,
+   "ankle_linvel": 3.1305294036865234,
+   "ankle_linvel_p95": 4.818624973297119
+  }
+ },
+ "SUBJECT074.jogging.pkl_0_435": {
+  "fb": {
+   "hip_angvel": 96.73479492982514,
+   "hip_angvel_p95": 266.8697441465687,
+   "knee_angvel": 134.16799385991445,
+   "knee_angvel_p95": 434.49335553727377,
+   "ankle_angvel": 183.117804922299,
+   "ankle_angvel_p95": 554.7786018927903,
+   "ankle_linvel": 1.5943654775619507,
+   "ankle_linvel_p95": 6.000569915771484
+  },
+  "naive": {
+   "hip_angvel": 143.87290151759228,
+   "hip_angvel_p95": 314.6441755955993,
+   "knee_angvel": 227.89376636779966,
+   "knee_angvel_p95": 467.58825154733694,
+   "ankle_angvel": 320.505303224032,
+   "ankle_angvel_p95": 670.2579767101862,
+   "ankle_linvel": 2.923499345779419,
+   "ankle_linvel_p95": 5.205358386039733
+  }
+ },
+ "SUBJECT080.jogging.pkl_2580_3009": {
+  "fb": {
+   "hip_angvel": 185.88337524414288,
+   "hip_angvel_p95": 351.6724211593239,
+   "knee_angvel": 217.18503299865193,
+   "knee_angvel_p95": 418.87366901935127,
+   "ankle_angvel": 313.3806806902776,
+   "ankle_angvel_p95": 675.5537195454615,
+   "ankle_linvel": 2.8375978469848633,
+   "ankle_linvel_p95": 5.013250207901001
+  },
+  "naive": {
+   "hip_angvel": 148.8978884122415,
+   "hip_angvel_p95": 284.0667124698812,
+   "knee_angvel": 194.41446338628432,
+   "knee_angvel_p95": 387.3988195809359,
+   "ankle_angvel": 314.7948879209791,
+   "ankle_angvel_p95": 527.2506277782354,
+   "ankle_linvel": 2.851642608642578,
+   "ankle_linvel_p95": 4.549306154251099
+  }
+ },
+ "SUBJECT070.jogging.pkl_3483_3917": {
+  "fb": {
+   "hip_angvel": 185.09798054261668,
+   "hip_angvel_p95": 327.81870149501776,
+   "knee_angvel": 233.70390970733376,
+   "knee_angvel_p95": 443.50134159395736,
+   "ankle_angvel": 343.36917231456067,
+   "ankle_angvel_p95": 722.5920240569378,
+   "ankle_linvel": 2.539754629135132,
+   "ankle_linvel_p95": 4.706800937652586
+  },
+  "naive": {
+   "hip_angvel": 133.4807756470603,
+   "hip_angvel_p95": 293.3572584892298,
+   "knee_angvel": 198.09352535531605,
+   "knee_angvel_p95": 363.2292949171692,
+   "ankle_angvel": 267.03568656018774,
+   "ankle_angvel_p95": 545.9406932979705,
+   "ankle_linvel": 1.909071445465088,
+   "ankle_linvel_p95": 3.7527077198028564
+  }
+ }
+}

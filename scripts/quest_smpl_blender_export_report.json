@@ -1,0 +1,72 @@
+{
+  "clips": {
+    "sports": {
+      "post-PHC (pred)": {
+        "frames": 417,
+        "fps": 30.0,
+        "mean_mm": 0.07711668535323819,
+        "max_mm": 0.21212943712629198,
+        "hands_mm": 39.46500398678155,
+        "root_mm": 0.0,
+        "root_rot_deg": 3.2594459321270154e-06,
+        "max_step_mm": 185.1747529348776
+      },
+      "pre-PHC (retarget)": {
+        "frames": 417,
+        "fps": 30.0,
+        "mean_mm": 0.08296816254682238,
+        "max_mm": 0.7826866423745883,
+        "hands_mm": 39.48343817915958,
+        "root_mm": 0.0,
+        "root_rot_deg": 3.337937342742331e-06,
+        "max_step_mm": 200.06085334506875
+      }
+    },
+    "gestures": {
+      "post-PHC (pred)": {
+        "frames": 423,
+        "fps": 30.0,
+        "mean_mm": 0.07644311962975045,
+        "max_mm": 0.20358714416632978,
+        "hands_mm": 39.425428199784044,
+        "root_mm": 0.0,
+        "root_rot_deg": 3.5652619439967923e-06,
+        "max_step_mm": 117.34249040254257
+      },
+      "pre-PHC (retarget)": {
+        "frames": 423,
+        "fps": 30.0,
+        "mean_mm": 0.08191642212902922,
+        "max_mm": 0.6867318036624792,
+        "hands_mm": 39.4505260184663,
+        "root_mm": 0.0,
+        "root_rot_deg": 3.5338873655199422e-06,
+        "max_step_mm": 117.23562086367956
+      }
+    },
+    "martialarts": {
+      "post-PHC (pred)": {
+        "frames": 444,
+        "fps": 30.0,
+        "mean_mm": 0.07818755252860235,
+        "max_mm": 0.2126476952836969,
+        "hands_mm": 39.456070777959724,
+        "root_mm": 0.0,
+        "root_rot_deg": 3.3906833072015524e-06,
+        "max_step_mm": 232.66448803091404
+      },
+      "pre-PHC (retarget)": {
+        "frames": 444,
+        "fps": 30.0,
+        "mean_mm": 0.08587615068285366,
+        "max_mm": 0.7045169433189995,
+        "hands_mm": 39.46734146280178,
+        "root_mm": 0.0,
+        "root_rot_deg": 3.3523307453313514e-06,
+        "max_step_mm": 152.02643547402272
+      }
+    }
+  },
+  "passed": true,
+  "failed": []
+}

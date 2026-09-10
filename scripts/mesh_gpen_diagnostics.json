@@ -1,0 +1,44 @@
+{
+  "SUBJECT070.sports.pkl_0_417": {
+    "gt": {
+      "frames": 418,
+      "ik_all_mean_mm": 42.54512786309811,
+      "ik_group_a_mean_mm": 30.93008585375063,
+      "gpen_mean_mm": 7.342789173126221,
+      "gpen_rate": 0.13397128880023956,
+      "gpen_max_mm": 25.081634521484375,
+      "lowest_vertex_z_m": -0.025081634521484375,
+      "n_vertices": 6890,
+      "wall_s": 150.8,
+      "cached": false
+    }
+  },
+  "SUBJECT070.gestures.pkl_0_423": {
+    "gt": {
+      "frames": 424,
+      "ik_all_mean_mm": 44.164628565764374,
+      "ik_group_a_mean_mm": 35.71563642694601,
+      "gpen_mean_mm": 0.0,
+      "gpen_rate": 0.0,
+      "gpen_max_mm": 0.0,
+      "lowest_vertex_z_m": 0.02407783269882202,
+      "n_vertices": 6890,
+      "wall_s": 126.4,
+      "cached": false
+    }
+  },
+  "SUBJECT059.martialarts.pkl_0_444": {
+    "gt": {
+      "frames": 445,
+      "ik_all_mean_mm": 42.83850252483865,
+      "ik_group_a_mean_mm": 32.13796188917594,
+      "gpen_mean_mm": 31.318634033203125,
+      "gpen_rate": 0.17528089880943298,
+      "gpen_max_mm": 94.02459716796875,
+      "lowest_vertex_z_m": -0.09402459859848022,
+      "n_vertices": 6890,
+      "wall_s": 185.6,
+      "cached": false
+    }
+  }
+}

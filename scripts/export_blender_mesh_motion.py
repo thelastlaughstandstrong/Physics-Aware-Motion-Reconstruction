@@ -100,9 +100,19 @@ def global_to_local(global_rot):
     return local
 
 
+# SMPL-H stores 52 joints (0-21 body, 22-36 LEFT hand, 37-51 RIGHT hand), so J_regressor[:24]
+# silently takes two LEFT-hand rows for SMPL-24's L_Hand/R_Hand, putting R_Hand on the wrong side
+# with a bogus ~1.5 m bone. Same defect fixed in phc/learning/distill_agent.py. It only reaches
+# the two hand leaves -- which are excluded from the render and from the residual check -- so it
+# never affected a rendered frame, but it made the printed hand diagnostic meaningless.
+_SMPLH_ROWS_FOR_SMPL24 = list(range(22)) + [22, 37]
+
+
 def load_rest_offsets(body_model_path):
     body_data = np.load(body_model_path, allow_pickle=True)
-    J_reg = np.array(body_data["J_regressor"])[:24]
+    J_reg_full = np.array(body_data["J_regressor"])
+    J_reg = (J_reg_full[_SMPLH_ROWS_FOR_SMPL24] if J_reg_full.shape[0] == 52
+             else J_reg_full[:24])
     rest_joints = J_reg @ np.array(body_data["v_template"])
     rest_offsets = rest_joints.copy()
     for i in range(1, 24):

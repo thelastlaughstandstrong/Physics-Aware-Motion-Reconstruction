@@ -1,0 +1,24 @@
+{
+  "finetuned_backbone": {
+    "checkpoint": "model_zoo/quest_backbone_finetuned_backbone_extracted.pth",
+    "num_sequences": 1072,
+    "gpen_mean_mm": 13.649677523239033,
+    "gpen_max_mm": 43.24360230742995,
+    "gpen_rate": 0.41996620646802035,
+    "gpen_mean_mm_z0": 4.266526580461537,
+    "gpen_rate_z0": 0.02248387606356754,
+    "pos_err_mm": 52.793838811774194,
+    "ground_convention": "per-sequence empirical GT min foot height (Phase A convention)"
+  },
+  "trackerr": {
+    "checkpoint": "model_zoo/quest_backbone_trackerr_extracted.pth",
+    "num_sequences": 1072,
+    "gpen_mean_mm": 14.683226554742719,
+    "gpen_max_mm": 45.48077522985526,
+    "gpen_rate": 0.4658575465336255,
+    "gpen_mean_mm_z0": 4.96076534334101,
+    "gpen_rate_z0": 0.02810369804634795,
+    "pos_err_mm": 50.98892091391191,
+    "ground_convention": "per-sequence empirical GT min foot height (Phase A convention)"
+  }
+}

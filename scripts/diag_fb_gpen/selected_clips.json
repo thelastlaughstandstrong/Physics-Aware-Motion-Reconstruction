@@ -1,0 +1,27 @@
+{
+ "worst": [
+  "SUBJECT086.walking.pkl_2889_3300",
+  "SUBJECT078.walking.pkl_3468_3900",
+  "SUBJECT074.jogging.pkl_2180_2615",
+  "SUBJECT076.walking.pkl_3992_4434",
+  "SUBJECT070.walking.pkl_3511_3948",
+  "SUBJECT086.jogging.pkl_879_1317",
+  "SUBJECT083.jogging.pkl_2209_2649",
+  "SUBJECT074.jogging.pkl_2616_3051",
+  "SUBJECT078.jogging.pkl_1744_2179",
+  "SUBJECT076.jogging.pkl_2235_2680",
+  "SUBJECT076.walking.pkl_2663_3105",
+  "SUBJECT084.walking.pkl_1280_1705",
+  "SUBJECT076.jogging.pkl_2681_3126",
+  "SUBJECT070.jogging.pkl_2613_3047",
+  "SUBJECT079.walking.pkl_436_871"
+ ],
+ "control": [
+  "SUBJECT080.jogging.pkl_1720_2149",
+  "SUBJECT072.jogging.pkl_2550_2974",
+  "SUBJECT074.jogging.pkl_0_435",
+  "SUBJECT080.jogging.pkl_2580_3009",
+  "SUBJECT070.jogging.pkl_3483_3917",
+  "SUBJECT080.jogging.pkl_1290_1719"
+ ]
+}
