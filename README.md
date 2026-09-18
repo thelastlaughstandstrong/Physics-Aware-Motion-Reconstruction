@@ -21,19 +21,16 @@ paths, and environment names are what's *really* there today, not assumptions.
 
 ## 0. Read this first — the current machine has known problems
 
-Before copying anything off the old laptop, be aware of three things sitting in `data/` right now:
+Before copying anything off the old laptop, be aware of things sitting in `data/`/`output/` right
+now:
 
-1. **The disk is almost full: 94GB free out of 1.9TB (95% used).** There is not enough room to
-   make a second local copy of the big datasets. Don't try to `zip`/`tar` everything into a
-   staging archive on this machine — plan a direct transfer instead (see §4).
-2. **`data/quest2_synthetic.zip` (16.7GB) is a corrupted, incomplete zip** — it fails
-   `zipfile.ZipFile()` with `BadZipFile: File is not a zip file`. It looks like an attempt to
-   archive `data/quest2_synthetic/` (511GB) ran out of disk space mid-write. It is safe to delete;
-   it isn't a usable archive of anything.
-   ```bash
-   rm /home/sia-irl/AvatarPoser/data/quest2_synthetic.zip   # reclaims 16.7GB, frees disk headroom
-   ```
-3. **Three duplicate copies of the same directory exist**: `data/quest_smpl_retarget/`,
+1. **The disk is tight: 74GB free out of 1.9TB (96% used) as of 2026-09-18.** There is not enough
+   room to make a second local copy of the big datasets. Don't try to `zip`/`tar` everything into a
+   staging archive on this machine — plan a direct transfer instead (see §4). (This was as low as
+   111MB free earlier the same day — an in-progress GUI archive operation had been consuming disk
+   space unattended and was interrupted; see git/session history if you need the details. The
+   corrupted `data/quest2_synthetic.zip` byproduct of that has already been deleted.)
+2. **Three duplicate copies of the same directory exist**: `data/quest_smpl_retarget/`,
    `data/quest_smpl_retarget (2)/`, and `data/quest_smpl_retarget (3)/` are byte-identical
    (verified with `diff -rq`), 2.8GB each — classic "extracted the same zip twice more" leftovers.
    Only one copy needs to survive:
@@ -44,8 +41,8 @@ Before copying anything off the old laptop, be aware of three things sitting in 
    (`data/quest_smpl_retarget.zip`, 2.9GB / 1394 files, is a *valid* zip — that one's fine to keep
    or delete once you've confirmed the extracted folder transferred correctly.)
 
-These three items alone reclaim ~27GB and remove confusion about which copy is authoritative.
-**None of this has been deleted yet — run these commands yourself (or ask me to) before
+This remaining item reclaims ~5.6GB and removes confusion about which copy is authoritative.
+**None of this has been deleted yet — run this command yourself (or ask me to) before
 proceeding**, they're just flagged here so the migration doesn't propagate the mess.
 
 ---
@@ -71,10 +68,10 @@ current, measured on the old machine:
 | `results/` | 1.2GB | Non-baseline eval artifacts (the small `baselines/*.json` subset is already git-tracked; the rest isn't). |
 | `sample_data/` | 3.2GB | Preprocessed PHC-format pickles (`phc_train.pkl`, `phc_test.pkl`, `avatarposer_all.pkl`) built from AMASS by this repo's own conversion scripts. Regeneratable from `amass/` + `data_split/`, but copying is much faster than regenerating. |
 | `data/quest_smpl_retarget/` | 2.8GB | Quest→SMPL retargeting pipeline outputs (keep **one** copy — see §0). |
-| `phc/data/` | 708MB | PHC submodule's own data cache. |
+| `phc/data/` | 708MB | Almost entirely `phc/data/smpl/*.pkl` (classic SMPL, all 3 genders). **Only needed for the legacy AMASS/SMPL track, not the current Quest2 pipeline** — verified in §5b. |
 | `phc/wandb/` | 65MB | Offline W&B run logs from PHC training (see §3c — wandb runs offline, no account needed). |
 | `results_decoder_finetune/` | 174MB | Decoder finetuning results. |
-| `support_data/body_models/` | ~500MB | SMPL-H + DMPL body model files — **gated download**, see §5b. |
+| `support_data/body_models/` | ~500MB | SMPL-H + DMPL body model files. **Only the `neutral/` subfolder is needed for the current Quest2 pipeline** (its optional Mesh-GPen diagnostic); `male/`+`female/` only matter for the legacy AMASS track — verified breakdown in §5b. Gated download either way. |
 | `model_zoo/*.pth` | 79MB | This project's own trained checkpoints (5 files) — `.pth` files here are gitignored. |
 | `data_split/` | 256KB | Train/test split text files (small enough it could be git-tracked, currently isn't). |
 
@@ -212,12 +209,68 @@ https://amass.is.tue.mpg.de/ to download — there's no scriptable URL. **Copyin
 folder across (§4) is faster than re-registering and re-downloading on the new machine.** If for
 some reason you need the original source, that's where it comes from.
 
-### 5b. SMPL-H / DMPL body models
-`support_data/body_models/{smplh,dmpls}/{male,female,neutral}/` — required by both the AvatarPoser
-and AMASS-loading code. Also a gated academic download
-(https://mano.is.tue.mpg.de/ for SMPL-H, https://smpl.is.tue.mpg.de/ for DMPL — both require a free
-account and manual acceptance of a license). Same advice: copy the existing folder rather than
+### 5b. SMPL / SMPL-H body models — verified per-pipeline, not "required by everything"
+
+There are **two separate body-model asset families** in this repo, and — verified by tracing the
+actual Ground Penetration (GPen) code path, not by filename — **neither is needed to reproduce the
+current Quest2 headline results** (`trackerr@380k`, the numbers in `results_comparison.md`'s main
+table). They're only needed for specific optional/legacy pieces:
+
+**`phc/data/smpl/SMPL_{NEUTRAL,MALE,FEMALE}.pkl`** (classic SMPL, ~742MB, all 3 genders) — loaded
+only when PHC's `humanoid_type` config is `smpl`/`smplh`/`smplx` (gated in
+`phc/phc/env/tasks/humanoid.py` line 777 onward, and in `phc/phc/utils/motion_lib_smpl.py`).
+`phc/data/cfg/robot/quest_humanoid.yaml` sets `humanoid_type: quest`, which never matches that
+gate — **the Quest2 pipeline (student inference, Isaac Gym simulation, and
+`scripts/evaluate_phc_metrics_quest.py`'s headline metrics) never touches this file.** It's a
+dependency of the separate, older **AMASS/SMPL track** only (`ap_phc_distill_*` experiments, Phase
+A, and the AMASS data-processing scripts under `phc/scripts/data_process/`), where all three
+genders are genuinely loaded (see `motion_lib_smpl.py:56-64`, `humanoid_amp.py:127-131`).
+
+**`support_data/body_models/{smplh,dmpls}/{male,female,neutral}/model.npz`** (~500MB for all 3
+genders × 2 model types) — used by two *different, optional* mesh-based Ground Penetration
+diagnostics, each pinned to one specific gender file, not "all of them":
+- **Quest2's own mesh-GPen** (`scripts/mesh_gpen_quest.py`, lines 52-53) — the script that produces
+  the "Mesh GPen Mean/Rate" rows in `results_comparison.md` for `trackerr`/Finetuned Backbone/Naive
+  PHC/SimXR — hardcodes `support_data/body_models/smplh/**neutral**/model.npz` and
+  `dmpls/**neutral**/model.npz` only. It never opens the `male/` or `female/` subfolders. This
+  script is **simulator-independent**: it re-IKs stored joint-position dumps
+  (`phc_positions_for_eval_*.pkl`) or ground truth onto a neutral SMPL-H mesh; it is not part of
+  the student-inference or physics-sim path.
+- **The AMASS-track's mesh-GPen** (`scripts/evaluate_phc_metrics.py`, line 363-366) hardcodes
+  `body_models/smplh/**male**/model.npz` / `dmpls/**male**/model.npz` instead — a different,
+  unrelated script for the separate AMASS-track table further down in `results_comparison.md`.
+- Neither script ever opens `female/`. It's only reachable via general AMASS
+  motion-processing code paths, not by either GPen evaluator.
+
+**Bottom line — what you actually need, by use case:**
+
+| Use case | Assets required | Needed for the current headline results? |
+|---|---|---|
+| Student inference (running a trained `.pth`) | None | — |
+| Quest2 Isaac Gym physics simulation + headline metrics (success/MPJPE/MPJRE/jitter/foot-skate) | None — `evaluate_phc_metrics_quest.py`'s own `compute_gpen` is pure joint-position math, no mesh, no body model | **Yes, and needs nothing from this section** |
+| Quest2 Mesh-GPen diagnostic (the "Mesh GPen" table rows) | `support_data/body_models/smplh/neutral/model.npz` + `dmpls/neutral/model.npz` **only** | Yes, for those specific rows only |
+| AMASS-track training/eval (separate, legacy pipeline) | `phc/data/smpl/SMPL_{NEUTRAL,MALE,FEMALE}.pkl` (all 3) + `support_data/body_models/smplh/male/model.npz` + `dmpls/male/model.npz` | No — not part of the current Quest2 report |
+| Blender rendering | See below | Optional, cosmetic only |
+
+If you're migrating for the current Quest2 report only, you can skip `phc/data/smpl/` entirely and
+keep just the `neutral/` subfolder of `support_data/body_models/{smplh,dmpls}/`. Both families are
+still gated academic downloads if you ever need to re-fetch them fresh
+(https://mano.is.tue.mpg.de/ for SMPL/SMPL-H, https://smpl.is.tue.mpg.de/ for DMPL — free account +
+manual license acceptance, no scriptable URL) — copying the existing folders (§4) is faster than
 re-registering.
+
+**Blender rendering** — two unrelated pipelines, both optional/cosmetic, neither gates the reported
+numbers:
+- SimXR repo's `scripts/vis/render_bvh_blender.py` imports a BVH (skeleton/armature only, no mesh)
+  and draws simple procedural primitives for joints — **no body model of any kind**.
+- This repo's `scripts/blender_render_addon.py` (documented in `scripts/BLENDER_EXPORT_README.md`)
+  poses the **official SMPL-X Blender addon's** rig/mesh — a body-model asset that lives inside
+  Blender's own addon installation, **not in this repo's file tree at all** and, per that doc, not
+  currently installed even on the old machine (`smplh_model_20260511.blend` "is not installed").
+  This is a separate, third asset family from both `phc/data/smpl/` and
+  `support_data/body_models/smplh/` — if you want this specific rendering path on the new machine,
+  you'll need to install the SMPL-X addon in Blender there from scratch; it was never fully set up
+  on the old one either.
 
 ### 5c. PHC's own pretrained checkpoints and AMASS-derived sample data
 PHC (the submodule) ships its own download script for its base pretrained humanoid controllers and
