@@ -1,358 +1,334 @@
-# AvatarPoser + PHC + Quest2/SimXR — Machine Setup & Migration Guide
+# Physics-Based Full-Body Avatars from Sparse VR Tracking: AvatarPoser + PHC
 
-This repo builds on [AvatarPoser](https://github.com/eth-siplab/AvatarPoser) (ECCV 2022, kinematic
-HMD/controller pose tracking) and [PHC](https://github.com/ZhengyiLuo/PHC) (physics-based humanoid
-control in Isaac Gym), with a large amount of custom work on top: a PHC-based "distillation"
-pipeline that turns AvatarPoser's kinematic output into physically-simulated motion, and a
-Quest2/SimXR track that retargets real headset+controller recordings onto SMPL and drives the same
-PHC pipeline from real (not synthetic AMASS) input.
+Research record: experiments run 2026-06 → 2026-09. This repository is a **fork of
+[AvatarPoser](https://github.com/eth-siplab/AvatarPoser)** (Jiang et al., ECCV 2022). It is
+combined with a modified fork of **[PHC](https://github.com/ZhengyiLuo/PHC)** (Luo et al., ICCV
+2023), included as the `phc/` submodule, and evaluated against a local replication of the
+**[SimXR](https://github.com/ZhengyiLuo/SimXR)** (Luo et al., CVPR 2024) no-vision ablation.
+[Provenance and attribution](#provenance-and-attribution) separates the original work from the
+upstream code.
 
-This document exists for one purpose: **moving this whole setup to a different laptop** without
-losing anything or having to rediscover how the pieces fit together. It assumes the new machine
-starts from nothing (fresh Ubuntu install) and walks through every step in order. Research
-findings, experiment results, and per-topic details live in the various `*.md` / `results_*.md`
-files scattered through the repo (notably `results_comparison.md`) — this file is only about
-**getting the environment and data working again**, not what the experiments found.
-
-Everything below was captured by inspecting the actual current machine on 2026-09-18. Sizes,
-paths, and environment names are what's *really* there today, not assumptions.
+> **Status.** This is a dated research record, not a maintained library. The trained student
+> checkpoints, datasets and most evaluation dumps are **not** in Git (see
+> [Reproducibility](#reproducibility)). Every number below is copied from
+> [`results_comparison.md`](results_comparison.md), the authoritative results log, which carries
+> the full footnotes and history.
 
 ---
 
-## 0. Read this first — the current machine has known problems
+## Research problem
 
-Before copying anything off the old laptop, be aware of things sitting in `data/`/`output/` right
-now:
+A VR headset and its two controllers give only **three tracked points**: head and both wrists.
+Kinematic regressors such as AvatarPoser predict accurate full-body poses from that signal, but
+the poses are not physically constrained. Feet slide and penetrate the floor, and the motion
+jitters. Physics-based controllers such as PHC produce physically valid motion, but they expect a
+full-body reference to track.
 
-1. **The disk is tight: 74GB free out of 1.9TB (96% used) as of 2026-09-18.** There is not enough
-   room to make a second local copy of the big datasets. Don't try to `zip`/`tar` everything into a
-   staging archive on this machine — plan a direct transfer instead (see §4). (This was as low as
-   111MB free earlier the same day — an in-progress GUI archive operation had been consuming disk
-   space unattended and was interrupted; see git/session history if you need the details. The
-   corrupted `data/quest2_synthetic.zip` byproduct of that has already been deleted.)
-2. **Three duplicate copies of the same directory exist**: `data/quest_smpl_retarget/`,
-   `data/quest_smpl_retarget (2)/`, and `data/quest_smpl_retarget (3)/` are byte-identical
-   (verified with `diff -rq`), 2.8GB each — classic "extracted the same zip twice more" leftovers.
-   Only one copy needs to survive:
-   ```bash
-   rm -rf "/home/sia-irl/AvatarPoser/data/quest_smpl_retarget (2)" \
-          "/home/sia-irl/AvatarPoser/data/quest_smpl_retarget (3)"   # reclaims 5.6GB
-   ```
-   (`data/quest_smpl_retarget.zip`, 2.9GB / 1394 files, is a *valid* zip — that one's fine to keep
-   or delete once you've confirmed the extracted folder transferred correctly.)
+**Question studied:** can a single student policy, conditioned only on sparse 3-point tracking,
+drive a physically simulated humanoid that is both accurate and physically plausible? And does it
+beat the simpler alternative of letting a frozen physics controller track the kinematic
+prediction directly?
 
-This remaining item reclaims ~5.6GB and removes confusion about which copy is authoritative.
-**None of this has been deleted yet — run this command yourself (or ask me to) before
-proceeding**, they're just flagged here so the migration doesn't propagate the mess.
+## Method
 
----
+The student is distilled from a **frozen PHC teacher** that has full-body reference access. The
+student itself only sees HMD/controller features and its own proprioception.
 
-## 1. What actually needs to move
+```mermaid
+flowchart LR
+    subgraph Input["Sparse input (3 tracked points)"]
+        HMD["Head + L/R wrist<br/>6D rot, rot-vel, pos, pos-vel<br/>window 41 x 54D"]
+    end
 
-### 1a. Git-tracked (comes for free with `git clone`)
-All source code, configs, small result summaries (`results/baselines/*.json`), and this README.
-The `phc/` directory is a **git submodule** pointing at `https://github.com/ZhengyiLuo/PHC.git`,
-currently pinned at commit `759f0904` on branch `direct-pd-action` — cloning with
-`--recurse-submodules` reproduces this exactly.
+    subgraph Student["Student policy (trained)"]
+        BB["AvatarPoser transformer backbone<br/>(AMASS-pretrained, fine-tuned)"]
+        Z["latent z (256D)"]
+        DEC["pose decoder → q_base<br/>(kinematic loss)"]
+        SE["state encoder h (256D)<br/>from 372D proprioception"]
+        TE["tracking error (27D)<br/>reference − simulated at 3 HMD bodies"]
+        AH["action head<br/>539 → 512 → 512 → 72"]
+    end
 
-### 1b. Local data that is `.gitignore`d and must be physically copied
-Nothing below travels with `git clone`. This is the actual payload of the migration. Sizes are
-current, measured on the old machine:
+    subgraph Sim["Isaac Gym"]
+        PD["PD targets → simulated humanoid"]
+    end
 
-| Path | Size | What it is |
+    T["Frozen PHC teacher<br/>(full-body reference)"]
+
+    HMD --> BB --> Z --> DEC
+    Z --> AH
+    SE --> AH
+    TE --> AH
+    AH -->|"72D action"| PD
+    PD -->|"proprioception"| SE
+    PD -->|"simulated HMD bodies"| TE
+    T -. "teacher action labels<br/>(training only)" .-> AH
+```
+
+Two training stages are implemented:
+
+- **Stage E: behaviour cloning.** DAgger-style action distillation against the frozen teacher,
+  plus a kinematic loss on the decoded pose `q_base`. The student's own actions step the
+  simulator. **All headline results use Stage E only.**
+- **Stage R: PPO fine-tuning** of a Stage E checkpoint against a tracking reward. It helped
+  briefly on AMASS, but collapses on Quest2 (see [Findings](#key-findings)).
+
+The work runs on two pipelines:
+
+| | AMASS / SMPL pipeline | Quest2 pipeline |
 |---|---|---|
-| `data/quest2_synthetic/` | 511GB | Real Quest2/SimXR HMD+controller recordings + rendered vision frames (train/test, `_seg` = segmented variants). This is the core dataset for the Quest2 track. |
-| `output/` | 204GB | All PHC training run checkpoints/logs (`HumanoidIm/<exp_name>/...`), renders, sim states. **These are the actual trained models your experiments reference** (e.g. `student_0260000.pth`, `finetuned_backbone@440k`) — not reproducible without re-running training. |
-| `amass/` | 11GB | Raw AMASS mocap data (kinematic ground truth for the non-Quest track). |
-| `data_cameraready_fps60/` | 5.4GB | A specific fps60 dataset snapshot. |
-| `results/` | 1.2GB | Non-baseline eval artifacts (the small `baselines/*.json` subset is already git-tracked; the rest isn't). |
-| `sample_data/` | 3.2GB | Preprocessed PHC-format pickles (`phc_train.pkl`, `phc_test.pkl`, `avatarposer_all.pkl`) built from AMASS by this repo's own conversion scripts. Regeneratable from `amass/` + `data_split/`, but copying is much faster than regenerating. |
-| `data/quest_smpl_retarget/` | 2.8GB | Quest→SMPL retargeting pipeline outputs (keep **one** copy — see §0). |
-| `phc/data/` | 708MB | Almost entirely `phc/data/smpl/*.pkl` (classic SMPL, all 3 genders). **Only needed for the legacy AMASS/SMPL track, not the current Quest2 pipeline** — verified in §5b. |
-| `phc/wandb/` | 65MB | Offline W&B run logs from PHC training (see §3c — wandb runs offline, no account needed). |
-| `results_decoder_finetune/` | 174MB | Decoder finetuning results. |
-| `support_data/body_models/` | ~500MB | SMPL-H + DMPL body model files. **Only the `neutral/` subfolder is needed for the current Quest2 pipeline** (its optional Mesh-GPen diagnostic); `male/`+`female/` only matter for the legacy AMASS track — verified breakdown in §5b. Gated download either way. |
-| `model_zoo/*.pth` | 79MB | This project's own trained checkpoints (5 files) — `.pth` files here are gitignored. |
-| `data_split/` | 256KB | Train/test split text files (small enough it could be git-tracked, currently isn't). |
+| Data | AMASS (AvatarPoser splits), 536-sequence PHC test set | SimXR Quest2 synthetic dataset, 4,097 train / **1,072 test** clips |
+| Rig | `smpl_humanoid` | SimXR `quest_humanoid` (25 bodies, 72 DoF) |
+| Teacher | PHC released checkpoints (`phc_kp_pnn_iccv` / `phc_kp_mcp_iccv`) | `phc_prim_quest` (md5-identical to the teacher used by SimXR's config; origin not documented here) |
+| Backbone | Frozen pretrained AvatarPoser | AvatarPoser ported to `quest_humanoid`, warm-started from AMASS weights, trained jointly |
 
-**Minimum viable transfer** (code + data + final checkpoints, skipping the 204GB `output/` run
-history): **~540GB**. **Full transfer including all training runs**: **~745GB**. Plan your
-transfer medium (external drive / direct network copy) accordingly — see §4.
+**Baselines**
 
-### 1c. Things that live *outside* this repo and also need to move
-- **IsaacGym Preview 4** — `/home/sia-irl/isaacgym_workspace/isaacgym/` (the extracted SDK) and/or
-  `/home/sia-irl/Downloads/IsaacGym_Preview_4_Package.tar.gz` (the original archive). Not
-  pip-installable from PyPI — see §3b.
-- Nothing else outside the repo was found to be load-bearing (no stray `.env`, credentials file,
-  or `.netrc` — this project doesn't need any API keys).
+- **Naive PHC baseline:** no student. The frozen teacher tracks the backbone's raw kinematic
+  prediction. This is the "just add physics afterwards" alternative, and the bar to beat.
+- **Kinematics only (Phase A):** the AvatarPoser backbone alone, with no simulation.
+- **SimXR no-vision ablation:** SimXR's own code, retrained here with the vision branch
+  disabled and the same teacher, data split and termination threshold. This is **not** the
+  published SimXR model, which also uses headset camera images.
 
----
+## Original contributions vs. upstream
 
-## 2. Hardware / OS baseline (what the old machine has, for reference)
+The table below scopes what was built in this project. It makes no claim of novelty beyond the
+specific pipeline and analyses; tracking-error observations in particular are standard in PHC-style
+imitation policies, and SimXR's own policy observes head tracking error.
 
-- Ubuntu 24.04.4 LTS
-- NVIDIA GPU with CUDA 12.x driver (old machine: RTX 4090 Laptop, 16GB VRAM, driver 535.309.01,
-  `nvcc` 12.0). Isaac Gym + PyTorch CUDA wheels here are built for **CUDA 12.1**, so the new
-  machine's driver needs to support at least that (any driver ≥ 530 does).
-- ~750GB+ free disk space is genuinely needed if you want the full dataset + all training outputs
-  present (see the table above).
-
----
-
-## 3. Setting up the new laptop — environment
-
-### 3a. System-level prerequisites
-```bash
-# NVIDIA driver + CUDA (use Ubuntu's driver installer or NVIDIA's .run installer; either way,
-# confirm afterwards):
-nvidia-smi          # should show a driver supporting CUDA 12.x
-nvcc --version       # optional; PyTorch ships its own CUDA runtime via pip wheels anyway
-
-# Miniconda/Anaconda (whichever you prefer — commands below assume `conda` is on PATH)
-```
-
-### 3b. Get IsaacGym Preview 4 onto the new machine
-IsaacGym is **not on PyPI**; it's a manual download gated behind an NVIDIA developer login
-(https://developer.nvidia.com/isaac-gym — sign in, download "Preview 4"). The old machine already
-has it at `/home/sia-irl/Downloads/IsaacGym_Preview_4_Package.tar.gz` — **copy that tarball across
-instead of re-downloading**, it saves dealing with the login flow again:
-```bash
-mkdir -p ~/isaacgym_workspace
-tar -xzf IsaacGym_Preview_4_Package.tar.gz -C ~/isaacgym_workspace
-# result: ~/isaacgym_workspace/isaacgym/
-```
-Don't run its `create_conda_env_rlgpu.sh` yet — the conda envs below already have everything that
-script would install except IsaacGym itself, which gets installed as an editable package into each
-env individually (§3c).
-
-### 3c. Recreate the two conda environments this project actually uses
-Only two environments matter for running this repo's own code: **`avatarposer`** (kinematic
-AvatarPoser training/eval, no GPU sim needed) and **`rlgpu`** (PHC/Isaac Gym physics training —
-also used for the `isaac` and `simxr` steps of this project, which share the same stack). Both are
-**Python 3.8.20 + PyTorch 2.4.1 built for CUDA 12.1**. Exact exports of both, captured from the
-old machine, are checked into this repo at `setup/environment-avatarposer.yml` and
-`setup/environment-rlgpu.yml`:
-```bash
-conda env create -f setup/environment-avatarposer.yml   # creates env "avatarposer"
-conda env create -f setup/environment-rlgpu.yml          # creates env "rlgpu"
-```
-These YAML exports deliberately do **not** include IsaacGym (conda correctly detected it as a
-local editable install and excluded it) — install it manually into **both** envs after they're
-created:
-```bash
-cd ~/isaacgym_workspace/isaacgym/python
-conda run -n avatarposer pip install -e .
-conda run -n rlgpu       pip install -e .
-```
-Verify each env:
-```bash
-conda run -n avatarposer python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
-conda run -n rlgpu       python -c "import isaacgym, torch; print('isaacgym OK', torch.cuda.is_available())"
-```
-Both `pip install` runs for the YAML files above will also resolve a handful of `git+https://...`
-packages (custom `smplx`, `SMPLSim`, `chumpy` forks) — these need network access during env
-creation, nothing gated, just make sure the new machine has internet access at this step.
-
-No W&B account is needed: every script in this repo that touches PHC sets `WANDB_MODE=offline`
-before launching training, so logging stays entirely local (`phc/wandb/`).
-
-### 3d. Clone the repo (with the PHC submodule)
-```bash
-git clone --recurse-submodules git@github.com:thelastlaughstandstrong/AvatarPoser-with-PHC-Implementation.git AvatarPoser
-```
-(SSH clone — make sure your GitHub SSH key is set up on the new machine first, e.g.
-`ssh-add ~/.ssh/id_ed25519` and the corresponding public key added to your GitHub account. If you'd
-rather not deal with SSH keys on the new machine, clone over HTTPS instead using the same repo
-path.)
-
-If you're instead copying the whole working directory across wholesale (see §4) rather than doing
-a fresh `git clone`, the submodule is already checked out inside it and no extra step is needed —
-just note the pinned commit above in case you ever need to re-sync it (`git submodule update`).
-
----
-
-## 4. Moving the data across
-
-Given the size (§1b) and that the old machine only has 94GB free (§0), **do not** try to stage
-everything into a single archive on the old laptop first. Two options, in order of preference:
-
-**Option A — direct machine-to-machine transfer** (fastest, no intermediate copy, resumable):
-```bash
-# from the NEW machine, pulling from the OLD one (adjust user@host):
-rsync -avh --progress \
-  --exclude='data/quest_smpl_retarget (2)' \
-  --exclude='data/quest_smpl_retarget (3)' \
-  --exclude='data/quest2_synthetic.zip' \
-  sia-irl@<old-machine-ip>:/home/sia-irl/AvatarPoser/ /home/sia-irl/AvatarPoser/
-```
-`rsync` resumes cleanly if interrupted — for 500GB+ over a home network this matters. Run it once
-for the repo itself, and separately (or in the same pass) for anything outside the repo you're
-bringing across (`~/isaacgym_workspace/`, `~/Downloads/IsaacGym_Preview_4_Package.tar.gz`).
-
-**Option B — external drive**: needs ≥1TB free to be comfortable (§1b totals ~745GB before
-overhead). Copy with `rsync -avh` (not plain `cp -r`) so permissions/symlinks survive and it's
-resumable if the drive disconnects mid-copy — note `phc/output` and `phc/sample_data` are
-**symlinks** back into the repo root, so a naive archive tool that doesn't preserve symlinks (or
-that dereferences them) will silently duplicate hundreds of GB. `rsync -avh` and `tar` both handle
-this correctly by default; double-check whatever tool you use does too.
-
-Either way, put the new machine's copy at the **same absolute path**: `/home/sia-irl/AvatarPoser`.
-See §6 for why that matters.
-
----
-
-## 5. Datasets that come from outside this project
-
-### 5a. AMASS
-`amass/` (11GB) holds AMASS mocap sequences. AMASS requires a free account at
-https://amass.is.tue.mpg.de/ to download — there's no scriptable URL. **Copying the already-agreed
-folder across (§4) is faster than re-registering and re-downloading on the new machine.** If for
-some reason you need the original source, that's where it comes from.
-
-### 5b. SMPL / SMPL-H body models — verified per-pipeline, not "required by everything"
-
-There are **two separate body-model asset families** in this repo, and — verified by tracing the
-actual Ground Penetration (GPen) code path, not by filename — **neither is needed to reproduce the
-current Quest2 headline results** (`trackerr@380k`, the numbers in `results_comparison.md`'s main
-table). They're only needed for specific optional/legacy pieces:
-
-**`phc/data/smpl/SMPL_{NEUTRAL,MALE,FEMALE}.pkl`** (classic SMPL, ~742MB, all 3 genders) — loaded
-only when PHC's `humanoid_type` config is `smpl`/`smplh`/`smplx` (gated in
-`phc/phc/env/tasks/humanoid.py` line 777 onward, and in `phc/phc/utils/motion_lib_smpl.py`).
-`phc/data/cfg/robot/quest_humanoid.yaml` sets `humanoid_type: quest`, which never matches that
-gate — **the Quest2 pipeline (student inference, Isaac Gym simulation, and
-`scripts/evaluate_phc_metrics_quest.py`'s headline metrics) never touches this file.** It's a
-dependency of the separate, older **AMASS/SMPL track** only (`ap_phc_distill_*` experiments, Phase
-A, and the AMASS data-processing scripts under `phc/scripts/data_process/`), where all three
-genders are genuinely loaded (see `motion_lib_smpl.py:56-64`, `humanoid_amp.py:127-131`).
-
-**`support_data/body_models/{smplh,dmpls}/{male,female,neutral}/model.npz`** (~500MB for all 3
-genders × 2 model types) — used by two *different, optional* mesh-based Ground Penetration
-diagnostics, each pinned to one specific gender file, not "all of them":
-- **Quest2's own mesh-GPen** (`scripts/mesh_gpen_quest.py`, lines 52-53) — the script that produces
-  the "Mesh GPen Mean/Rate" rows in `results_comparison.md` for `trackerr`/Finetuned Backbone/Naive
-  PHC/SimXR — hardcodes `support_data/body_models/smplh/**neutral**/model.npz` and
-  `dmpls/**neutral**/model.npz` only. It never opens the `male/` or `female/` subfolders. This
-  script is **simulator-independent**: it re-IKs stored joint-position dumps
-  (`phc_positions_for_eval_*.pkl`) or ground truth onto a neutral SMPL-H mesh; it is not part of
-  the student-inference or physics-sim path.
-- **The AMASS-track's mesh-GPen** (`scripts/evaluate_phc_metrics.py`, line 363-366) hardcodes
-  `body_models/smplh/**male**/model.npz` / `dmpls/**male**/model.npz` instead — a different,
-  unrelated script for the separate AMASS-track table further down in `results_comparison.md`.
-- Neither script ever opens `female/`. It's only reachable via general AMASS
-  motion-processing code paths, not by either GPen evaluator.
-
-**Bottom line — what you actually need, by use case:**
-
-| Use case | Assets required | Needed for the current headline results? |
+| Area | What was done here | Where |
 |---|---|---|
-| Student inference (running a trained `.pth`) | None | — |
-| Quest2 Isaac Gym physics simulation + headline metrics (success/MPJPE/MPJRE/jitter/foot-skate) | None — `evaluate_phc_metrics_quest.py`'s own `compute_gpen` is pure joint-position math, no mesh, no body model | **Yes, and needs nothing from this section** |
-| Quest2 Mesh-GPen diagnostic (the "Mesh GPen" table rows) | `support_data/body_models/smplh/neutral/model.npz` + `dmpls/neutral/model.npz` **only** | Yes, for those specific rows only |
-| AMASS-track training/eval (separate, legacy pipeline) | `phc/data/smpl/SMPL_{NEUTRAL,MALE,FEMALE}.pkl` (all 3) + `support_data/body_models/smplh/male/model.npz` + `dmpls/male/model.npz` | No — not part of the current Quest2 report |
-| Blender rendering | See below | Optional, cosmetic only |
+| Distillation pipeline | AvatarPoser-backbone student (backbone + state encoder + action head + value head), Stage E behaviour cloning, Stage R PPO, for both rigs | PHC fork: `phc/phc/learning/distill_agent.py`, `distill_agent_quest.py`, `phc/phc/data/cfg/learning/distill*.yaml` |
+| AvatarPoser on Quest2 | Quest2 dataloader, differentiable FK on `quest_humanoid`, AMASS→Quest2 transfer fine-tuning, Quest2 evaluation | [`data/dataset_quest2.py`](data/dataset_quest2.py), [`models/quest_body_model.py`](models/quest_body_model.py), [`models/network_finetune.py`](models/network_finetune.py), [`models/model_avatarposer_finetune.py`](models/model_avatarposer_finetune.py), [`main_test_avatarposer_quest2.py`](main_test_avatarposer_quest2.py) |
+| Closed-loop fix | Found why every earlier Quest2 student scored 0% on locomotion: the action head could not observe its own tracking error. Fixed with a deployable 27D heading-frame tracking-error input (`use_tracking_error`), plus an HMD-velocity fps fix | [`results_comparison.md`](results_comparison.md#root-cause-of-0-locomotion-found-2026-08-11-and-the-fix) |
+| Evaluation tooling | Physics-rollout metric scripts, naive-baseline construction and temporal alignment, simulator-independent mesh ground penetration via Quest→SMPL-H IK, per-clip analysis, checkpoint scans | [`scripts/evaluate_phc_metrics_quest.py`](scripts/evaluate_phc_metrics_quest.py), [`scripts/evaluate_phc_metrics.py`](scripts/evaluate_phc_metrics.py), [`scripts/mesh_gpen_quest.py`](scripts/mesh_gpen_quest.py), [`scripts/score_naive_baseline_vs_gt.py`](scripts/score_naive_baseline_vs_gt.py), [`scripts/per_clip_metrics.py`](scripts/per_clip_metrics.py), [`utils/physical_metrics.py`](utils/physical_metrics.py) |
+| Quest→SMPL retargeting | Joint correspondence, frame calibration, single-frame and sequence IK, PHC physics pass on retargeted motion, per-activity characterisation | [`scripts/retarget_quest_to_smpl.py`](scripts/retarget_quest_to_smpl.py), [`scripts/retarget_quest_to_smpl_sequence.py`](scripts/retarget_quest_to_smpl_sequence.py), [`scripts/quest_smpl_step6e_report.md`](scripts/quest_smpl_step6e_report.md), [`scripts/quest_smpl_charstudy_report.md`](scripts/quest_smpl_charstudy_report.md) |
+| Diagnostics | Stage R collapse root cause, mesh-penetration excess, ankle/action-smoothness behaviour vs. teacher and SimXR | [`scripts/diag_fb_gpen/DIAGNOSIS.md`](scripts/diag_fb_gpen/DIAGNOSIS.md), [`scripts/diag_fb_multiclip/VERDICT.md`](scripts/diag_fb_multiclip/VERDICT.md), [`scripts/diag_simxr_ankle/VERDICT_SIMXR.md`](scripts/diag_simxr_ankle/VERDICT_SIMXR.md) |
+| SimXR baseline | Re-ran SimXR's no-vision configuration and patched its evaluation player to dump rotations for the full metric set | [`scripts/simxr_novision/`](scripts/simxr_novision/README.md), [`simxr_ref/`](simxr_ref/README.md) |
+| Rendering | Blender export and SMPL-X-addon rendering of simulated motion | [`scripts/BLENDER_EXPORT_README.md`](scripts/BLENDER_EXPORT_README.md), [`QUEST2_BLENDER_REPRODUCTION.md`](QUEST2_BLENDER_REPRODUCTION.md) |
 
-If you're migrating for the current Quest2 report only, you can skip `phc/data/smpl/` entirely and
-keep just the `neutral/` subfolder of `support_data/body_models/{smplh,dmpls}/`. Both families are
-still gated academic downloads if you ever need to re-fetch them fresh
-(https://mano.is.tue.mpg.de/ for SMPL/SMPL-H, https://smpl.is.tue.mpg.de/ for DMPL — free account +
-manual license acceptance, no scriptable URL) — copying the existing folders (§4) is faster than
-re-registering.
+**Modified upstream AvatarPoser files** (the original structure is kept and the ETH headers are
+retained): `main_train_avatarposer.py`, `main_test_avatarposer.py`, `prepare_data.py`,
+`data/dataset_amass.py`, `data/select_dataset.py`, `models/model_avatarposer.py`,
+`models/model_base.py`, `models/network.py`, `models/select_model.py`,
+`utils/utils_visualize.py`. Run `git diff 0f97cb2 -- <file>` against the last upstream commit to
+see exactly what changed.
 
-**Blender rendering** — two unrelated pipelines, both optional/cosmetic, neither gates the reported
-numbers:
-- SimXR repo's `scripts/vis/render_bvh_blender.py` imports a BVH (skeleton/armature only, no mesh)
-  and draws simple procedural primitives for joints — **no body model of any kind**.
-- This repo's `scripts/blender_render_addon.py` (documented in `scripts/BLENDER_EXPORT_README.md`)
-  poses the **official SMPL-X Blender addon's** rig/mesh — a body-model asset that lives inside
-  Blender's own addon installation, **not in this repo's file tree at all** and, per that doc, not
-  currently installed even on the old machine (`smplh_model_20260511.blend` "is not installed").
-  This is a separate, third asset family from both `phc/data/smpl/` and
-  `support_data/body_models/smplh/` — if you want this specific rendering path on the new machine,
-  you'll need to install the SMPL-X addon in Blender there from scratch; it was never fully set up
-  on the old one either.
+## Results
 
-### 5c. PHC's own pretrained checkpoints and AMASS-derived sample data
-PHC (the submodule) ships its own download script for its base pretrained humanoid controllers and
-filtered-AMASS sample pickles, fetched via Google Drive with `gdown`:
+### Metric definitions
+
+| Metric | Definition |
+|---|---|
+| **Success (`phc_survival`)** | Fraction of test sequences whose simulated episode is never terminated by PHC's 0.5 m tracking-error check. This is the headline success metric, and the closest to SimXR's per-sequence success. |
+| Success (`frame_head`) | Per sequence, the fraction of frames with head error < 0.5 m, averaged over sequences. Looser, and saturates near 0.97–0.99. |
+| MPJPE | Mean per-joint global position error vs. ground truth (Quest2: all 25 bodies, mm; AMASS: cm) |
+| MPJRE | Mean per-joint rotation error (°) |
+| MPJVE | Mean per-joint velocity error (cm/s) |
+| Jitter | Mean norm of the joint-position third derivative (m/s³); lower is smoother |
+| Foot skate | Height-gated horizontal foot velocity (cm/s); lower is better |
+| Mesh GPen (Quest2) | Ground penetration of a reconstructed SMPL-H neutral mesh. Mean = mean depth over penetrating (vertex, frame) pairs; Rate = fraction of frames with any vertex below Z = 0. Every method passes through the same Quest→SMPL-H IK. |
+
+**Pre-sim** values are measured on kinematic output before physics. **Post-sim** values are
+measured on the simulated trajectory. The two are not comparable.
+
+### Quest2 (SimXR synthetic dataset, 1,072 test clips)
+
+The student is `trackerr`, checkpoint `student_0380160.pth` (Stage E, 380k steps): the AMASS-finetuned backbone plus the tracking-error input.
+
+| Metric | Stage | Kinematics only (Phase A) | Naive PHC baseline | SimXR no-vision (replicated) | **Student (`trackerr`)** |
+|---|---|---|---|---|---|
+| Success `phc_survival` ↑ | post | n/a | **0.767** | 0.717 | 0.738 |
+| Success `frame_head` ↑ | post | — | 0.974 | **0.997** | 0.989 |
+| MPJPE (mm) ↓ | see note | *37.85* | 96.38 | 112.5 | **87.43** |
+| MPJRE (°) ↓ | see note | *10.65* | **13.82** | 29.76 | 15.23 |
+| MPJVE (cm/s) ↓ | see note | *14.50* | **24.17** | 40.93 | 34.25 |
+| Jitter (m/s³) ↓ | see note | *136.46* | **221.94** | 704.29 | 524.78 |
+| Foot skate (cm/s) ↓ | see note | *23.34* | 21.41 | **14.39** | 17.14 |
+| Mesh GPen mean (mm) ↓ | pre | 3.27 | 3.27 (same stream) | n/a | 4.48 |
+| Mesh GPen rate ↓ | pre | 0.018 | 0.018 (same stream) | n/a | 0.024 |
+| Mesh GPen mean (mm) ↓ | post | n/a | **2.56** | 3.30 | 6.03 |
+| Mesh GPen rate ↓ | post | n/a | **0.020** | 0.031 | 0.041 |
+
+Note: Phase A values (italic) are **pre-simulation** and not comparable to the post-simulation
+columns. Ground-truth motion through the same mesh pipeline gives a pre-sim GPen of 1.72 mm /
+0.017. SimXR maps sensors directly to actions, so it has no pre-sim pose. The student's post-sim
+GPen excess is partly a reconstruction artefact: the Quest rig has no toe joint, and 30.8% of the
+student's penetrating frames are airborne (see
+[`scripts/diag_fb_gpen/DIAGNOSIS.md`](scripts/diag_fb_gpen/DIAGNOSIS.md)).
+
+**Effect of the closed-loop fix.** On the 461 locomotion and dynamic clips, success went from
+**0/461 → 236/461 (0.512)**. Per activity, `phc_survival` was:
+
+| Activity | Before fix (`finetuned_backbone`) | **After fix (`trackerr`)** | Naive baseline |
+|---|---|---|---|
+| walking | 0.000 | **0.812** | 0.792 |
+| jogging | 0.000 | 0.390 | **0.779** |
+| interactions | 0.000 | **0.573** | 0.533 |
+| dancing | 0.000 | 0.250 | **0.500** |
+| standing | 0.689 | 0.985 | 0.985 |
+| whiteboard | 0.647 | 0.968 | **0.974** |
+| gestures | 0.314 | **0.893** | 0.830 |
+| ROM | 0.600 | **0.800** | 0.762 |
+
+### AMASS / SMPL (536-sequence PHC test set)
+
+All rows below are post-simulation. MPJPE is in **cm**.
+
+| Model | Success ↑ | MPJPE (cm) ↓ | MPJRE (°) ↓ | Jitter (m/s³) ↓ | Foot skate (cm/s) ↓ |
+|---|---|---|---|---|---|
+| **Naive PHC baseline** (frozen teacher tracks AvatarPoser output) | **0.912** | **14.06** | **18.93** | **318** | **0.88** |
+| `frozen_bb`: frozen backbone, action head only | 0.584 | 34.83 | 38.73 | 1188 | 2.66 |
+| `v7`: Stage E distillation | 0.545 | 38.18 | 40.31 | 1337 | 2.41 |
+| `v7_validate`: `v7` + 6k Stage R steps (best student) | 0.756 | 24.59 | 34.83 | 773 | 1.66 |
+
+For reference, kinematic AvatarPoser alone (pre-sim) gets 2.51 cm MPJPE, 1357 m/s³ jitter and
+33.67 cm/s foot skate. The full table, including negative variants (`v8`, `goal-delta-input`) and
+Stage R checkpoints, is in [`results_comparison.md`](results_comparison.md#amasssmpl-pipeline).
+
+### Key findings
+
+1. **On AMASS, no distilled student beats the naive baseline** (best 0.756 vs. 0.912 success).
+   The AMASS student shares the structural defect fixed on Quest2: it cannot observe its own
+   tracking error. Whether the same fix closes this gap is an open question, untested.
+2. **On Quest2, the missing closed-loop signal was the bottleneck.** Every pre-fix variant
+   (from-scratch, pure action loss, explicit-pose conditioning, AMASS warm-start) scored 0% on
+   locomotion. Adding the tracking-error input brought the student roughly to parity with the
+   naive baseline, a mixed result rather than a clear win:
+   - Better than naive on MPJPE (87.4 vs. 96.4 mm), foot skate and `frame_head` success.
+   - Slightly lower survival (0.738 vs. 0.767).
+   - Worse on MPJRE, MPJVE, jitter and mesh GPen.
+3. **The student outperforms the replicated SimXR no-vision ablation on most metrics**: survival,
+   MPJPE, MPJRE, MPJVE and jitter. It is worse on foot skate, `frame_head` success and post-sim
+   mesh GPen. These comparisons share the same teacher, split and termination threshold.
+4. **Representation choice was not the bottleneck.** Feeding the action head the explicit
+   decoded pose instead of the latent made no measurable difference on either pipeline.
+5. **Stage R (PPO) collapses on Quest2.** The root cause is a critic that Stage E never trains.
+   Critic warm-up reduced but did not prevent the collapse. Two further suspects (KL-adaptive LR,
+   critic gradients into the shared trunk) are documented but not tested.
+6. **Training is noisy.** Adjacent checkpoints differ by up to ±0.10 success, so early stopping is
+   unreliable for this recipe and single-checkpoint comparisons are not meaningful.
+
+## Limitations
+
+- **Test-set checkpoint selection.** The reported Quest2 student checkpoint (and the SimXR
+  ablation's epoch-1,500 peak) were chosen by scanning success on the **1,072-clip test set**.
+  There is no separate validation split for these runs, so the headline numbers are optimistic.
+- **Single seed, single run.** There are no confidence intervals. Training is seeded but not
+  deterministic (Isaac Gym GPU physics, `torch_deterministic=False`).
+- **Subject overlap.** The SimXR Quest2 split is a random 8:2 split by take: 30.4% of test clips
+  come from subjects seen in training (on other activities). Treat results as clip-level, not
+  subject-independent.
+- **Synthetic data.** The Quest2 data is SimXR's synthetic dataset; nothing here is evaluated on
+  live headset recordings.
+- **Metric differences from published work.** MPJPE here averages all 25 bodies; SimXR's paper
+  uses 11 common joints. The SimXR column is a local no-vision replication, so compare against
+  SimXR's published tables only approximately.
+- **Weak categories.** `martialarts` (0/9) and `sports` (5/45) remain near zero.
+- **Physics does not improve kinematic accuracy.** In the 10-clip retargeting characterisation
+  study, a frozen PHC pass removed penetration and mostly reduced foot skate, but increased MPJPE
+  on all 10 clips (see
+  [`scripts/quest_smpl_charstudy_report.md`](scripts/quest_smpl_charstudy_report.md)).
+
+## Reproducibility
+
+| Document | Contents |
+|---|---|
+| [`results_comparison.md`](results_comparison.md) | All results, footnotes, eval commands, dataset caveats, historical runs |
+| [`QUEST2_TRAINING_REPRODUCTION.md`](QUEST2_TRAINING_REPRODUCTION.md) | Code-path trace for training and evaluating the reported Quest2 student, with required files and known gaps |
+| [`QUEST2_BLENDER_REPRODUCTION.md`](QUEST2_BLENDER_REPRODUCTION.md) | Rendering and mesh-penetration pipelines |
+| [`results_per_clip_renders.md`](results_per_clip_renders.md) | Per-clip metrics for the rendered clips |
+| [`docs/MIGRATION.md`](docs/MIGRATION.md) | Full environment setup (conda, Isaac Gym), data inventory, body-model requirements, hardcoded-path notes |
+| [`scripts/simxr_novision/README.md`](scripts/simxr_novision/README.md) | Re-running the SimXR baseline |
+
+**Environment.** Python 3.8, PyTorch 2.4.1 (CUDA 12.1), Isaac Gym Preview 4. There are two conda
+environments: [`setup/environment-avatarposer.yml`](setup/environment-avatarposer.yml) for
+kinematic training and metrics, and [`setup/environment-rlgpu.yml`](setup/environment-rlgpu.yml)
+for PHC and Isaac Gym.
+
+**Not included in Git:**
+
+- AMASS, which needs registration.
+- The SimXR Quest2 dataset (~511 GB processed).
+- SMPL/SMPL-H body models, which need registration.
+- The PHC teacher checkpoints.
+- The trained student checkpoints, including `student_0380160.pth`.
+- Most evaluation dumps.
+
+The tracked [`model_zoo/avatarposer.pth`](model_zoo/avatarposer.pth) is the original upstream
+AvatarPoser checkpoint.
+
+**Main entry points:**
+
 ```bash
-conda run -n rlgpu pip install gdown   # or use the old machine's dedicated `gdown_dl` env
-bash phc/download_data.sh
-```
-This is independent of this project's own `sample_data/`, `data/`, and `model_zoo/` — it populates
-`phc/sample_data/` and `phc/output/HumanoidIm/phc_*` with PHC's *own* released checkpoints
-(distinct from the checkpoints this project trained itself, which live in the top-level `output/`
-you copied in §4). Google Drive rate-limits anonymous downloads per file — if a `gdown` call stalls
-with "too many people have requested this file today," it's a transient Drive-side block, not a
-bug; retry later. (This exact failure mode, and a `--folder`-based workaround for it, is documented
-in `scripts/download_simxr_data.sh` if you ever need to re-pull the SimXR Quest2 dataset itself —
-that raw dataset is separate from the already-processed `data/quest2_synthetic/` you're copying in
-§4 and shouldn't be needed unless you're rebuilding that processing pipeline from scratch.)
+# Kinematic AvatarPoser (Quest2 rig): train / evaluate
+python main_train_avatarposer.py -opt options/train_avatarposer_quest2_finetune.json
+python main_test_avatarposer_quest2.py -opt <options.json> -ckpt <checkpoint.pth>
 
----
-
-## 6. The hardcoded-path problem
-
-Several shell scripts under `scripts/` hardcode the absolute path `/home/sia-irl/AvatarPoser`
-(52 references across the repo as of this writing — e.g. `scripts/auto_eval.sh` sets
-`REPO=/home/sia-irl/AvatarPoser` directly), and also hardcode
-`/home/sia-irl/anaconda3/bin/conda` as the conda binary path.
-
-**Simplest fix**: keep the same username (`sia-irl`) and the same repo location
-(`/home/sia-irl/AvatarPoser`) and same anaconda install path (`~/anaconda3`) on the new machine.
-Nothing needs to change.
-
-**If the new machine must use a different username or path**, find and fix every reference before
-relying on these scripts:
-```bash
-grep -rl "/home/sia-irl" --include="*.sh" --include="*.py" . \
-  | grep -vE '^\./(data|output|amass|results|support_data|phc/(data|wandb|output))/'
-# then, once you've confirmed the new path:
-grep -rl "/home/sia-irl" --include="*.sh" . | xargs sed -i 's|/home/sia-irl|/home/<new-user>|g'
-```
-(The exclusions above skip data directories, where the same string could coincidentally appear
-inside dataset content rather than as a path a script relies on.)
-
----
-
-## 7. Verifying the migration worked
-
-Two smoke tests, cheapest first:
-
-```bash
-# 1. Kinematic AvatarPoser path (no GPU sim, no IsaacGym needed — just torch + the data pickles)
-conda run -n avatarposer python main_test_avatarposer.py -opt options/test_avatarposer.json
-
-# 2. PHC + IsaacGym physics path (confirms IsaacGym install + GPU sim actually work)
-conda run -n rlgpu python scripts/smoke_test_humanoid_im_quest.py
-```
-If both run without import errors or CUDA errors, the environment side of the migration is sound.
-To confirm the *data* side, re-run an existing evaluation against a checkpoint you know the answer
-to (any exp_name/step referenced in `results_comparison.md` or `results/baselines/*.json`) and
-check the numbers match:
-```bash
-bash scripts/auto_eval.sh <exp_name> <checkpoint_step>
+# Physics rollout + metrics for a distilled student (wraps PHC's run_hydra.py)
+bash scripts/auto_eval_quest.sh <exp_name> <target_step>
+bash scripts/quest_checkpoint_scan.sh <exp_name> [eval_interval] [patience]
 ```
 
----
+Several shell scripts hardcode the original workstation paths (`/home/sia-irl/...`). See
+[`docs/MIGRATION.md` §6](docs/MIGRATION.md#6-the-hardcoded-path-problem).
 
-## 8. Conda environments on the old machine — what to actually bring
+> **Submodule note.** `phc/` is pinned to commit `759f0904` on a `direct-pd-action` branch of
+> the PHC fork. That branch is not on the upstream PHC remote that `.gitmodules` points at. The
+> distillation code above lives in that fork, so `git clone --recurse-submodules` will not
+> reproduce it until the fork is published.
 
-The old machine has 9 conda environments; only two belong to this project:
+## Repository map
 
-| Env | Bring it? | Why |
-|---|---|---|
-| `avatarposer` | **Yes** | Kinematic AvatarPoser train/eval. Recreate via `setup/environment-avatarposer.yml`. |
-| `rlgpu` | **Yes** | PHC + Isaac Gym physics training/eval (also covers what the `isaac`/`simxr` steps of this project need — same stack). Recreate via `setup/environment-rlgpu.yml`. |
-| `isaac` | No | Same package set as `rlgpu` (Python 3.8.20, torch 2.4.1+cu121) but not referenced by any script in this repo — looks like an earlier/parallel env, superseded by `rlgpu`. |
-| `simxr` | No | Same package set again; not referenced by any script here either — this project's SimXR work runs under `rlgpu`. |
-| `gdown_dl` | Optional | A minimal Python 3.12 env with just `gdown`, used for bulk Google-Drive downloads (§5c). Trivial to recreate with `conda create -n gdown_dl python=3.12 && pip install gdown` instead of migrating it. |
-| `colmap_env`, `dexgrasp`, `dexgraspnet`, `sugar` | No | Unrelated to this project. |
+```
+main_*_avatarposer*.py    AvatarPoser train/test entry points (upstream, extended; *_quest2 is new)
+data/, models/, utils/    AvatarPoser code (upstream) + Quest2 dataset/FK/finetune modules (new)
+options/                  JSON configs (upstream AMASS + new Quest2 configs)
+phc/                      PHC fork (submodule): distillation agents, Quest configs
+scripts/                  Evaluation, retargeting, rendering, diagnostics, reports (*.md, *.json)
+results/baselines/        Small JSON metric snapshots backing the tables
+simxr_ref/                Patched copies of two SimXR files (eval instrumentation only)
+setup/                    Conda environment exports
+*.log (root)              Raw logs from Stage R / critic warm-up experiments
+```
 
----
+## Provenance and attribution
 
-## 9. License
+- **AvatarPoser**: © 2022 ETH Sensing, Interaction & Perception Lab, MIT License (see
+  [`LICENSE`](LICENSE)). This repository was forked from
+  [eth-siplab/AvatarPoser](https://github.com/eth-siplab/AvatarPoser). Commits up to `0f97cb2`
+  (2025-02-20) are upstream; all later commits are this project's. The backbone architecture and
+  the original AMASS pipeline are AvatarPoser's.
+- **PHC**: © 2023 Carnegie Mellon University and © 2018–2023 NVIDIA Corporation, BSD 3-Clause
+  Clear License. The physics controller, Isaac Gym environments, motion libraries and released
+  teacher checkpoints are PHC's. This project's changes live in a fork used as the `phc/`
+  submodule.
+- **SimXR**: the `quest_humanoid` rig, the Quest2 synthetic dataset and the no-vision training
+  configuration are SimXR's. [`simxr_ref/`](simxr_ref/README.md) contains modified copies of two
+  SimXR source files; the SimXR repository declares no license.
+- **Datasets and body models**: AMASS, SMPL, SMPL-H and DMPL are subject to their own
+  registration-based licenses and are not redistributed here.
 
-This project extends [AvatarPoser](https://github.com/eth-siplab/AvatarPoser) (MIT License,
-Copyright © 2022 ETH Sensing, Interaction & Perception Lab — see `LICENSE`) and incorporates
-[PHC](https://github.com/ZhengyiLuo/PHC) as a git submodule (see `phc/LICENSE` for its own terms).
+If you build on this work, please cite the upstream papers:
+
+```bibtex
+@inproceedings{jiang2022avatarposer,
+  title     = {AvatarPoser: Articulated Full-Body Pose Tracking from Sparse Motion Sensing},
+  author    = {Jiang, Jiaxi and Streli, Paul and Qiu, Huajian and Fender, Andreas and Laich, Larissa and Snape, Patrick and Holz, Christian},
+  booktitle = {European Conference on Computer Vision (ECCV)},
+  year      = {2022}
+}
+@inproceedings{luo2023perpetual,
+  title     = {Perpetual Humanoid Control for Real-time Simulated Avatars},
+  author    = {Luo, Zhengyi and Cao, Jinkun and Winkler, Alexander and Kitani, Kris and Xu, Weipeng},
+  booktitle = {International Conference on Computer Vision (ICCV)},
+  year      = {2023}
+}
+@inproceedings{luo2024real,
+  title     = {Real-Time Simulated Avatar from Head-Mounted Sensors},
+  author    = {Luo, Zhengyi and Cao, Jinkun and Khirodkar, Rawal and Winkler, Alexander and Kitani, Kris and Xu, Weipeng},
+  booktitle = {IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2024}
+}
+```
