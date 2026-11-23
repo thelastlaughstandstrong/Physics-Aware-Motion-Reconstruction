@@ -1,5 +1,61 @@
 # Physics-Based Full-Body Avatars from Sparse VR Tracking: AvatarPoser + PHC
 
+Can a policy that sees only a VR headset and two controllers drive a **physically simulated**
+full-body avatar? This research record distils a physics-based motion controller (PHC) into a
+student policy built on a sparse-input pose estimator (AvatarPoser). It evaluates that policy in
+Isaac Gym on two datasets, against a physics-tracking baseline and a replicated SimXR ablation.
+
+## Demonstrations
+
+Two Quest2 test clips, each rendered side by side. Left to right: ground truth, the SimXR
+no-vision baseline, the distilled student ("Finetuned Backbone", i.e. `trackerr`,
+`student_0380160.pth`) and the naive PHC baseline. The top row is a Blender render of the motion
+retargeted onto an SMPL-X body; the bottom row is the Isaac Gym simulation itself. The GIFs are
+reduced to 640 px at 10 fps; the MP4 links give the full-quality originals.
+
+| Walking (locomotion) | Range of motion (full-body) |
+|:---:|:---:|
+| ![Walking: ground truth, SimXR, student, naive PHC baseline](docs/media/walking_clean.gif) | ![Range of motion: ground truth, SimXR, student, naive PHC baseline](docs/media/range_of_motion_clean.gif) |
+| [Full-quality MP4](docs/media/walking_clean.mp4) · [still](docs/media/walking_clean.png) | [Full-quality MP4](docs/media/range_of_motion_clean.mp4) · [still](docs/media/range_of_motion_clean.png) |
+
+These are illustrative single clips. No selection criterion for them was recorded, so they say
+nothing about average performance; the [Results](#results) tables are the evidence. The column labels follow
+the project's convention (`Finetuned Backbone` = `trackerr`, as in `results_comparison.md`). The
+exact render invocation was not recorded. The renders use
+`scripts/blender_render_4way_mesh.py` and the SMPL-X Blender add-on (body model by MPI-IS,
+subject to its own license).
+
+## At a glance
+
+- **Problem.** Three tracked points (head and wrists) under-determine full-body motion.
+  Kinematic estimators are accurate but physically implausible: feet slide and penetrate the
+  floor, and motion jitters. Physics controllers produce plausible motion but expect a full-body
+  reference.
+- **Approach.** A student policy (AvatarPoser transformer backbone, simulator-state encoder and
+  action head) is distilled from a frozen PHC teacher. It sees only the sparse VR signal and its
+  own proprioception, and drives a humanoid in Isaac Gym. It is evaluated on the SimXR Quest2
+  synthetic dataset (1,072 test clips) and on AMASS (536 sequences).
+- **Main findings.**
+  - On Quest2, every early student scored 0% survival on locomotion. Diagnosing that as missing
+    closed-loop feedback, and adding the student's own tracking error as an input, raised
+    locomotion/dynamic survival from **0/461 to 236/461**.
+  - The final student is **roughly at parity** with simply letting the frozen physics controller
+    track the kinematic prediction: lower position error (87.4 vs. 96.4 mm), slightly lower
+    survival (0.738 vs. 0.767), and worse rotation error and jitter.
+  - It outperforms a replicated SimXR no-vision ablation on most metrics.
+  - On AMASS, no distilled student beat that naive baseline.
+- **Caveats.** Reported checkpoints were selected on the test set, and each result is a single
+  run. Trained checkpoints were lost with the original workstation; see
+  [Limitations](#limitations) and [Reproducibility](#reproducibility).
+- **Contributions.**
+  - The distillation pipeline for two humanoid rigs.
+  - The closed-loop diagnosis and fix.
+  - Evaluation and diagnostic tooling (physics metrics, mesh ground penetration, per-clip
+    analyses).
+  - Documented negative results (Stage R collapse, representation ablations).
+
+  Details are in [Original contributions vs. upstream](#original-contributions-vs-upstream).
+
 Research record: experiments run 2026-06 → 2026-09. This repository is a **fork of
 [AvatarPoser](https://github.com/eth-siplab/AvatarPoser)** (Jiang et al., ECCV 2022). It is
 combined with a modified fork of **[PHC](https://github.com/ZhengyiLuo/PHC)** (Luo et al., ICCV
@@ -13,6 +69,11 @@ upstream code.
 > [Reproducibility](#reproducibility)). Every number below is copied from
 > [`results_comparison.md`](results_comparison.md), the authoritative results log, which carries
 > the full footnotes and history.
+
+**Contents:** [Demonstrations](#demonstrations) · [Research problem](#research-problem) ·
+[Method](#method) · [Contributions](#original-contributions-vs-upstream) · [Results](#results) ·
+[Key findings](#key-findings) · [Limitations](#limitations) · [Reproducibility](#reproducibility) ·
+[Repository map](#repository-map) · [Attribution](#provenance-and-attribution)
 
 ---
 
@@ -202,21 +263,8 @@ student's penetrating frames are airborne (see
 
 ### Qualitative examples (Quest2)
 
-Two test clips, each rendered side by side. Left to right: ground truth, the SimXR no-vision
-baseline, the distilled student ("Finetuned Backbone", i.e. `trackerr`, `student_0380160.pth`)
-and the naive PHC baseline. The top row is a Blender render of the motion retargeted onto an SMPL-X
-body; the bottom row is the Isaac Gym simulation itself. Click a still to play the video.
-
-| Walking (locomotion) | Range of motion (full-body) |
-|---|---|
-| [![Walking: ground truth, SimXR, student, naive PHC](docs/media/walking_clean.png)](docs/media/walking_clean.mp4) | [![Range of motion: ground truth, SimXR, student, naive PHC](docs/media/range_of_motion_clean.png)](docs/media/range_of_motion_clean.mp4) |
-
-These are illustrative single clips. No selection criterion for them was recorded, so they say
-nothing about average performance; the tables above are the evidence. The column labels follow
-the project's convention (`Finetuned Backbone` = `trackerr`, as in `results_comparison.md`). The
-exact render invocation was not recorded. The renders use
-`scripts/blender_render_4way_mesh.py` and the SMPL-X Blender add-on (body model by MPI-IS,
-subject to its own license).
+The Walking and Range of Motion comparisons are shown in
+[Demonstrations](#demonstrations) at the top of this page.
 
 ### AMASS / SMPL (536-sequence PHC test set)
 
