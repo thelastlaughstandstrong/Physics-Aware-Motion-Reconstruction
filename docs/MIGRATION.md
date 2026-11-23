@@ -1,8 +1,10 @@
-> **About this file.** This is the root `README.md` as it stood at commit `54158c8` (2026-09-18),
-> moved here unchanged on 2026-11-23 when the root README was rewritten as a research overview.
-> It is a machine-specific setup and migration log. Paths such as `/home/sia-irl/AvatarPoser`,
-> disk-usage figures and the conda-environment inventory describe the original workstation, not
-> requirements. Relative references such as `results_comparison.md` and `setup/*.yml` are relative
+> **About this file.** This is the setup and migration guide written for the original workstation
+> (the root `README.md` as of 2026-09-18). It was moved here on 2026-11-23, and **sanitized for the
+> public release**: workstation housekeeping (disk usage, duplicate-folder cleanup), unrelated
+> conda environments, account-specific clone URLs and home-directory paths were removed or made
+> generic. The technical content is unchanged. Sizes and the environment inventory describe that
+> workstation, not requirements. The original workstation is no longer available; datasets and
+> lost artifacts are covered in [`DATA_AND_ARTIFACTS.md`](DATA_AND_ARTIFACTS.md). Relative references such as `results_comparison.md` and `setup/*.yml` are relative
 > to the **repository root**, not to `docs/`.
 
 # AvatarPoser + PHC + Quest2/SimXR — Machine Setup & Migration Guide
@@ -26,31 +28,9 @@ paths, and environment names are what's *really* there today, not assumptions.
 
 ---
 
-## 0. Read this first — the current machine has known problems
+## 0. (Removed for the public release)
 
-Before copying anything off the old laptop, be aware of things sitting in `data/`/`output/` right
-now:
-
-1. **The disk is tight: 74GB free out of 1.9TB (96% used) as of 2026-09-18.** There is not enough
-   room to make a second local copy of the big datasets. Don't try to `zip`/`tar` everything into a
-   staging archive on this machine — plan a direct transfer instead (see §4). (This was as low as
-   111MB free earlier the same day — an in-progress GUI archive operation had been consuming disk
-   space unattended and was interrupted; see git/session history if you need the details. The
-   corrupted `data/quest2_synthetic.zip` byproduct of that has already been deleted.)
-2. **Three duplicate copies of the same directory exist**: `data/quest_smpl_retarget/`,
-   `data/quest_smpl_retarget (2)/`, and `data/quest_smpl_retarget (3)/` are byte-identical
-   (verified with `diff -rq`), 2.8GB each — classic "extracted the same zip twice more" leftovers.
-   Only one copy needs to survive:
-   ```bash
-   rm -rf "/home/sia-irl/AvatarPoser/data/quest_smpl_retarget (2)" \
-          "/home/sia-irl/AvatarPoser/data/quest_smpl_retarget (3)"   # reclaims 5.6GB
-   ```
-   (`data/quest_smpl_retarget.zip`, 2.9GB / 1394 files, is a *valid* zip — that one's fine to keep
-   or delete once you've confirmed the extracted folder transferred correctly.)
-
-This remaining item reclaims ~5.6GB and removes confusion about which copy is authoritative.
-**None of this has been deleted yet — run this command yourself (or ask me to) before
-proceeding**, they're just flagged here so the migration doesn't propagate the mess.
+Workstation-specific housekeeping notes (disk usage and duplicate data folders) were removed.
 
 ---
 
@@ -87,8 +67,8 @@ history): **~540GB**. **Full transfer including all training runs**: **~745GB**.
 transfer medium (external drive / direct network copy) accordingly — see §4.
 
 ### 1c. Things that live *outside* this repo and also need to move
-- **IsaacGym Preview 4** — `/home/sia-irl/isaacgym_workspace/isaacgym/` (the extracted SDK) and/or
-  `/home/sia-irl/Downloads/IsaacGym_Preview_4_Package.tar.gz` (the original archive). Not
+- **IsaacGym Preview 4**: `~/isaacgym_workspace/isaacgym/` (the extracted SDK) and/or
+  `IsaacGym_Preview_4_Package.tar.gz` (the original archive). Not
   pip-installable from PyPI — see §3b.
 - Nothing else outside the repo was found to be load-bearing (no stray `.env`, credentials file,
   or `.netrc` — this project doesn't need any API keys).
@@ -120,9 +100,8 @@ nvcc --version       # optional; PyTorch ships its own CUDA runtime via pip whee
 
 ### 3b. Get IsaacGym Preview 4 onto the new machine
 IsaacGym is **not on PyPI**; it's a manual download gated behind an NVIDIA developer login
-(https://developer.nvidia.com/isaac-gym — sign in, download "Preview 4"). The old machine already
-has it at `/home/sia-irl/Downloads/IsaacGym_Preview_4_Package.tar.gz` — **copy that tarball across
-instead of re-downloading**, it saves dealing with the login flow again:
+(https://developer.nvidia.com/isaac-gym: sign in and download "Preview 4"). If you already have
+`IsaacGym_Preview_4_Package.tar.gz`, copying it saves repeating the login flow:
 ```bash
 mkdir -p ~/isaacgym_workspace
 tar -xzf IsaacGym_Preview_4_Package.tar.gz -C ~/isaacgym_workspace
@@ -165,12 +144,9 @@ before launching training, so logging stays entirely local (`phc/wandb/`).
 
 ### 3d. Clone the repo (with the PHC submodule)
 ```bash
-git clone --recurse-submodules git@github.com:thelastlaughstandstrong/AvatarPoser-with-PHC-Implementation.git AvatarPoser
+git clone --recurse-submodules <repository URL> AvatarPoser
 ```
-(SSH clone — make sure your GitHub SSH key is set up on the new machine first, e.g.
-`ssh-add ~/.ssh/id_ed25519` and the corresponding public key added to your GitHub account. If you'd
-rather not deal with SSH keys on the new machine, clone over HTTPS instead using the same repo
-path.)
+Then rebuild the SimXR-derived Quest2 files in `phc/` (see [`PHC_SUBMODULE.md`](PHC_SUBMODULE.md)).
 
 If you're instead copying the whole working directory across wholesale (see §4) rather than doing
 a fresh `git clone`, the submodule is already checked out inside it and no extra step is needed —
@@ -180,21 +156,17 @@ just note the pinned commit above in case you ever need to re-sync it (`git subm
 
 ## 4. Moving the data across
 
-Given the size (§1b) and that the old machine only has 94GB free (§0), **do not** try to stage
-everything into a single archive on the old laptop first. Two options, in order of preference:
+Given the size (§1b), **do not** try to stage everything into a single archive on the source
+machine first. Two options, in order of preference:
 
 **Option A — direct machine-to-machine transfer** (fastest, no intermediate copy, resumable):
 ```bash
-# from the NEW machine, pulling from the OLD one (adjust user@host):
-rsync -avh --progress \
-  --exclude='data/quest_smpl_retarget (2)' \
-  --exclude='data/quest_smpl_retarget (3)' \
-  --exclude='data/quest2_synthetic.zip' \
-  sia-irl@<old-machine-ip>:/home/sia-irl/AvatarPoser/ /home/sia-irl/AvatarPoser/
+# from the NEW machine, pulling from the OLD one:
+rsync -avh --progress <user>@<old-machine>:<path-to>/AvatarPoser/ <path-to>/AvatarPoser/
 ```
 `rsync` resumes cleanly if interrupted — for 500GB+ over a home network this matters. Run it once
 for the repo itself, and separately (or in the same pass) for anything outside the repo you're
-bringing across (`~/isaacgym_workspace/`, `~/Downloads/IsaacGym_Preview_4_Package.tar.gz`).
+bringing across (`~/isaacgym_workspace/`, the Isaac Gym archive).
 
 **Option B — external drive**: needs ≥1TB free to be comfortable (§1b totals ~745GB before
 overhead). Copy with `rsync -avh` (not plain `cp -r`) so permissions/symlinks survive and it's
@@ -203,8 +175,8 @@ resumable if the drive disconnects mid-copy — note `phc/output` and `phc/sampl
 that dereferences them) will silently duplicate hundreds of GB. `rsync -avh` and `tar` both handle
 this correctly by default; double-check whatever tool you use does too.
 
-Either way, put the new machine's copy at the **same absolute path**: `/home/sia-irl/AvatarPoser`.
-See §6 for why that matters.
+Either way, keeping the **same absolute path** as the original checkout avoids editing scripts;
+see §6.
 
 ---
 
@@ -305,17 +277,14 @@ Several shell scripts under `scripts/` hardcode the absolute path `/home/sia-irl
 `REPO=/home/sia-irl/AvatarPoser` directly), and also hardcode
 `/home/sia-irl/anaconda3/bin/conda` as the conda binary path.
 
-**Simplest fix**: keep the same username (`sia-irl`) and the same repo location
-(`/home/sia-irl/AvatarPoser`) and same anaconda install path (`~/anaconda3`) on the new machine.
-Nothing needs to change.
-
-**If the new machine must use a different username or path**, find and fix every reference before
-relying on these scripts:
+These are the original workstation's paths. **On any other machine, find and replace every
+reference before relying on these scripts:**
 ```bash
 grep -rl "/home/sia-irl" --include="*.sh" --include="*.py" . \
   | grep -vE '^\./(data|output|amass|results|support_data|phc/(data|wandb|output))/'
 # then, once you've confirmed the new path:
-grep -rl "/home/sia-irl" --include="*.sh" . | xargs sed -i 's|/home/sia-irl|/home/<new-user>|g'
+grep -rl "/home/sia-irl/AvatarPoser" --include="*.sh" . | xargs sed -i 's|/home/sia-irl/AvatarPoser|<path-to>/AvatarPoser|g'
+grep -rl "/home/sia-irl/anaconda3/bin/conda" --include="*.sh" . | xargs sed -i 's|/home/sia-irl/anaconda3/bin/conda|conda|g'
 ```
 (The exclusions above skip data directories, where the same string could coincidentally appear
 inside dataset content rather than as a path a script relies on.)
@@ -343,9 +312,7 @@ bash scripts/auto_eval.sh <exp_name> <checkpoint_step>
 
 ---
 
-## 8. Conda environments on the old machine — what to actually bring
-
-The old machine has 9 conda environments; only two belong to this project:
+## 8. Conda environments used by this project
 
 | Env | Bring it? | Why |
 |---|---|---|
@@ -354,7 +321,6 @@ The old machine has 9 conda environments; only two belong to this project:
 | `isaac` | No | Same package set as `rlgpu` (Python 3.8.20, torch 2.4.1+cu121) but not referenced by any script in this repo — looks like an earlier/parallel env, superseded by `rlgpu`. |
 | `simxr` | No | Same package set again; not referenced by any script here either — this project's SimXR work runs under `rlgpu`. |
 | `gdown_dl` | Optional | A minimal Python 3.12 env with just `gdown`, used for bulk Google-Drive downloads (§5c). Trivial to recreate with `conda create -n gdown_dl python=3.12 && pip install gdown` instead of migrating it. |
-| `colmap_env`, `dexgrasp`, `dexgraspnet`, `sugar` | No | Unrelated to this project. |
 
 ---
 

@@ -65,7 +65,10 @@ Results saved to `phc/output/HumanoidIm/<EXP>/phc_eval.log`.
 > compare pre-v7 `qref_MPJPE` against v7's.
 >
 > ² Evaluated on the full 536-sequence test set 2026-07-07. **Beats every distillation/Stage R
-> result above on every metric** (2x MPJPE, 41% success, 3x jitter). Not because distillation is
+> result above on every metric** (2x MPJPE, 41% success, 3x jitter). *(Audit note 2026-11-23:
+> those ratios predate `v7_validate`. Against the best student, `v7_validate`, the gap is 1.75x
+> MPJPE (14.06 vs 24.59 cm), +0.156 absolute success (0.912 vs 0.756) and 2.4x jitter (318 vs
+> 773).)* Not because distillation is
 > broken — it solves a harder problem (compressing full-body tracking into a network that only
 > ever sees a sparse 3-point HMD signal) — but don't present distillation as an accuracy win over
 > this baseline without closing the gap; reframe around latency/compute instead.
@@ -85,7 +88,8 @@ Results saved to `phc/output/HumanoidIm/<EXP>/phc_eval.log`.
 > physics eliminates penetration entirely here; don't read it as a pre-sim number.
 >
 > ⁴ Found via `scripts/train_stage_r_with_early_stop.sh`'s collapse-detection sweep from the same
-> `v7`@250k checkpoint. Confirmed deterministic across 3 reruns, not luck. **Best distilled
+> `v7`@250k checkpoint. That sweep scores checkpoints with `scripts/auto_eval.sh` on
+> `phc_test.pkl`, the same 536-sequence test set reported here, so this row is test-set-selected. Confirmed deterministic across 3 reruns, not luck. **Best distilled
 > checkpoint overall** — still well behind the naive baseline on every metric.
 >
 > ⁵ Hypothesis: explicit `q_base` access (vs. only implicitly via `z`) would help. Result: v8 is
@@ -113,10 +117,10 @@ Backbone pose predictions vs. AMASS GT — independent of the physics sim.
 # Automated (watches for checkpoint, runs both steps):
 bash scripts/auto_eval.sh <exp_name> <step>
 
-# Manual — Step 1: run student in sim (rlgpu env, from phc/)
-/home/sia-irl/anaconda3/bin/conda run -n rlgpu --no-capture-output bash -c "
+# Manual — Step 1: run student in sim (rlgpu env, from phc/). REPO = this repository's root.
+conda run -n rlgpu --no-capture-output bash -c "
 unset PYTHONPATH && export WANDB_MODE=offline
-cd /home/sia-irl/AvatarPoser/phc && python phc/run_hydra.py \
+cd \"$REPO/phc\" && python phc/run_hydra.py \
   learning=distill exp_name=<EXP> test=True im_eval=True \
   env=env_im_getup_mcp robot=smpl_humanoid robot.freeze_hand=True robot.box_body=False \
   env.motion_file=sample_data/phc_test.pkl \
@@ -168,6 +172,43 @@ tracking the backbone's raw output directly, no student) — previously missing 
 currently broken — see below). Best checkpoint `student_0380160.pth`, found via a full-range
 scan (patience disabled — early stopping doesn't work for this recipe, see Lessons below).
 
+> **Reporting status (audit 2026-11-23). Read before citing any number in this table.**
+>
+> - **Test-set checkpoint selection.** `student_0380160.pth` was chosen by
+>   `scripts/quest_checkpoint_scan.sh`, which ranks checkpoints by `phc_survival` on
+>   `test_seg_motion`, the same 1,072 clips reported here. No validation split was used. The
+>   SimXR column's epoch-1,500 checkpoint was also chosen as the test-set peak of 12 checkpoints.
+>   The Naive PHC baseline involves no checkpoint selection. The two trained columns are
+>   therefore optimistically biased relative to Naive PHC. Final checkpoints, for comparison:
+>   `trackerr`@500k = 0.707, SimXR epoch 6,105 = 0.514 (`scripts/simxr_novision/README.md`).
+> - **Verified against tracked files:** Naive PHC (`results/baselines/quest2_naive_baseline_vs_gt.json`,
+>   including per-activity rates), Phase A (`results/baselines/avatarposer_quest2_phase_a_finetuned.json`),
+>   and all Mesh GPen rows (`scripts/dataset_mesh_gpen_aggregate.json`).
+> - **Recorded in contemporaneous notes only:** the Finetuned Backbone (`trackerr`) post-sim metrics
+>   and per-activity rates, and the SimXR column. Their raw outputs
+>   (`output/HumanoidIm/quest_distill_trackerr/quest_eval_0380160.json`, rollout dumps and the
+>   SimXR checkout) were never committed and were **lost with the original workstation**, so they
+>   cannot be re-checked. `QUEST2_TRAINING_REPRODUCTION.md` quotes the `trackerr` eval JSON to full
+>   precision.
+> - **SimXR column mixes two evaluation runs.** Success 0.717 and MPJPE 112.5 mm are from SimXR's own
+>   evaluator (`eval_peak_1500.log`, `num_envs=512`). MPJRE, MPJVE, Jitter and Foot Skate come
+>   from this repo's `evaluate_phc_metrics_quest.py`, run on a `num_envs=64` re-run dump (which
+>   gave 0.7155 / 112.36 mm on the same checkpoint; see `simxr_ref/README.md`).
+> - **Unresolved: `trackerr` backbone initialisation.** This table describes `trackerr` as using
+>   the AMASS-finetuned backbone (`results/AvatarPoseEstimationQuest2Finetune/`). But according to
+>   `QUEST2_TRAINING_REPRODUCTION.md`, the committed `distill_quest.yaml` default is
+>   `results/AvatarPoseEstimationQuest2/models/15000_G.pth` (from scratch), and the reconstructed
+>   launch command passes no override.
+>   - The recovered PHC fork's history shows this from-scratch path as the default at **every**
+>     committed revision.
+>   - The agent's own docstring says the earlier `finetuned_backbone` round swapped in the
+>     AMASS-finetuned checkpoint through a command-line override.
+>   - No record shows whether `trackerr` received the same override. The checkpoints that could
+>     settle it were lost.
+>
+>   "Finetuned Backbone" is therefore the **intended, not verified,** initialisation of
+>   `trackerr`.
+
 | Metric | Stage | Ground Truth *(control)* | Phase A / Kinematics Only | Naive PHC Baseline | SimXR Baseline | **Finetuned Backbone** |
 |---|---|---|---|---|---|---|
 | Success (`phc_survival`) | post | — | N/A¹ | **0.767** | 0.717 | 0.738 |
@@ -214,10 +255,20 @@ scan (patience disabled — early stopping doesn't work for this recipe, see Les
 > impossible — so roughly a third of the measured excess is reconstruction-induced, not simulator
 > contact penetration. Naive PHC, through the identical pipeline, produces 0.0% airborne frames.
 
-Every metric improves 2–2.3x over the old run. `trackerr` beats the SimXR ablation on every
-metric except foot skate, and beats the naive baseline on MPJPE (87.4 vs 96.4mm) while still
-trailing slightly on success (0.738 vs 0.767) — distillation is now roughly at parity with
-skipping distillation entirely, the first time that's been true in this project.
+Against the pre-fix `finetuned_backbone`@440k, every metric improves, but by 1.2–2.3x, not
+uniformly 2–2.3x: success 2.33x (0.317→0.738), MPJPE 2.12x, Jitter 2.13x, MPJRE 1.68x, MPJVE
+1.46x, Foot Skate 1.21x. *(Corrected 2026-11-23; the earlier text said "every metric improves
+2–2.3x".)*
+
+Against the SimXR no-vision ablation, `trackerr` is better on `phc_survival`, MPJPE, MPJRE, MPJVE
+and Jitter. It is worse on Foot Skate, `frame_head` success (0.989 vs 0.997) and post-sim Mesh
+GPen (6.03 vs 3.30 mm). *(Corrected; the earlier text said "every metric except foot skate".)*
+
+Against the Naive PHC baseline, `trackerr` is better on MPJPE (87.4 vs 96.4 mm), Foot Skate and
+`frame_head` success. It is worse on `phc_survival` (0.738 vs 0.767), MPJRE, MPJVE, Jitter and
+Mesh GPen. Distillation is roughly at parity with skipping distillation, with a mixed metric
+profile rather than a dominant one. Both comparisons are subject to the test-set selection caveat
+above.
 
 Per-activity `phc_survival`:
 
@@ -240,6 +291,10 @@ these two — not separately broken out in that run.
 > (`results/baselines/avatarposer_quest2_phase_a_finetuned.json`), because every other column
 > descends from that backbone and the Naive PHC baseline tracks its raw output. The from-scratch
 > variant (MPJPE 40.24, MPJRE 10.91) appears in the Phase A comparison table further down.
+> *(Audit note: the Phase A metrics JSON records `models/15000_G.pth`, but
+> `scripts/mesh_gpen_dataset.py` computes the Phase A Mesh GPen stream from `models/15001_G.pth`.
+> Both checkpoints were lost with the original workstation, so whether they hold the same weights
+> cannot be verified.)*
 > `Finetuned Backbone` is `trackerr` @380k (`student_0380160.pth`); the superseded pre-fix
 > `finetuned_backbone` @440k run is retained only in the historical table below.
 > Phase B (frozen teacher on ground truth) was previously a column here; it is removed from the
@@ -511,6 +566,13 @@ penetration at all in 1 of 1072 sequences**. Preserved for the record (all joint
 > single-clip run reusing the same `exp_name`; only the Phase B copy in
 > `results/baselines/phase_b_artifacts_backup/` survives. Recomputing needs a fresh 1072-sequence
 > rollout, and given the range above would near-certainly return 0.00x mm.
+>
+> **Unresolved inconsistency (audit 2026-11-23):** `scripts/run_mesh_gpen_study.sh` reads the
+> Naive stream from this same path, yet `scripts/dataset_mesh_gpen_aggregate.json` (committed
+> 2026-09-10) reports a 1,072-clip Naive post-sim Mesh GPen (2.56 mm / 0.020). Either the dump was
+> regenerated after 2026-08-20 and this footnote is stale, or the Mesh GPen value came from
+> elsewhere. The dump itself was lost with the original workstation, so this **cannot now be
+> resolved**. Both statements are kept as recorded.
 
 A genuine pre-vs-post penetration analysis — where the metric *is* informative, because it is
 measured against a motion with real artefacts rather than after physics has removed them — lives in

@@ -143,7 +143,8 @@ and `state_enc` (control branch) — see architecture diagram in `distill_agent_
   `explicit_pose_action_input: False`; `use_tracking_error: True`; `window_size: 40`;
   `enable_stage_r: False`; `avatarposer_checkpoint: "../results/AvatarPoseEstimationQuest2/models/15000_G.pth"`;
   `teacher_checkpoint: "../output/HumanoidIm/phc_prim_quest/Humanoid.pth"`.
-- **Working directory**: `/home/sia-irl/AvatarPoser/phc` (the launch script `cd`s there before
+- **Working directory**: `$REPO/phc`, where `$REPO` is this repository's root (the original
+  workstation's checkout; the launch script `cd`s there before
   invoking `run_hydra.py`; all relative paths above, e.g. `../results/...`, are relative to this).
 - **Conda env**: `rlgpu`.
 - **Launch script**: `scripts/train_distill_quest_with_auto_recovery.sh` — confirmed by the
@@ -151,11 +152,11 @@ and `state_enc` (control branch) — see architecture diagram in `distill_agent_
   attempt — this run never crashed/restarted, unlike several sibling experiments).
 - **Exact command constructed by that script** (`train_distill_quest_with_auto_recovery.sh:104-113`):
   ```bash
-  cd /home/sia-irl/AvatarPoser/phc
+  cd "$REPO/phc"
   conda run -n rlgpu --no-capture-output python phc/run_hydra.py \
       learning=distill_quest exp_name=quest_distill_trackerr \
       env=env_quest_im_basic robot=quest_humanoid \
-      env.motion_file=/home/sia-irl/AvatarPoser/data/quest2_synthetic/train_seg_motion \
+      env.motion_file="$REPO/data/quest2_synthetic/train_seg_motion" \
       env.num_envs=128 env.cycle_motion=True env.min_length=5 \
       learning.params.config.max_distill_step=500000 \
       headless=True no_virtual_display=True no_log=True disable_multiprocessing=False \
@@ -204,7 +205,7 @@ and `state_enc` (control branch) — see architecture diagram in `distill_agent_
 ### 12. Evaluation
 
 - **Script**: `scripts/auto_eval_quest.sh <exp_name> <target_step> [extra_overrides] [num_envs]`.
-- **Working directory**: `/home/sia-irl/AvatarPoser/phc` (script `cd`s there internally).
+- **Working directory**: `$REPO/phc` (script `cd`s there internally).
 - **Two-part pipeline it runs**:
   1. Physics rollout (`conda run -n rlgpu`): same `run_hydra.py` entry as training, but
      `env.motion_file=data/quest2_synthetic/test_seg_motion`, `env.cycle_motion=False`,

@@ -1,57 +1,73 @@
-# simxr_ref
+# simxr_ref: SimXR evaluation instrumentation (historical record)
 
-Working copies of two files from the separate/upstream SimXR repo (`/home/sia-irl/SimXR/`,
-local checkout, commit `39081b831aa1c1e52a4a974fb78a1ed93f7580c2`, no remote configured),
-copied here so they can be patched without touching that repo's originals.
+This directory originally held working copies of two files from
+[SimXR](https://github.com/ZhengyiLuo/SimXR) (Luo et al., *Real-Time Simulated Avatar from
+Head-Mounted Sensors*, CVPR 2024), patched so the SimXR **no-vision baseline** could be scored
+with this repository's full metric set.
 
-Purpose: enable option (b) from `results_comparison.md` footnote 7 / the
-`simxr_ablation_replication` memory — get the full `MPJRE`/`Jitter`/`Foot Skate`/`gpen` metric
-set for the SimXR no-vision ablation checkpoint (`ablation_results.md`), by porting this repo's
-own `phc_positions_for_eval.pkl`-dump instrumentation (already working in
-`phc/phc/learning/im_amp_players.py`, this repo's own PHC fork) into the equivalent files in
-the SimXR repo, rather than trying to load that checkpoint into this repo's incompatible env
-wiring.
+**SimXR declares no license, so those copies are not part of the public release.** They are kept
+out of version control (see `.gitignore`); this README documents what they were and how to
+reproduce them from an official SimXR checkout.
 
-Files, relative path preserved from the SimXR repo's own layout:
-- `phc/env/tasks/humanoid_im.py` — needs `body_rot`/`body_rot_gt` added to `self.extras` in
-  `post_physics_step` (SimXR's copy currently only exposes `body_pos`/`body_pos_gt`, no
-  rotation — required for MPJRE).
-- `phc/learning/im_amp_players.py` — needs the same `pred_rot`/`gt_rot` accumulation and final
-  `phc_positions_for_eval.pkl` dump this repo's fork already has (diffed directly against
-  `phc/phc/learning/im_amp_players.py` here — otherwise identical). Also has a live, unconditional
-  `import ipdb; ipdb.set_trace()` mid-eval-loop that needs removing so a batch/automated eval run
-  doesn't hang.
+## Role in the experiments
 
-**To apply**: once patched here, copy these two files back over their originals at
-`/home/sia-irl/SimXR/phc/env/tasks/humanoid_im.py` and
-`/home/sia-irl/SimXR/phc/learning/im_amp_players.py`, then re-run the ablation checkpoint's
-`test=True im_eval=True` eval pass there to produce `phc_positions_for_eval.pkl`, and run this
-repo's `scripts/evaluate_phc_metrics_quest.py --pos_dump <that file>` on it.
+Nothing in this repository imports or executes these files. They were applied once, by hand, to
+a **separate SimXR checkout**, which produced the SimXR baseline's `phc_positions_for_eval.pkl`
+dump. This repository's `scripts/evaluate_phc_metrics_quest.py` then scored that dump, giving the
+MPJRE / MPJVE / jitter / foot-skate values in the SimXR column of `results_comparison.md`
+(footnote 7).
 
-Not wired into this repo's own build/imports — these are reference/patch-staging copies only,
-not used by anything in `phc/` (this repo's actual PHC fork) or any training/eval script here.
+| SimXR file (official revision) | Modification made for this project |
+|---|---|
+| `phc/env/tasks/humanoid_im.py` | In `post_physics_step`, also expose the simulated and reference rigid-body rotations (`body_rot`, `body_rot_gt`) in `self.extras`, next to the existing positions. MPJRE needs them |
+| `phc/learning/im_amp_players.py` | Accumulate those rotations per evaluation batch alongside positions. Remove two unconditional `ipdb.set_trace()` breakpoints in the evaluation loop, which hang a non-interactive run. Write `phc_positions_for_eval.pkl` (positions, rotations, motion keys, success rate, termination history), then exit after the single evaluation pass |
 
-## Status: patched, copied back, and run successfully (2026-07-27)
+The research algorithm, policy, observations, reward and success computation are **not**
+changed. Only data is exported, and the interactive breakpoints are removed.
 
-Both files above had the patch applied (diffed and syntax-checked against the SimXR originals
-first). Per user request ("you do that"), copied over the SimXR checkout's originals at
-`/home/sia-irl/SimXR/phc/env/tasks/humanoid_im.py` and
-`/home/sia-irl/SimXR/phc/learning/im_amp_players.py`, then re-ran the peak (epoch 1,500)
-checkpoint of `simxr_quest_novision_lrdecay` through `test=True im_eval=True`
-(`env.num_envs=64`, reduced from the original 512 to avoid crashing on GPU memory contention
-with an unrelated concurrently-running training job, `quest_distill_explicit_pose`) to produce
-`phc_positions_for_eval.pkl`, then ran `scripts/evaluate_phc_metrics_quest.py` on it in this
-repo. Result now recorded in `results_comparison.md`'s Quest2 table (footnote 7): MPJRE 29.76°,
-MPJVE 40.93 cm/s, Jitter 704.29 m/s³, Foot Skate 14.39 cm/s, gpen_mean/rate 0.00/0.000 — success
-rate (0.7155) and MPJPE (112.36mm) reproduced the original console numbers (0.717/112.5mm)
-within noise, confirming the num_envs=64 substitution is valid.
+**Upstream revision used:** `39081b831aa1c1e52a4a974fb78a1ed93f7580c2` (SimXR `main`,
+2025-05-11, "raw processing file").
 
-Real gotcha hit and fixed along the way: the SimXR repo's `im_amp_players.py` had a live
-`import ipdb; ipdb.set_trace()` that had been silently blocking this exact dump step in every
-prior manual eval run (confirmed via `eval_peak_1500.log` — metrics printed fine, then hung at
-an interactive debugger until manually killed). Removed in the patched copy (this directory)
-before copying back.
+## Reproducing the instrumentation
 
-These local copies (`simxr_ref/`) are left in place as the patch record / for future re-runs
-(e.g. the epoch-6,105 final checkpoint, not yet done) — they are not wired into anything and can
-be regenerated from the SimXR checkout's current (now-patched) files if needed.
+The modification is stored as an edit script,
+[`scripts/simxr_novision/simxr_eval_instrumentation.json`](../scripts/simxr_novision/simxr_eval_instrumentation.json).
+It holds line-range references into the official files plus this project's own added lines
+(29 lines; no SimXR text). The applier checks SHA-256 before and after:
+
+```bash
+git clone https://github.com/ZhengyiLuo/SimXR.git /path/to/SimXR
+git -C /path/to/SimXR checkout 39081b831aa1c1e52a4a974fb78a1ed93f7580c2
+python scripts/simxr_novision/apply_eval_instrumentation.py --simxr /path/to/SimXR --check
+python scripts/simxr_novision/apply_eval_instrumentation.py --simxr /path/to/SimXR
+```
+
+| File | SHA-256 of the official file | SHA-256 after instrumentation |
+|---|---|---|
+| `phc/env/tasks/humanoid_im.py` | `34ec3bf8bdcb7ec6b693afe1372b5169cb23105bb93712abe1eecc440959ddf7` | `9631b1fc50753096dd2f994ea739020aa01e6a597cdef4e25fa804a93a3ec69b` |
+| `phc/learning/im_amp_players.py` | `ffb5f19774096e2b5ca4a6ae4c20950f7dfe20479525a09d4b061cbdd4f5d057` | `acd2a103c40e35a8b308ee59193f37294bc274dcdcdf653dddc1ec6251b66647` |
+
+The result is byte-identical to the files used in the experiments; this was verified on
+2026-11-23. Revert with `git -C /path/to/SimXR checkout -- phc/`. Then follow
+[`scripts/simxr_novision/README.md`](../scripts/simxr_novision/README.md) to train or evaluate the
+baseline in the SimXR checkout, and score the dump with:
+
+```bash
+python scripts/evaluate_phc_metrics_quest.py \
+  --pos_dump <SimXR>/output/HumanoidIm/<exp_name>/phc_positions_for_eval.pkl
+```
+
+Your use of SimXR, its released checkpoints and its data is governed by its authors' terms.
+
+## Historical notes (2026-07-27)
+
+- The instrumented files were copied over the SimXR checkout on the original workstation. The
+  peak (epoch 1,500) checkpoint of `simxr_quest_novision_lrdecay` was re-evaluated with
+  `test=True im_eval=True` at `env.num_envs=64`, reduced from 512 because of GPU contention. This
+  produced the dump.
+- That re-run reproduced the original console numbers within noise: success 0.7155 vs. 0.717,
+  MPJPE 112.36 vs. 112.5 mm. This supports the 64-env substitution.
+- The unconditional `ipdb.set_trace()` had silently blocked this dump step in every earlier
+  manual evaluation; metrics printed, then the process waited at a debugger prompt.
+- The SimXR checkout, its checkpoints and the resulting dump lived only on the original
+  workstation and **were not preserved** (see `docs/DATA_AND_ARTIFACTS.md`).

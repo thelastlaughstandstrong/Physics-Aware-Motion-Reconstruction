@@ -2,7 +2,7 @@
 
 Reproduces the **71.7 % success / 112.5 mm MPJPE_g** SimXR baseline row in
 `results_comparison.md`. Everything here is a *record and re-run recipe* for an already-completed
-run; nothing in `/home/sia-irl/SimXR` is modified by these scripts except the output directory you
+run; nothing in the SimXR checkout (`$SIMXR`) is modified by these scripts except the output directory you
 point them at.
 
 ```
@@ -30,7 +30,7 @@ the evaluation path is deterministic given the checkpoint. The August rerun prod
 
 | | |
 |---|---|
-| repo | `/home/sia-irl/SimXR` (separate checkout from AvatarPoser) |
+| repo | `$SIMXR`, a separate SimXR checkout (set `SIMXR=/path/to/SimXR`; the scripts' default is the original workstation's path) |
 | conda env | **`isaac`** — *not* `rlgpu`, which is the AvatarPoser/PHC env |
 | entry point | `phc/run_hydra.py`, run with cwd = repo root |
 | seed | `0` (`config.yaml:12`), `torch_deterministic: False` |

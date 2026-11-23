@@ -1,0 +1,144 @@
+{
+ "description": "Evaluation instrumentation applied to SimXR for the no-vision baseline (see simxr_ref/README.md). Segments reference lines of the official SimXR file; only this project's own lines are stored.",
+ "simxr_repository": "https://github.com/ZhengyiLuo/SimXR",
+ "simxr_revision": "39081b831aa1c1e52a4a974fb78a1ed93f7580c2",
+ "format": 3,
+ "files": [
+  {
+   "path": "phc/env/tasks/humanoid_im.py",
+   "simxr_sha256": "34ec3bf8bdcb7ec6b693afe1372b5169cb23105bb93712abe1eecc440959ddf7",
+   "target_sha256": "9631b1fc50753096dd2f994ea739020aa01e6a597cdef4e25fa804a93a3ec69b",
+   "segments": [
+    [
+     0,
+     694,
+     0
+    ],
+    [
+     "            self.extras['body_rot'] = self._rigid_body_rot.cpu().numpy()\n",
+     "            self.extras['body_rot_gt'] = motion_res['rb_rot'].cpu().numpy()\n"
+    ],
+    [
+     694,
+     1696,
+     0
+    ]
+   ]
+  },
+  {
+   "path": "phc/learning/im_amp_players.py",
+   "simxr_sha256": "ffb5f19774096e2b5ca4a6ae4c20950f7dfe20479525a09d4b061cbdd4f5d057",
+   "target_sha256": "acd2a103c40e35a8b308ee59193f37294bc274dcdcdf653dddc1ec6251b66647",
+   "segments": [
+    [
+     0,
+     34,
+     0
+    ],
+    [
+     "        self.pred_rot, self.pred_rot_all = [], []\n",
+     "        self.gt_rot, self.gt_rot_all = [], []\n"
+    ],
+    [
+     34,
+     89,
+     0
+    ],
+    [
+     "            self.pred_rot.append(info[\"body_rot\"])\n",
+     "            self.gt_rot.append(info[\"body_rot_gt\"])\n"
+    ],
+    [
+     89,
+     102,
+     0
+    ],
+    [
+     103,
+     110,
+     0
+    ],
+    [
+     "                all_body_rot_pred = np.stack(self.pred_rot)\n",
+     "                all_body_rot_pred = [all_body_rot_pred[: (i - 1), idx] for idx, i in enumerate(humanoid_env._motion_lib.get_motion_num_steps())]\n",
+     "                all_body_rot_gt = np.stack(self.gt_rot)\n",
+     "                all_body_rot_gt = [all_body_rot_gt[: (i - 1), idx] for idx, i in enumerate(humanoid_env._motion_lib.get_motion_num_steps())]\n"
+    ],
+    [
+     110,
+     120,
+     0
+    ],
+    [
+     "                self.pred_rot_all += all_body_rot_pred\n",
+     "                self.gt_rot_all += all_body_rot_gt\n"
+    ],
+    [
+     0,
+     2,
+     0
+    ],
+    [
+     122,
+     131,
+     0
+    ],
+    [
+     "                    pred_rot_all = self.pred_rot_all[:humanoid_env._motion_lib._num_unique_motions]\n",
+     "                    gt_rot_all = self.gt_rot_all[: humanoid_env._motion_lib._num_unique_motions]\n"
+    ],
+    [
+     131,
+     163,
+     0
+    ],
+    [
+     165,
+     170,
+     0
+    ],
+    [
+     0,
+     1,
+     0
+    ],
+    [
+     "                    # Dump simulated positions for AvatarPoser-style metric evaluation.\n",
+     "                    # pred_pos_all: list of [T_i, 25, 3] numpy arrays -- PHC simulated rigid body positions\n",
+     "                    #               in PHC's world frame (quest_humanoid: has_upright_start=False), quest_humanoid body order.\n",
+     "                    # motion_keys:  sequence identifiers (match those written by convert_avatarposer_quest2_to_phc.py).\n",
+     "                    joblib.dump({\n",
+     "                        \"pred_pos_all\": pred_pos_all,\n",
+     "                        \"ref_pos_all\": gt_pos_all,\n",
+     "                        \"pred_rot_all\": pred_rot_all,\n",
+     "                        \"gt_rot_all\": gt_rot_all,\n",
+     "                        \"motion_keys\": humanoid_env._motion_lib._motion_data_keys.tolist(),\n",
+     "                        \"success_rate\": float(self.success_rate),\n",
+     "                        \"terminate_hist\": terminate_hist[: humanoid_env._motion_lib._num_unique_motions].tolist(),\n",
+     "                    }, osp.join(self.config['network_path'], \"phc_positions_for_eval.pkl\"))\n"
+    ],
+    [
+     170,
+     171,
+     0
+    ],
+    [
+     "                    exit()\n"
+    ],
+    [
+     171,
+     181,
+     0
+    ],
+    [
+     "                self.mpjpe, self.gt_pos, self.pred_pos, self.pred_rot, self.gt_rot = [], [], [], [], []\n"
+    ],
+    [
+     182,
+     332,
+     0
+    ]
+   ]
+  }
+ ]
+}

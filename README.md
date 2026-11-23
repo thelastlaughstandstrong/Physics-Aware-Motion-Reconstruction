@@ -41,7 +41,7 @@ flowchart LR
     end
 
     subgraph Student["Student policy (trained)"]
-        BB["AvatarPoser transformer backbone<br/>(AMASS-pretrained, fine-tuned)"]
+        BB["AvatarPoser transformer backbone<br/>(trained jointly)"]
         Z["latent z (256D)"]
         DEC["pose decoder → q_base<br/>(kinematic loss)"]
         SE["state encoder h (256D)<br/>from 372D proprioception"]
@@ -79,8 +79,8 @@ The work runs on two pipelines:
 |---|---|---|
 | Data | AMASS (AvatarPoser splits), 536-sequence PHC test set | SimXR Quest2 synthetic dataset, 4,097 train / **1,072 test** clips |
 | Rig | `smpl_humanoid` | SimXR `quest_humanoid` (25 bodies, 72 DoF) |
-| Teacher | PHC released checkpoints (`phc_kp_pnn_iccv` / `phc_kp_mcp_iccv`) | `phc_prim_quest` (md5-identical to the teacher used by SimXR's config; origin not documented here) |
-| Backbone | Frozen pretrained AvatarPoser | AvatarPoser ported to `quest_humanoid`, warm-started from AMASS weights, trained jointly |
+| Teacher | PHC released checkpoints (`phc_kp_pnn_iccv` / `phc_kp_mcp_iccv`) | `phc_prim_quest`: md5-identical to the teacher in SimXR's config, and very likely the checkpoint SimXR's `download_data.sh` fetches (not byte-verified) |
+| Backbone | Frozen pretrained AvatarPoser | AvatarPoser ported to `quest_humanoid`, trained jointly. Documented as warm-started from AMASS weights, but [unresolved](#reporting-status) |
 
 **Baselines**
 
@@ -135,7 +135,35 @@ measured on the simulated trajectory. The two are not comparable.
 
 ### Quest2 (SimXR synthetic dataset, 1,072 test clips)
 
-The student is `trackerr`, checkpoint `student_0380160.pth` (Stage E, 380k steps): the AMASS-finetuned backbone plus the tracking-error input.
+The student is `trackerr`, checkpoint `student_0380160.pth` (Stage E, 380k steps): a jointly trained backbone plus the tracking-error input.
+
+#### Reporting status
+
+Read this before citing the table.
+
+- **Test-set selection.** `student_0380160.pth` is the best of a full-range checkpoint scan
+  ranked by `phc_survival` **on these same 1,072 test clips**
+  ([`scripts/quest_checkpoint_scan.sh`](scripts/quest_checkpoint_scan.sh)). The SimXR column's
+  epoch-1,500 checkpoint is likewise the test-set peak of 12. The Naive PHC baseline involves no
+  selection. Final checkpoints score lower: `trackerr`@500k = 0.707 and SimXR final = 0.514
+  `phc_survival`.
+- **Verified against tracked files:** Naive PHC
+  ([`quest2_naive_baseline_vs_gt.json`](results/baselines/quest2_naive_baseline_vs_gt.json)),
+  Phase A
+  ([`avatarposer_quest2_phase_a_finetuned.json`](results/baselines/avatarposer_quest2_phase_a_finetuned.json)),
+  and all Mesh GPen rows
+  ([`dataset_mesh_gpen_aggregate.json`](scripts/dataset_mesh_gpen_aggregate.json)).
+- **Reported but not verifiable from this repository:** the student's post-sim metrics and
+  per-activity rates (the eval JSON is untracked), and the SimXR column (its dumps live in the
+  separate SimXR checkout).
+- **The SimXR column mixes two evaluation runs.** Success and MPJPE come from SimXR's own
+  evaluator (512 envs). MPJRE, MPJVE, jitter and foot skate come from this repo's script on a
+  64-env re-run, which gave 0.7155 / 112.36 mm.
+- **Unresolved: backbone initialisation.** `results_comparison.md` describes the student as
+  warm-started from the AMASS-finetuned AvatarPoser. But the committed `distill_quest.yaml`
+  default points at the from-scratch Quest2 backbone, and no override is recorded (see
+  [`QUEST2_TRAINING_REPRODUCTION.md`](QUEST2_TRAINING_REPRODUCTION.md)). Which one was used is
+  not established.
 
 | Metric | Stage | Kinematics only (Phase A) | Naive PHC baseline | SimXR no-vision (replicated) | **Student (`trackerr`)** |
 |---|---|---|---|---|---|
@@ -172,9 +200,29 @@ student's penetrating frames are airborne (see
 | gestures | 0.314 | **0.893** | 0.830 |
 | ROM | 0.600 | **0.800** | 0.762 |
 
+### Qualitative examples (Quest2)
+
+Two test clips, each rendered side by side. Left to right: ground truth, the SimXR no-vision
+baseline, the distilled student ("Finetuned Backbone", i.e. `trackerr`, `student_0380160.pth`)
+and the naive PHC baseline. The top row is a Blender render of the motion retargeted onto an SMPL-X
+body; the bottom row is the Isaac Gym simulation itself. Click a still to play the video.
+
+| Walking (locomotion) | Range of motion (full-body) |
+|---|---|
+| [![Walking: ground truth, SimXR, student, naive PHC](docs/media/walking_clean.png)](docs/media/walking_clean.mp4) | [![Range of motion: ground truth, SimXR, student, naive PHC](docs/media/range_of_motion_clean.png)](docs/media/range_of_motion_clean.mp4) |
+
+These are illustrative single clips. No selection criterion for them was recorded, so they say
+nothing about average performance; the tables above are the evidence. The column labels follow
+the project's convention (`Finetuned Backbone` = `trackerr`, as in `results_comparison.md`). The
+exact render invocation was not recorded. The renders use
+`scripts/blender_render_4way_mesh.py` and the SMPL-X Blender add-on (body model by MPI-IS,
+subject to its own license).
+
 ### AMASS / SMPL (536-sequence PHC test set)
 
-All rows below are post-simulation. MPJPE is in **cm**.
+All rows below are post-simulation. MPJPE is in **cm**. `v7_validate` was selected by an
+early-stop sweep scored on this same test set ([`scripts/auto_eval.sh`](scripts/auto_eval.sh) →
+`phc_test.pkl`).
 
 | Model | Success ↑ | MPJPE (cm) ↓ | MPJRE (°) ↓ | Jitter (m/s³) ↓ | Foot skate (cm/s) ↓ |
 |---|---|---|---|---|---|
@@ -212,9 +260,14 @@ Stage R checkpoints, is in [`results_comparison.md`](results_comparison.md#amass
 
 ## Limitations
 
-- **Test-set checkpoint selection.** The reported Quest2 student checkpoint (and the SimXR
-  ablation's epoch-1,500 peak) were chosen by scanning success on the **1,072-clip test set**.
-  There is no separate validation split for these runs, so the headline numbers are optimistic.
+- **Test-set checkpoint selection.** These were all chosen by scanning success on the test set
+  itself, with no separate validation split:
+  - the reported Quest2 student checkpoint;
+  - the SimXR ablation's epoch-1,500 peak;
+  - the AMASS `v7_validate` checkpoint.
+
+  The trained methods' headline numbers are therefore optimistic relative to the naive baseline,
+  which needs no selection.
 - **Single seed, single run.** There are no confidence intervals. Training is seeded but not
   deterministic (Isaac Gym GPU physics, `torch_deterministic=False`).
 - **Subject overlap.** The SimXR Quest2 split is a random 8:2 split by take: 30.4% of test clips
@@ -241,23 +294,46 @@ Stage R checkpoints, is in [`results_comparison.md`](results_comparison.md#amass
 | [`results_per_clip_renders.md`](results_per_clip_renders.md) | Per-clip metrics for the rendered clips |
 | [`docs/MIGRATION.md`](docs/MIGRATION.md) | Full environment setup (conda, Isaac Gym), data inventory, body-model requirements, hardcoded-path notes |
 | [`scripts/simxr_novision/README.md`](scripts/simxr_novision/README.md) | Re-running the SimXR baseline |
+| [`docs/DATA_AND_ARTIFACTS.md`](docs/DATA_AND_ARTIFACTS.md) | What is included, external dependencies, dataset acquisition, artifacts that were **not preserved**, and what each reported result rests on |
+| [`docs/PHC_SUBMODULE.md`](docs/PHC_SUBMODULE.md) | The public PHC fork, research↔publication commit mapping, and the SimXR install step required for Quest2 |
+| [`simxr_ref/README.md`](simxr_ref/README.md) | SimXR evaluation instrumentation: what was changed and how to re-apply it to an official checkout |
 
 **Environment.** Python 3.8, PyTorch 2.4.1 (CUDA 12.1), Isaac Gym Preview 4. There are two conda
 environments: [`setup/environment-avatarposer.yml`](setup/environment-avatarposer.yml) for
 kinematic training and metrics, and [`setup/environment-rlgpu.yml`](setup/environment-rlgpu.yml)
 for PHC and Isaac Gym.
 
-**Not included in Git:**
+**Quest2 needs SimXR.** SimXR declares no license, so no SimXR-derived code is distributed. Quest2
+work needs [SimXR](https://github.com/ZhengyiLuo/SimXR) at
+`39081b831aa1c1e52a4a974fb78a1ed93f7580c2`. It provides the Quest rig, configs and motion
+library, which are rebuilt into `phc/` by `phc/scripts/install_simxr_quest_files.py` (see
+[`docs/PHC_SUBMODULE.md`](docs/PHC_SUBMODULE.md#setup-order)). It also provides the SimXR
+baseline. The AMASS/SMPL pipeline does not need SimXR.
 
-- AMASS, which needs registration.
-- The SimXR Quest2 dataset (~511 GB processed).
-- SMPL/SMPL-H body models, which need registration.
-- The PHC teacher checkpoints.
-- The trained student checkpoints, including `student_0380160.pth`.
-- Most evaluation dumps.
+**Not included:**
 
-The tracked [`model_zoo/avatarposer.pth`](model_zoo/avatarposer.pth) is the original upstream
-AvatarPoser checkpoint.
+- datasets (AMASS, SimXR Quest2 synthetic data), body models, Isaac Gym and the PHC/SimXR teacher
+  checkpoints, which must be obtained from their sources;
+- trained student checkpoints, rollout dumps and most evaluation outputs, which were **lost with
+  the original workstation** and cannot be recovered;
+- per-frame action and trajectory dumps derived from SimXR or AMASS data, which are excluded and
+  regenerable.
+
+Details and the evidence behind each result are in
+[`docs/DATA_AND_ARTIFACTS.md`](docs/DATA_AND_ARTIFACTS.md).
+
+**Pretrained AvatarPoser checkpoint (not included).** The AMASS kinematic baseline and the
+AMASS→Quest2 warm start use upstream AvatarPoser's pretrained model. It was trained on AMASS,
+whose license is non-commercial and forbids training networks for commercial use, and upstream
+does not grant explicit permission to redistribute the weights. Download it from the official
+release instead:
+
+```bash
+mkdir -p model_zoo
+curl -L -o model_zoo/avatarposer.pth \
+  https://github.com/eth-siplab/AvatarPoser/releases/download/v1.0/avatarposer.pth
+echo "02f8888e807579771a7e9959160d1461b62b7112a1e99557aae76bedc46f9e76  model_zoo/avatarposer.pth" | sha256sum -c
+```
 
 **Main entry points:**
 
@@ -274,10 +350,12 @@ bash scripts/quest_checkpoint_scan.sh <exp_name> [eval_interval] [patience]
 Several shell scripts hardcode the original workstation paths (`/home/sia-irl/...`). See
 [`docs/MIGRATION.md` §6](docs/MIGRATION.md#6-the-hardcoded-path-problem).
 
-> **Submodule note.** `phc/` is pinned to commit `759f0904` on a `direct-pd-action` branch of
-> the PHC fork. That branch is not on the upstream PHC remote that `.gitmodules` points at. The
-> distillation code above lives in that fork, so `git clone --recurse-submodules` will not
-> reproduce it until the fork is published.
+> **Submodule note.** In the public release, `phc/` points at
+> [`PHC-AvatarPoser`](https://github.com/thelastlaughstandstrong/PHC-AvatarPoser) @
+> `413516d081f0`. This is a clean copy of the private research fork, with SimXR-derived files
+> excluded from its history. The results were produced at private commit `759f0904`, which
+> corresponds to `research-pin/759f0904` (`e31fdfeddb24`). Older commits of this repository pin
+> private SHAs; see the mapping in [`docs/PHC_SUBMODULE.md`](docs/PHC_SUBMODULE.md).
 
 ## Repository map
 
@@ -288,7 +366,7 @@ options/                  JSON configs (upstream AMASS + new Quest2 configs)
 phc/                      PHC fork (submodule): distillation agents, Quest configs
 scripts/                  Evaluation, retargeting, rendering, diagnostics, reports (*.md, *.json)
 results/baselines/        Small JSON metric snapshots backing the tables
-simxr_ref/                Patched copies of two SimXR files (eval instrumentation only)
+simxr_ref/                SimXR eval-instrumentation record (README only; SimXR code not included)
 setup/                    Conda environment exports
 *.log (root)              Raw logs from Stage R / critic warm-up experiments
 ```
@@ -303,12 +381,15 @@ setup/                    Conda environment exports
 - **PHC**: © 2023 Carnegie Mellon University and © 2018–2023 NVIDIA Corporation, BSD 3-Clause
   Clear License. The physics controller, Isaac Gym environments, motion libraries and released
   teacher checkpoints are PHC's. This project's changes live in a fork used as the `phc/`
-  submodule.
-- **SimXR**: the `quest_humanoid` rig, the Quest2 synthetic dataset and the no-vision training
-  configuration are SimXR's. [`simxr_ref/`](simxr_ref/README.md) contains modified copies of two
-  SimXR source files; the SimXR repository declares no license.
+  submodule. Its `NOTICE` separates upstream code from this project's additions.
+- **SimXR**: the `quest_humanoid` rig, the Quest2 synthetic dataset, the teacher checkpoint
+  `phc_prim_quest` and the no-vision training configuration are SimXR's. SimXR declares no
+  license, so no SimXR source code, and no data derived from its dataset at motion level, is
+  distributed here. Users obtain SimXR themselves; this repository ships only edit scripts with
+  this project's own changes.
 - **Datasets and body models**: AMASS, SMPL, SMPL-H and DMPL are subject to their own
-  registration-based licenses and are not redistributed here.
+  registration-based licenses and are not redistributed here. The two raw AMASS sample sequences
+  that upstream AvatarPoser ships (`support_data/github_data/*_sample.npz`) are also excluded.
 
 If you build on this work, please cite the upstream papers:
 

@@ -25,3 +25,31 @@ data/*
 output/
 results_*/
 model_zoo/*.pth
+
+# --- Public-release exclusions (2026-11-23) --------------------------------------------------
+# Copied SimXR source files (SimXR declares no license). Kept locally as a historical record;
+# see simxr_ref/README.md for how to reproduce the instrumentation from an official checkout.
+/simxr_ref/phc/
+# Motion-level policy/teacher action dumps on SimXR Quest2 clips (regenerable, see
+# docs/DATA_AND_ARTIFACTS.md). Aggregate *_metrics.json files next to them stay tracked.
+/scripts/ablation_footweight/evals/*_actions.npz
+/scripts/diag_fb_multiclip/mc_*.npz
+/scripts/diag_simxr_ankle/mc_simxr.npz
+# Per-frame / per-pose SMPL fits of SimXR Quest2 clips (regenerable with
+# scripts/retarget_quest_to_smpl*.py). The *.md reports and *.png figures stay tracked.
+/scripts/quest_smpl_sequence_fit.json
+/scripts/quest_smpl_sequence_fit_walking.json
+/scripts/quest_smpl_single_frame_fit.json
+# Raw AMASS sample sequences inherited from upstream AvatarPoser (support_data/ is ignored
+# above; listed explicitly so the intent is recorded).
+/support_data/github_data/amass_sample.npz
+/support_data/github_data/dmpl_sample.npz
+# Upstream AvatarPoser pretrained checkpoint: trained on AMASS (non-commercial research licence);
+# redistribution of the weights is not explicitly permitted. Download it from the official
+# release instead (docs/DATA_AND_ARTIFACTS.md). model_zoo/*.pth above already covers it.
+/model_zoo/avatarposer.pth
+# Private publication-audit workspace -- never part of a public release.
+/docs/publication_audit/
+
+# Source archive for README media (contents copied to docs/media/); not part of the repository.
+/readme_media_clean.zip
